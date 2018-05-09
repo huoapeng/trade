@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %>  
+<title>VR/AR大厅</title>  
+<style>  
+/**重置颜色,高度**/
+header,header input,.categorys>li>ul{
+	border-color:    #46b8da !important;
+} 
+header .search a,header .btn,.nav-head-items>li:first-child{
+	background-color: #46b8da !important;
+}   
+.categorys,.categorys>li>ul {  
+	 height: 400px !important;
+}
+.categorys>li>ul span,header #vrhall,.categorys-sons>ul a:hover {
+	color: #46b8da !important;
+}
+.drop-meanu>li>span>a{
+	color: #46b8da !important;
+}
+.hotNavItems a:hover{
+	background-color: #46b8da !important;
+}
+.recommend-block li>a:hover{
+	color: #46b8da !important;
+}
+/**重置颜色高度 end**/
+
+.banner .banner-slide{
+	width:990px;
+	height:400px; 
+	margin-left: 210px;
+	position: relative;
+
+}  
+.banner .banner-bottom-imgs{
+	float:left;width:950px;height:150px; 
+	//overflow: hidden;
+}  
+section>h2{
+ 	border-left:4px solid  #46b8da;
+ 	padding: 0px 10px;
+ 	margin: 30px 0;
+ } 
+
+/* 轮播css */ 
+.slideBox .hd{ height:15px;   position: absolute;bottom:20px;left:45%; }
+.slideBox .hd ul{ overflow:hidden;  }
+.slideBox .hd ul li{display:inline-block;width:14px; height:14px;margin-top:10px;  margin:0 4px;background-color:white; border-radius:8px; cursor:pointer; }
+.slideBox .hd ul li.on{ background-color:#e8594b; border-radius:7px;} 
+.slideBox .bd img{width:100%; height:400px;    } 
+.slideBox .bd li{display:inline-block;  } 
+</style>  
+</head>
+<body style="overflow-X:hidden; background:#f5f5f5" >   
+<% include header.html %>
+<div class="banner">
+	<div class="w" style="position:relative;">   
+		<div class="banner-slide slideBox"> 
+			<div class="hd ">
+				<ul><li></li><li></li><li></li></ul>
+			</div>
+			<div class="bd">
+				<ul>
+					<%for(var i in results['list2']['data']){%>
+						<li><a><img  src="<%= results['list2']['data'][i]['image']%>" /></a></li>
+					<%}%> 
+				</ul>
+			</div>
+		</div> 
+	</div> 
+	<div style="clear:both"></div>  
+</div>  
+<!--ar/vr-->
+<section class="w">
+	<h2 style="font-size:30px;font-weight:400;color:#333">VR/AR大厅	</h2>
+	<div class="recommend-block">
+		<h4>VR实拍</h4>
+		<div>	 
+			<% for(  var i=0; i<results['list12']['data'].length; i++){%> 
+			 		<%if(i==0){%>
+						<img src="<%= results['list12']['data'][i]['image']%>" > 
+			 		<%}%> 
+			<%}%>
+			<ul class="list">
+				<%for(var i in results['list7']['data']){%>
+					<li><span>￥<%= results['list7']['data'][i]['description']%></span><a href="<%= results['list7']['data'][i]['url']%>"><%= results['list7']['data'][i]['title']%></a></li>
+				<%}%>  
+			</ul>
+		</div>
+	</div>
+	<div class="recommend-block" style="float:right;">
+		<h4>VR游戏</h4>
+		<div>	 
+			<% for(  var i=0; i<results['list12']['data'].length; i++){%> 
+		 		<%if(i==1){%>
+					<img src="<%= results['list12']['data'][i]['image']%>" > 
+		 		<%}%> 
+			 <%}%>
+			<ul class="list">
+				<%for(var i in results['list8']['data']){%>
+					<li><span>￥<%= results['list8']['data'][i]['description']%></span><a href="<%= results['list8']['data'][i]['url']%>"><%= results['list8']['data'][i]['title']%></a></li>
+				<%}%> 
+			</ul>
+		</div>
+	</div>
+	<div class="recommend-block">
+		<h4>AR教育</h4>
+		<div>	 
+			<% for(  var i=0; i<results['list12']['data'].length; i++){%> 
+			 		<%if(i==2){%>
+						<img src="<%= results['list12']['data'][i]['image']%>" > 
+			 		<%}%> 
+			 <%}%>
+			<ul class="list">
+				<%for(var i in results['list9']['data']){%>
+					<li><span>￥<%= results['list9']['data'][i]['description']%></span><a href="<%= results['list9']['data'][i]['url']%>"><%= results['list9']['data'][i]['title']%></a></li>
+				<%}%> 
+			</ul>
+		</div>
+	</div>
+	<div class="recommend-block" style="float:right;">
+		<h4>AR游戏</h4>
+		<div>	
+			 <% for(  var i=0; i<results['list12']['data'].length; i++){%> 
+			 		<%if(i==3){%>
+						<img src="<%= results['list12']['data'][i]['image']%>" > 
+			 		<%}%> 
+			 <%}%> 
+			<ul class="list">
+				<%for(var i in results['list10']['data']){%>
+					<li><span>￥<%= results['list10']['data'][i]['description']%></span><a   href="<%= results['list10']['data'][i]['url']%>" ><%= results['list10']['data'][i]['title']%></a></li>
+				<%}%> 
+			</ul>
+		</div>
+	</div>
+	<div style="clear:both"></div> 
+</section> 
+<!--热门导航，想去哪就去哪-->
+<section class="w">
+	<h2 style="font-size:30px;font-weight:400;color:#333">热门导航，想去哪就去哪	</h2>
+	<div class="hotNavigation">
+		<img src="/images/common/navigation1.png">
+		<span>V R 游 戏</span>
+		<div class="hotNavItems">
+			<%for(var i in results['list20']['data']){%>
+				<a href="<%= results['list20']['data'][i]['url']%>"><%= results['list20']['data'][i]['title']%></a>
+			<%}%> 
+		</div>
+	</div>
+	<div class="hotNavigation">
+		<img src="/images/common/navigation2.png">
+		<span>V R 实 拍</span>
+		<div class="hotNavItems">
+			<%for(var i in results['list19']['data']){%>
+				<a href="<%= results['list19']['data'][i]['url']%>"><%= results['list19']['data'][i]['title']%></a>
+			<%}%> 
+		</div>
+	</div>
+	<div class="hotNavigation" style="margin:0px;">
+		<img src="/images/common/navigation3.png">
+		<span>V R 教 育</span>
+		<div class="hotNavItems">
+			<%for(var i in results['list21']['data']){%>
+				<a href="<%= results['list21']['data'][i]['url']%>"><%= results['list21']['data'][i]['title']%></a>
+			<%}%> 
+		</div>
+	</div>
+	<div style="clear:both"></div>
+	</br>
+	<div class="hotNavigation">
+		<img src="/images/common/navigation4.png">
+		<span>A R 游 戏</span>
+		<div class="hotNavItems">
+			<%for(var i in results['list22']['data']){%>
+				<a href="<%= results['list22']['data'][i]['url']%>"><%= results['list22']['data'][i]['title']%></a>
+			<%}%> 
+		</div>
+	</div>
+	<div class="hotNavigation">
+		<img src="/images/common/navigation5.png">
+		<span>定 格 动 画</span>
+		<div class="hotNavItems">
+			<%for(var i in results['list23']['data']){%>
+				<a href="<%= results['list23']['data'][i]['url']%>"><%= results['list23']['data'][i]['title']%></a>
+			<%}%> 
+		</div>
+	</div>
+	<div class="hotNavigation" style="margin:0px;">
+		<img src="/images/common/navigation6.png">
+		<span>三 维 动 画</span>
+		<div class="hotNavItems">
+			<%for(var i in results['list24']['data']){%>
+				<a href="<%= results['list24']['data'][i]['url']%>" ><%= results['list24']['data'][i]['title']%></a>
+			<%}%> 
+		</div>
+	</div>
+	<div style="clear:both"></div>
+</section>
+<% include footer.html %>
+<% include commonScript.html %>
+<script type="text/javascript" src="/js/jquery.SuperSlide.2.1.1.js"></script>   
+<script   type="text/javascript">  
+ $(".slideBox").slide({mainCell:".bd ul",autoPlay:true});
+ $('.search a').click(function(){
+	var keyword=$('.search input').val();
+	/*console.log(keyword);
+	var url=location.search.toString();
+	url=replaceParamVal(url,'keyword',keyword)  */
+	url='/p/1?keyword='+keyword;
+	location = url 
+})
+
+ $(document).keydown(function(event){
+     if(event.keyCode==13){
+         $('.search a').click();
+     }
+ });
+</script> 
+</body>
+
+</html>

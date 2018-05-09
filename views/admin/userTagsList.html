@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>用户管理</title>  
+<style>   
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" > 
+				<div class="panel panel-default">
+					<div class="panel-heading">标签
+						<div class="input-group pull-right"    style="width:200px;position:relative;top:-8px;float:right">
+							<input type="text" class="form-control" id="tagInput" placeholder="请输入标签"> 
+							<span class="input-group-btn">
+								<button class="btn btn-default btn btn-primary" type="button"   onclick="addTag()">添加标签</button>
+							</span> 
+						</div>  
+					</div>
+					<div class="panel-body"> 
+						<table class="table table-hover"    data-hasnext="<%= results['has_next']%>"  data-hasprev="<%= results['has_prev']%>" data-nextnum="<%= results['next_num']%>" data-page="<%= results['page']%>" data-pages="<%= results['pages']%>" data-perpage="<%= results['per_page']%>"  data-prevnum="<%= results['prev_num']%>">
+							<thead>
+								<tr>
+									<td>标签ID</td> 
+									<td>标签名称</td>
+									<td>使用数量</td> 
+								</tr>
+							</thead>
+							<tbody>  
+								<%for(var i in results['data']){%>
+									<tr data-id="<%= results['data'][i]['id']%>">
+										<td><%= results['data'][i]['id']%></td>
+										<td><%= results['data'][i]['name']%></td>
+										<td><%= results['data'][i]['count']%></td>
+									</tr> 
+								<%}%> 
+							</tbody>     
+						</table> 
+						<div id="turnPage">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> 
+	</div>  
+</div>  
+<% include commonScript.html %> 
+<script type="text/javascript">
+$(function(){ 
+	var turnPageData={
+		has_next: $('.table').attr('data-hasnext'),
+		has_prev: $('.table').attr('data-hasprev'),
+		next_num: $('.table').attr('data-nextnum'),
+		page: $('.table').attr('data-page'),
+		pages: $('.table').attr('data-pages'),
+		per_page: $('.table').attr('data-perpage'),
+		prev_num: $('.table').attr('data-prevnum'), 
+	}
+	$('#turnPage').myUtils('turnPage',turnPageData,changePage)   
+})
+//翻页
+function changePage(){ 
+	var url=location.search.toString();
+	url='/userTagsList/'+$(this).attr('data-pageid')+url; 
+	location =url  
+} 
+
+//添加标签
+function addTag(){
+	var params={
+		name:$('#tagInput').val()
+	}
+	$.ajax({
+		type: "POST",
+		async: false,
+		url: "/adminUsertag", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			var str='<tr data-id="'+data['id']+'">'+
+						'<td>'+data['id']+'</td>'+
+						'<td>'+data['name']+'</td>'+ 
+					'</tr>';
+			$('table tbody').append(str);
+		},
+		error: function(){
+			alert('fail');
+		}
+	});  
+}
+//删除
+function removeTag(e){
+	var params={
+		'id':parseInt($(e).parent().attr('data-id'))
+	}
+	console.log(params)
+	$.ajax({
+		type: "delete",
+		async: false,
+		url: "/adminUsertag", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			$(e).parent().remove();
+		},
+		error: function(){
+			alert('fail');
+		}
+	});  
+} 
+</script>  
+</body>
+
+</html>

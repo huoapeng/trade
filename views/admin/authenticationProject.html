@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>项目审核</title> 
+<style>  
+.projectPage>ul{
+	text-align:center;
+}
+.projectPage>ul>li{
+	display:inline-block;
+}
+.projectPage>ul>li>a{
+	display:block;
+	border-radius:10px;
+	height:20px;
+	width:20px; 
+	text-align:center;
+	vertical-align:middle;
+	
+	margin:4px;
+	color:#999;
+}
+.projectPage .active{
+	background-color:#ec6941;  
+	color:white;
+} 
+.projectPage i{
+	color:#999;
+	cursor:pointer;
+}
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" >  
+				<div class="panel panel-default">
+					<div class="panel-heading filterStatus">项目审核列表  
+					状态：<a data-value="">全部</a>    |   
+						<a   data-value="1">竞标中</a>    |   
+						<a   data-value="2">进行中</a>    |   
+						<a   data-value="3">已结束</a>    |   
+						<a   data-value="4">审核中</a>	| 
+						<a   data-value="5">中止</a> | 
+						<a   data-value="6">未通过</a> 
+					<div class="input-group"  id="search" style="width:200px;position:relative;top:-8px;float:right">
+				      	<input type="text" class="form-control" placeholder="Search for...">
+				      	<span class="input-group-btn">
+				       	 	<button id="searchprojectInput" class="btn btn-primary" type="button"  >搜索</button>
+				      	</span>
+				    </div> 
+					</div>
+					<div class="list panel-body">
+						<table class="table table-hover project-list"   data-hasnext="<%= results['has_next']%>"  data-hasprev="<%= results['has_prev']%>" data-nextnum="<%= results['next_num']%>" data-page="<%= results['page']%>" data-pages="<%= results['pages']%>" data-perpage="<%= results['per_page']%>"  data-prevnum="<%= results['prev_num']%>">
+						<thead>
+							<tr> 
+								<td>项目名称</td> 
+								<td>用户名称</td> 
+								<td>操作</td> 
+							</tr>
+						</thead>
+						<tbody> 
+						<%for (var i in results['data']){%>
+							<tr data-projectid="<%= results['data'][i]['id']%>" >
+								<td><a onclick="showprojectInfo(this)"><%= results['data'][i]['name']%></a></td>
+								<td><a  data-userUrl="<%= results['data'][i]['owner']%>"  onclick="showUserInfo(this)">查看</a></td>
+								<%if(results['data'][i]['status']==1){%>
+									<td style="color:red">竞标中</td>
+								<%}else if(results['data'][i]['status']==2){%>
+									<td style="color:green">进行中</td> 
+								<%}else if(results['data'][i]['status']==3){%>
+									<td style="color:e0e0e0">已结束</td> 
+								<%}else if(results['data'][i]['status']==4){%>
+									<td> <button type="button" class="btn btn-default btn-xs" onclick="changeprojectStatus(this,1)">通过</button><button type="button" class="btn btn-default btn-xs" onclick="changeprojectStatus(this,6)">不通过</button> </td>
+								<%}else if(results['data'][i]['status']==5){%>
+									<td style="color:#e0e0e0">中止</td>
+								<%}else if(results['data'][i]['status']==6){%>
+									<td style="color:#e0e0e0">未通过</td>
+								<%}%>
+							</tr> 
+						<%}%> 
+						</tbody> 
+					</table> 
+					<div id="turnPage"></div>
+					</div>
+				</div>  
+			</div>
+		</div> 
+	</div>
+</div>   
+<!-- Modal -->
+<div class="modal fade" id="projectInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content"> 
+			<div class="modal-body"> 
+				<span><strong>项目包名称</strong></span><p  id="name"></p>
+				<span><strong>项目周期</strong></span><p  id="timespan"></p>
+				<span><strong>赏金</strong></span><p  id="bonus"></p>
+				<span><strong>需求</strong></span><p  id="requirements"></p>
+				<span><strong>所在地要求</strong></span><p  id="bidder_location_requirement"></p>
+				<span><strong>资质要求</strong></span><p  id="bidder_qualification_requirement"></p>
+				<span><strong>描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</strong></span><p  id="description"></p>
+				<span><strong>创建时间</strong></span><p  id="publishDate"></p> 
+			</div> 
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="userInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content"> 
+			<div class="modal-body"> 
+				<span><strong>邮箱</strong></span><p  id="email"></p>
+				<span><strong>描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</strong></span><p  id="description"></p> 
+				<span><strong>所在地</strong></span><p  id="location"></p> 
+				<span><strong>昵称</strong></span><p  id="nickname"></p> 
+				<span><strong>电话</strong></span><p  id="phone"></p>  
+				<span><strong>注册时间</strong></span><p  id="registDate"></p> 
+			</div> 
+		</div>
+	</div>
+</div>
+<% include commonScript.html %>  
+<script type="text/javascript">
+ $(function () { 
+ 	var turnPageData={
+		has_next: $('.project-list').attr('data-hasnext'),
+		has_prev: $('.project-list').attr('data-hasprev'),
+		next_num: $('.project-list').attr('data-nextnum'),
+		page: $('.project-list').attr('data-page'),
+		pages: $('.project-list').attr('data-pages'),
+		per_page: $('.project-list').attr('data-perpage'),
+		prev_num: $('.project-list').attr('data-prevnum'), 
+	}
+	$('#turnPage').myUtils('turnPage',turnPageData,changePage)   
+   
+});   
+//翻页
+function changePage(){ 
+	var url=location.search.toString();
+	url='/authenticationProject/'+$(this).attr('data-pageid')+url; 
+	location =url  
+}
+//项目状态
+$('.filterStatus>a').click(function(){ 
+	var status=$(this).attr("data-value"); 
+	var url=location.search.toString(); 
+	location = url 
+	if(status){ 
+		url=replaceParamVal(url,'status',status) 
+		url='/authenticationProject/1'+url;
+		location = url 
+	}else{ 
+		url='/authenticationProject/1'+removeParameter(url,'status');
+		location = url  
+	} 
+}) 
+//搜索
+ $('#search button').click(function(){
+ 	$(this).parent().find('input').val()
+	var keyword=$('#search input').val()
+	console.log(keyword)
+	/*console.log(keyword);
+	var url=location.search.toString();
+	url=replaceParamVal(url,'keyword',keyword)  */
+	url='/authenticationProject/1?keyword='+keyword;
+	location = url 
+})  
+function showprojectInfo(e){ 
+	var projectid =$(e).parent().parent().attr('data-projectid')
+	$.ajax({
+		type: "get",
+		async: false,
+		url: '/project/'+projectid,
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){  
+			$('#projectInfo').find('#name').html(data['name'])
+			$('#projectInfo').find('#timespan').html(data['timespan'])
+			$('#projectInfo').find('#bonus').html(data['bonus'])
+			$('#projectInfo').find('#requirements').html(data['requirements'])
+			$('#projectInfo').find('#bidder_location_requirement').html(data['bidderLocationRequire'])
+			$('#projectInfo').find('#bidder_qualification_requirement').html(data['bidderQualifiRequire'])
+			$('#projectInfo').find('#description').html(data['description'])
+			$('#projectInfo').find('#publishDate').html(data['publishDate']) 
+		},
+		error: function(){ 
+				
+		}
+	});
+	$('#projectInfo').modal('toggle');	
+}
+function showUserInfo(e){ 
+	var url =$(e).attr('data-userUrl').replace("http://10.0.0.44:8080/api/v1.0","")
+	console.log(url)
+	$.ajax({
+		type: "get",
+		async: false,
+		url: url,
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){  
+			$('#userInfo').find('#email').html(data['email'])
+			$('#userInfo').find('#description').html(data['description'])
+			$('#userInfo').find('#location').html(data['location'])
+			$('#userInfo').find('#nickname').html(data['nickname'])
+			$('#userInfo').find('#phone').html(data['phone'])
+			$('#userInfo').find('#registDate').html(data['registDate']) 
+		},
+		error: function(){ 
+		}
+	});
+	$('#userInfo').modal('toggle');	
+} 
+function changeprojectStatus(e,status){ 
+	if(confirm("确定此操作？")){
+		var params={
+			'id':parseInt($(e).parent().parent().attr('data-projectid')),
+			'status':status
+		}
+		console.log(params)
+		$.ajax({
+			type: "put",
+			async: false,
+			url: "/project", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){ 
+				if(params['status']==1){
+					$(e).parent().html('竞标中').css('color','red');
+					alert("操作成功");  
+				}else{
+					$(e).parent().html('未通过').css('color','#e0e0e0');
+					alert("操作成功");   
+				}
+			},
+			error: function(){
+				alert('fail');
+			}
+		});   
+	} 
+}    
+
+</script>  
+</body>
+
+</html>

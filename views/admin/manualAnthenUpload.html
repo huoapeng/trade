@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>项目审核</title> 
+<style> 
+ 
+.projectPage>ul{
+	text-align:center;
+}
+.projectPage>ul>li{
+	display:inline-block;
+}
+.projectPage>ul>li>a{
+	display:block;
+	border-radius:10px;
+	height:20px;
+	width:20px; 
+	text-align:center;
+	vertical-align:middle;
+	
+	margin:4px;
+	color:#999;
+}
+.projectPage .active{
+	background-color:#ec6941;  
+	color:white;
+}
+
+
+.projectPage i{
+	color:#999;
+	cursor:pointer;
+}
+.initAuthen img,.authenSucess img{
+	max-width: 500px;
+	display: block;
+}
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" >  
+				<div class="panel panel-default">
+					<div class="panel-heading"> 
+						人工审核——资料上传
+				    </div>  
+					<div class="panel-body">
+						<div class="person">
+							<a></a>
+							<%if(results['authenticationType'] ==0){%>
+							<div class="initAuthen">
+								<div class="input-group">
+								  	<span class="input-group-addon" id="basic-addon1">姓名：</span>
+								  	<input type="text" class="form-control" name="name" aria-describedby="basic-addon1">
+								</div>
+								<div class="input-group">
+								  	<span class="input-group-addon" id="basic-addon1">身份证号：</span>
+								  	<input type="text" class="form-control"  name="identityID" >
+								</div>   
+								<form id="PrivateFront">
+									<span>身份证正面</span>
+									<input data-uploadType="3" type="file"    name="file"     > 
+									<img  >
+								</form> 
+								<form  id="PrivateBack" >
+									<span>身份证反面</span>
+									<input data-uploadType="4"  type="file"  name="file"  > 
+									<img>
+								</form> 
+								
+								<button class="btn   btn-primary save">保存</button>
+							</div> 
+							<%}%>
+							<%if(results['authenticationType'] & 1){%>
+							<div class="authenSucess">
+								<span>姓名：</span><span class="name"><%= results['privateAuthentication']['data'][0]['name']%></span></br></br>
+								<span>身份证号：</span><span class="identityID"> <%= results['privateAuthentication']['data'][0]['identityID']%></span></br></br>
+								<span>身份证号正面：</span></br>
+								<img  class="authorityPrivateFront"  src="<%= results['privateAuthentication']['data'][0]['identityFrontImage']%>"></br>
+								<span>身份证号反面：</span></br>
+								<img class="authorityPrivateBack" src="<%= results['privateAuthentication']['data'][0]['identityBackImage']%>"></br>
+								<button class="btn   btn-primary modify" data-path="privateauthen">修改</button>
+							</div> 
+							<%}%>
+						</div></br></br></br>
+
+
+						<div class="company">
+							<%if(results['authenticationType'] ==0){%>
+							<div class="initAuthen">
+								<div class="input-group">
+								  	<span class="input-group-addon" id="basic-addon1">企业名称</span>
+								  	<input type="text" class="form-control"  name="companyName" >
+								</div>
+								<div class="input-group">
+								  	<span class="input-group-addon" id="basic-addon1">经营范围</span>
+								  	<input type="text" class="form-control" name="businessScope" >
+								</div> 
+								<div class="input-group">
+								  	<span class="input-group-addon" id="basic-addon1">经营执照注册码</span>
+								  	<input type="text" class="form-control"   name="licenseID" >
+								</div>  
+								<form  id="licenseImage">
+									<span>营业执照照片</span>
+									<input data-uploadType="5"  type="file"  name="file"  > 
+									<img  >
+								</form>
+								<form id="contactImage" >
+									<span>联系人名片</span>
+									<input  data-uploadType="6"  type="file" name="file"  > 
+									<img  >
+								</form> 
+								<button class="btn   btn-primary  save">保存</button>
+							</div>
+							<%}%>
+							<%if(results['authenticationType'] & 2){%>
+							<div class="authenSucess">
+								<span>企业名称：</span><span class="companyName"><%= results['companyAuthentication']['data'][0]['name']%></span></br></br>
+								<span>经营范围：</span><span class="businessScope"><%= results['companyAuthentication']['data'][0]['businessScope']%></span></br></br>
+								<span>经营范围：</span><span class="licenseID"><%= results['companyAuthentication']['data'][0]['licenseID']%></span></br></br>
+								<span>营业执照照片：</span></br></br>
+								<img  class="licenseImage"  src="<%= results['companyAuthentication']['data'][0]['licenseImage']%>">
+								<span>联系人名片：</span></br></br>
+								<img class="contactImage" src="<%= results['companyAuthentication']['data'][0]['contactImage']%>">
+								<button class="btn   btn-primary   modify" data-path="companyauthen">修改</button>
+							</div> 
+							<%}%>
+						</div> 
+						</br></br></br>
+
+						<div class="trade">
+							<%if(results['authenticationType'] == 1  || results['authenticationType'] == 2){%>
+							<div class="initAuthen">
+								<div class="input-group">
+									<span class="input-group-addon" >户名：</span>
+									<input class="form-control" name="name" type="text" placeholder="户名">
+								</div>  
+								<div class="input-group">
+									<span class="input-group-addon">对公账户：</span>
+									<input class="form-control" name="bankAccount" type="text"  placeholder="对公账户">
+								</div>   
+								<div class="input-group">
+									<span class="input-group-addon" >确认对公账户： </span>
+									<input class="form-control" name="bankAccount_repeat" type="text" placeholder="再次确认对公账户">
+								</div> 
+								<div class="input-group">
+									<span class="input-group-addon" >开户银行：</span>
+									<input type="text" class="form-control" name="bankName"  placeholder="如：中国银行"  >    
+								</div> 
+								<div class="input-group">
+									<span class="input-group-addon" >开户银行地点：</span>
+									<input class="form-control" placeholder="如：张江路支行"  name="bankLocation" type="text" value="">
+								</div> 
+								<button class="btn   btn-primary save">保存</button>
+							</div>
+							<%}%>
+							<%if(results['authenticationType'] & 4){%>
+							<div class="authenSucess">
+								<span>户名：</span><span class="name"><%= results['bankAuthentication']['data'][0]['name']%></span></br></br>
+								<span>对公账户：</span><span class="bankAccount"><%=results['bankAuthentication']['data'][0]['bankAccount']%></span> </br></br>
+								<span>开户银行：</span><span class="bankName"><%=results['bankAuthentication']['data'][0]['bankName']%></span></br></br>
+								<span>开户银行地点：</span><span class="bankLocation"><%=results['bankAuthentication']['data'][0]['bankLocation']%></span> </br></br>
+								<button class="btn   btn-primary modify" data-path="bankauthen">修改</button>
+							</div> 
+							<%}%>
+						</div>
+					</div>
+				</div>  
+			</div>
+		</div> 
+	</div>
+</div>    
+<% include commonScript.html %>  
+<script type="text/javascript">
+$(function () { 
+ 
+
+})
+var url = location.search;
+console.log(url); 
+var _user;
+if (url.indexOf("?") != -1) {
+    var str = url.substr(1);
+    strs = str.split("="); 
+    _user=strs[1];
+   
+}  
+//全局变量
+
+//个人认证提交
+$('.person .save').click(function(){ 
+	var flag=true;
+	// 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X  
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+	var params={
+		"ownerid":parseInt(_user), 
+		'identityid':$(".person input[name='identityID']").val(),
+		'name':$(".person input[name='name']").val(),
+		'identityFrontImage':$('.person #PrivateFront').attr('data-fileName'),
+		'identityBackImage':$('.person #PrivateBack').attr('data-fileName'),
+	}
+	console.log(params)
+	if(params['identityid']==""){
+		alert("身份号码不能为空");
+	}else if(params['identityFrontImage']==''){
+		alert("请上传身份证正面照片");
+	}else if(params['identityBackImage']==''){
+		alert("请上传身份证反面照片");
+	}else{
+		console.log(params);
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/privateauthen", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				console.log(data);
+				changeStatus(1,data['id'])
+				alert("ok");  
+			},
+			error: function(){
+				alert('认证失败');
+			}
+		});   
+	}  
+}) 
+//企业认证提交
+$('.company .save').click(function(){ 
+	var params={
+		'ownerid':_user,
+		'name':$('.company input[name="companyName"]').val(),
+		'businessScope':$('.company input[name="businessScope"]').val(),
+        'licenseID':$('.company input[name="licenseID"]').val(),
+        'verifyType':1,
+        //'verifyType':parseInt($('input:radio[name="radio"]:checked').val())==1 ? 1 : 2,
+       // 'bankAccount':$('input[name="bankAccount"]').val().trim(),
+       // 'bankName':$('input[name="bankName"]').val().trim(),
+       // 'bankLocation':$('input[name="bankLocation"]').val().trim(),
+		'licenseImage':$('.company #licenseImage').attr('data-fileName'),
+		'contactImage':$('.company #contactImage').attr('data-fileName'),
+	} 
+	console.log(params)
+	if(params['name']==""){
+		alert('企业名称不能为空');
+	}else if(params['licenseID']==""){
+		alert('经营执照注册码不能为空');
+	}else if(params['licenseImage']==""){
+		alert('请上传营业执照');
+	}else{
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/companyauthen", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				//history.back(-1);
+				console.log(data);
+				changeStatus(2,data['id'])
+				alert("已提交认证");  
+			},
+			error: function(data){
+				alert('认证失败');
+				console.log(data);
+			}
+		});  
+	}
+}) 
+//交易认证提交
+$('.trade .save').click(function(){
+	var params={
+		'ownerid':_user,
+		'name':$('.trade input[name="name"]').val().trim(),
+		'bankAccount':$('.trade input[name="bankAccount"]').val().trim(),
+        'bankAccount_repeat':$('.trade input[name="bankAccount_repeat"]').val().trim(), 
+        'bankName':$('.trade input[name="bankName"]').val().trim(), 
+        'bankLocation':$('.trade input[name="bankLocation"]').val().trim(), 
+	}
+	console.log(params);
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/bankauthen", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			 
+			changeStatus(4,data['id']) 
+			alert("已提交认证");  
+		},
+		error: function(data){
+			alert('认证失败');
+			console.log(data);
+		}
+	}); 
+})
+//上传图片
+$('form input').change(function (){
+	var url = null;  
+	var imgObejct=this.files[0];
+	var type=$(this).attr('data-uploadType')
+	var $this=$(this)
+	var formData = new FormData($(this).parent('form')[0]); 
+	formData.append("type",type);   
+	formData.append("foldername",_user);  
+ 	$.ajax({  
+	   url: '/uploadfile',
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {   
+			console.log(returndata)
+			$this.parent('form').attr('data-fileName',returndata['fileName'])
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(imgObejct) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(imgObejct) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(imgObejct) ;
+			}  
+			if (url) {
+				console.log($(this))
+				$this.parent('form').find('img').attr('src',url) ;
+			}   
+	   },  
+	   error: function (returndata) {  
+			console.log(returndata);  
+	   }  
+	});   
+})  
+$('.modify').click(function(){
+	var path=$(this).attr('data-path')
+	console.log(path);
+	if(confirm('点击更改认证后，之前认证将失效，确认修改?')){
+		var userInfo=modify(path);   
+		if(userInfo['authenticationType'] & 4){
+			var path='bankauthen';
+			modify(path); 
+		}
+		location=location;
+	} 
+})
+
+function modify(path){
+	var temp;
+	var params={ 
+			"ownerid":_user
+		}
+	$.ajax({
+		type: "delete",
+		async: false,
+		url: "/"+path, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data);   
+			temp=data;
+			//location=location
+		},
+		error: function(){
+			alert('fail');
+		}
+	});  
+	return temp;
+
+}
+function changeStatus(authenticationType,authenID){
+	var params={
+		"authenType":authenticationType,
+		"authenID":authenID,
+		"approvalStatus":2,
+		"userid":_user,
+		"adminid":1,
+		//"description":"asdasd"
+		"description":"人工审核通过" 
+	} ;  
+	console.log(params);
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/approval", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data); 
+			alert("操作成功"); 
+			location=location;
+			//document.URL=location.href; 
+		},
+		error: function(){
+			alert('fail');
+		}
+	});    
+}   
+ 
+ 
+</script>  
+</body>
+
+</html>

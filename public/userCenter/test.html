@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>Upload New File</title>
+<body>
+	<h1>Upload File</h1>
+	<form  id="uploadForm" action="http://127.0.0.1:3000/uploadfile"
+		method="POST" enctype="multipart/form-data">
+	<input type="file" id="imgFile" name="file" />
+	<input type="submit" value="Upload" />
+	 
+	</form>
+	<% include commonScript.html %>   
+	<script>  
+		$("#imgFile").change(function(){    
+			var url = null;  
+			var imgObejct=this.files[0]; 
+			var formData = new FormData($("#uploadForm" )[0]); 
+			$.ajax({  
+			   url: '/uploadfile',  
+			   type: 'POST',  
+			   data: formData,  
+			   async: false,  
+			   cache: false,  
+			   contentType:false,  
+			   processData: false,  
+			   success: function (returndata) {   
+					console.log(returndata);
+					workImg=returndata['fileName']; 
+			   },  
+			   error: function (returndata){  
+					console.log(returndata);  
+			   }  
+			});  
+		});
+	</script>
+</body>

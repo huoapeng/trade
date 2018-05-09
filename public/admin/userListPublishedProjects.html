@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>用户管理</title>   
+<style> 
+ 
+.fliter{
+	display:inline-block;
+}
+.fliter +input{
+	display:inline-block;
+	height:26px;
+}
+.fliter>li{
+	display:inline-block;
+	margin-top:6px;
+	margin-right:0px;
+}
+.fliter>li>a{
+	color:#666;
+}
+.fliter .active{
+	color:#ec6941; 
+}  
+.list{
+	position:relative; 
+	margin-bottom:40px;
+}   
+.time{
+	color:#999;
+	font-size:12px;
+}
+.status{
+	color:#ec6941;
+	font-size:12px;
+}
+.operation a{
+	color:#ec6941;
+	display:inline-block;
+	padding:0px 4px 0px 4px;
+	border:1px solid #ec6941;
+	border-radius:10px;
+} 
+table td{
+	text-align: center;
+}
+.operationBtn{
+	display:inline-block;
+	border-radius:10px;
+	border:1px solid #ec6941;
+	padding:0 6px;
+}
+ 
+.endBtn i {
+	display:block;
+	color:#999;
+	font-size:16px;
+	cursor:pointer;
+} 
+
+
+.catalog .active{
+
+	border:1px solid red;
+}
+.catalog a{
+	cursor: pointer;
+	display: inline-block;
+	padding:0px 4px;
+}
+
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="col-xs-10">
+				<div class="container">
+					<div class="list">   
+						<div class="panel panel-default">  
+							<div class="panel-heading">
+								<ul class="fliter">
+									<li><a id="fliter_"  data-value="">全部</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li><a id="fliter_1" data-value="1" >竞标中</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li><a id="fliter_2" data-value="2">进行中</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li><a id="fliter_3" data-value="3">已结束</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li><a id="fliter_4" data-value="4">审核中</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li><a id="fliter_5" data-value="5">中止</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li><a id="fliter_6" data-value="6">未通过</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+								</ul>
+								<button type="button" class="btn pull-right btn-primary btn-xs" data-toggle="modal" data-target="#myModal">
+								  添加项目
+								</button>
+								<!--
+								<div class="input-group"   style="width:200px;    float: right;position: relative;top: -12px;"> 
+							      	<input type="text" class="form-control" placeholder="Search for...">
+							      	<span class="input-group-btn">
+							       	 	<button id="searchprojectInput" class="btn btn-primary" type="button"  >搜索</button>
+							      	</span>
+							    </div> 
+							    -->
+							</div>
+							<div class="panel-body" >   
+								<table class="table table-hover ">
+									<thead>
+										<tr>
+											<td>项目名</td>
+											<td>状态</td>
+											<td>发布时间</td>
+											<td>竞标数</td>
+											<td>操作区</td> 
+										</tr>
+									</thead>
+									<tbody  data-hasnext="<%= results['has_next']%>"  data-hasprev="<%= results['has_prev']%>" data-nextnum="<%= results['next_num']%>" data-page="<%= results['page']%>" data-pages="<%= results['pages']%>" data-perpage="<%= results['per_page']%>"  data-prevnum="<%= results['prev_num']%>">  
+										<%  for (var i in results['data']){%> 
+											<tr id="<%= results['data'][i]['id']%>">
+												<td><a href="/projectDetail?projectid=<%= results['data'][i]['id']%>" style="color:#333"><%= results['data'][i]['name']%></a> </td> 
+												<% if(results['data'][i]['status']==1){%>
+													<td class="status"> 竞标中</td>
+												<%}else if(results['data'][i]['status']==2){%>
+													<td class="status"> 进行中</td>
+												<%}else if(results['data'][i]['status']==3){%>
+													<td class="status"> 已结束</td>
+												<%} else if(results['data'][i]['status']==4){%>
+													<td class="status"> 审核中</td>
+												<%}else if(results['data'][i]['status']==5){%>
+													<td class="status"> 中止</td>
+												<%}else if(results['data'][i]['status']==6){%>
+													<td class="status"> 未通过</td>
+												<%} %>
+												<td><span class="time"><%= results['data'][i]['publishDate'].split("T")[0]%></span></td> 
+												<td><span style="color:#999;"><%= results['data'][i]['bidCount']%></span></td> 
+												<%   if(results['data'][i]['status']==1){%>
+													<td class="operation"><a  href="/bidding?projectid=<%= results['data'][i]['id']%>">竞标管理</a><a onclick="toEndStatus(this)"  data-status="5">关闭</a></td>
+												<%}else if(results['data'][i]['status']==2){%>
+													<td class="operation"><a href="/versions?projectid=<%= results['data'][i]['id']%>">version</a> <a href="/suggections?projectid=<%= results['data'][i]['id']%>">意见</a><a onclick="toEndStatus(this)" data-status="3">关闭</a></td>
+												<%}else if(results['data'][i]['status']==3){%>
+													<td class="operation"><a href="/versions?projectid=<%= results['data'][i]['id']%>">version</a> <a href="/suggections?projectid=<%= results['data'][i]['id']%>">意见</a></td>
+												<%} else if(results['data'][i]['status']==4){%>
+													<td class="operation"><a onclick="toEndStatus(this)">关闭</a></td>
+												<%}else if(results['data'][i]['status']==5){%>
+													<td class="operation">中止</td>
+												<%}else if(results['data'][i]['status']==6){%>
+													<td class="operation">未通过</td>
+												<%} %> 
+											</tr> 
+										<%}%> 
+									</tbody>
+								</table>  
+								<div id="turnPage"></div>
+							</div>  
+						</div> 
+					</div>  
+				</div>
+			</div> 
+		</div> 
+	</div>  
+</div> 
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加项目</h4>
+      </div>
+      <div class="modal-body">
+      		<div class="catalog">
+      			<ul>
+      				
+      			</ul> 
+      		</div>
+        	<div class="input-group">
+				<span class="input-group-addon"   ><font style="color:red">*</font>任务包名称：</span>
+				<input class="form-control" name="name"  >
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon"   ><font style="color:red">*</font>任务包周期：</span>
+				<input class="form-control" name="timespan" >
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon"   ><font style="color:red">*</font>任务包赏金：</span>
+				<input class="form-control" name="bonus"   >
+				<span class="input-group-addon"  style="color:#999999">请输入数字（单位：人民币）</span>
+
+			</div> 
+			<div class="input-group">
+				<span class="input-group-addon"   ><font style="color:red">*</font>任务包要求：</span>
+				<textarea class="form-control requirements"   style="resize:none; height:100px;"></textarea>
+			</div> 
+			<div class="input-group">
+				<span class="input-group-addon"   >任务包介绍：</span>
+				<textarea class="form-control description"   style="resize:none; height:100px;"></textarea>
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon"   >乙方资质要求：</span>
+				<input class="form-control" name="bidderQualifiRequire"  >
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon"   >乙方地域要求：</span>
+				<input class="form-control" name="bidderLocationRequire"  >
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon"   ><input type="checkbox" id="receipt" >发票：</span>
+				<textarea class="form-control receiptDes"    style="resize:none; height:100px;"></textarea>
+			</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary"  onclick="addProject()">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+<% include commonScript.html %>  
+<script type="text/javascript"> 
+$(function () {   
+	$.ajax({
+		type: "get",
+		async: false,
+		url: "/categorylist", 
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){  
+			var str=""
+			for(var i in data['data']){
+			 	if(data['data'][i]['parentid']==data['data'][i]['id']  ){
+			 		str+='<li class="catalog-li"><span>'+data['data'][i]['name']+'  </span><ul>';
+			 			for(var j in data['data']){
+			 				if(data['data'][j]['parentid']==data['data'][i]['id']  && data['data'][j]['id']!=data['data'][i]['id']){
+			 					str+='<li><span>'+data['data'][j]['name']+'</span>';
+			 							for(var k in data['data']){
+			 								if(data['data'][k]['parentid']==data['data'][j]['id']  && data['data'][k]['id']!=data['data'][j]['id'])
+			 								str+='<a  data-id="'+data['data'][k]['id']+'" onclick="addCatelog(this)">'+data['data'][k]['name']+'</a>'; 
+			 							}  
+									'</li>'; 
+			 				}  
+			 			}
+			 		str+='</ul></li>'
+			 	}
+
+			} 
+			$('.catalog ul').append(str);
+			 
+		},
+		error: function(){
+			alert('fail');
+		} 
+	});    
+});  
+
+$(function(){ 
+	$('#fliter_'+(getUrlParameter('status') ? getUrlParameter('status') : "")).addClass('active');
+	var turnPageData={
+		has_next: $('tbody').attr('data-hasnext'),
+		has_prev: $('tbody').attr('data-hasprev'),
+		next_num: $('tbody').attr('data-nextnum'),
+		page: $('tbody').attr('data-page'),
+		pages: $('tbody').attr('data-pages'),
+		per_page: $('tbody').attr('data-perpage'),
+		prev_num: $('tbody').attr('data-prevnum'), 
+	}
+	$('#turnPage').myUtils('turnPage',turnPageData,changePage) 
+}); 
+
+
+$('.fliter a').click(function(){
+	var status=$(this).attr("data-value");
+	var url=location.search.toString();
+	if(status){ 
+		url=replaceParamVal(url,'status',status)  
+		url='/userListPublishedProjects/1'+url; 
+	}else{  
+		url='/userListPublishedProjects/1'+removeParameter(url,'status');
+	} 
+	location = url  
+}) 
+//翻页
+function changePage(){ 
+	var url=location.search.toString();
+	url='/userListPublishedProjects/'+$(this).attr('data-pageid')+url; 
+	location =url  
+}      
+//状态结束按钮
+function toEndStatus(e){
+	var $_e=$(e);
+	var params={
+		'id':parseInt($(e).parent().parent().attr('id')), 
+		'status':parseInt($_e.attr('data-status'))
+	} 
+	console.log(params);
+	var r=confirm("确定结束此任务包？");   
+	if(r==true){ 
+		$.ajax({
+			type: "put",
+			async: false,
+			url:"/project", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				$_e.css('display','none');
+				$_e.parent().parent().find('.status').html('关闭');
+				$_e.parent().parent().find('.status').css('color','#999');
+			},
+			error: function(){
+				alert('fail');
+			}
+		}); 
+       
+	}else{
+         return false;   
+	}  
+}    
+
+
+
+
+
+
+
+
+
+ 
+
+//全局变量 
+var url = location.search; 
+var theRequest = {};  
+if (url.indexOf("?") != -1) {
+    var str = url.substr(1);
+    strs = str.split("&"); 
+    theRequest={ 
+    	"userid":strs[0].split("userid=")[1], 
+    }
+    console.log(theRequest) 
+}
+   
+
+function addCatelog(e){
+	var id=$(e).attr('data-id');
+ 	
+ 	if($(e).hasClass('active')){
+ 		$(e).removeClass('active') 
+ 	}else{ 
+ 		$(e).addClass('active')
+ 	} 
+
+} 
+function addProject(){
+	
+	var arr=$('.catalog  .active') ;  
+	var cataLogArr="";
+	console.log(arr)
+	for(var i=0;i<arr.length;i++){
+		cataLogArr += cataLogArr=="" ?  $(arr[i]).attr('data-id') : ","+$(arr[i]).attr('data-id');
+		//kind.push(parseInt($(arr[i]).attr('id')));
+		 
+	}  
+	console.log(cataLogArr)
+	var params={
+		"userid":theRequest['userid'],
+		"name":$('input[name="name"]').val(),
+		"timespan":$('input[name="timespan"]').val(),
+		"bonus":$('input[name="bonus"]').val(),
+		"requirements":$('.requirements').val().replace(/\n|\r\n/g,"<br>"),
+		"description":$('.description').val().replace(/\n|\r\n/g,"<br>"),
+		"bidderQualifiRequire":$('input[name="bidderQualifiRequire"]').val(),
+		"bidderLocationRequire":$('input[name="bidderLocationRequire"]').val(),
+		"receiptDes":$('.receiptDes').val().replace(/\n|\r\n/g,"<br>")  ,
+		"receipt":$('input[type="checkbox"]').is(':checked') ? true :false,
+		"cids":cataLogArr
+
+	}
+	console.log(params)
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/project", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data); 
+			alert("添加成功")
+			$('#myModal').modal('toggle')
+			 
+			 
+		},
+		error: function(){
+			alert('fail');
+		}
+	});   
+}  
+</script>  
+</body>
+
+</html>

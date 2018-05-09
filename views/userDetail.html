@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html >
+<head>
+<% include commonHead.html %> 
+<title>团队详情</title> 
+ 
+<style type="text/css">
+.title{ 
+	text-align:center;color:#e8594b;margin-top:20px;padding:20px 0;background: #fafbfc;border-bottom: 1px solid #e5e5e6;border-top: 1px solid #e5e5e6;
+	font-size:30px;font-weight:400;
+ }
+.userInfo{
+	position:relative;background:url('/images/common/userDetailBg.jpg');height:500px;
+	padding-top: 20px;
+	text-align: center;
+}
+.userInfo .userInfo_ i {
+	color:#e0e0e0;
+	font-size: 14px;
+	font-weight: 800;
+	display: inline-block; 
+	padding-right:10px;
+	color:#ffffff;
+
+}
+.userInfo img{
+	width:138px;height:138px;border-radius:100%;
+	margin: 0 auto;
+	display: block;
+}
+.userInfo .userInfo_{ 
+	width:1200px;margin:0 auto; 
+	padding-left:120px;
+} 
+.userInfo .userInfo_ span{
+	color:#ffffff; 
+	display: inline-block; 
+	padding-right:20px;
+	font-size: 14px;
+
+}
+
+ 
+.works  .box {
+	padding: 10px;
+	border: solid 1px #eeeeee;
+	border-radius: 4px;
+	margin-bottom: 10px;
+	cursor: pointer; 
+	background-color: white;
+	float: left;
+	width: 262px;
+}
+.works  .box img {
+	  width: 100%
+}
+.works  .box p {
+	position: absolute;
+	bottom: 4px;
+	padding:10px 10px; 
+	width: 100%;
+	background-color: rgba(0,0,0,0.8);
+	color:white; 
+	display: none;
+
+}
+.works  .box:hover p{
+	display:block;
+} 
+.tags a{
+	display: inline-block;
+	border-radius: 8px;
+	border:1px solid #fca95f;
+	background-color:rgba(255,233,214,0.3);
+	color:white;
+	padding:4px;
+	font-size: 14px;
+	margin-right: 10px;
+}
+.projectlist>a{
+	display: block;
+    width: 560px;
+    float: left;
+    padding: 20px 20px;
+    color: #666; 
+}
+.projectlist>a:hover,.projectlist>a:hover span{
+	color:#e8594b;
+}
+.projectlist>a>span{
+	display: inline-block;
+	padding:0px 10px; 
+	color:#666;
+}
+.recommend { 
+	width: 1200px;   
+	text-align: center; 
+	background-color: white;
+	border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.14);
+    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1); 
+    overflow: hidden;
+}
+.recommend li{
+	float: left;  
+	padding:20px 0;
+	position: relative;  
+	width: 239px; 
+	border-right: 1px solid rgba(0,0,0,.14); 
+	 
+}
+.recommend li:hover{
+	box-shadow: 0 0 38px rgba(0,0,0,.08) inset;
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+}
+.recommend li:hover span{
+	color:#666;
+}
+.recommend li>span{
+	color: #999;
+}
+.recommend li a{
+	display: block;
+	position: relative;  
+	vertical-align:middle;
+	text-align:center;
+} 
+.recommend li a>img{ 
+	vertical-align:middle; 
+	max-width: 200px;
+	max-height: 200px;
+}    
+</style>
+</head> 
+<body style="overflow-x:hidden;  background:#f5f5f5">
+<% include header2.html%>
+<section class="userInfo" style=""> 
+		<img src="<%=results['user']['imageLarge']%>">
+          			<%if(results['user']['authenticationType'] & 1) {%>
+                        <div class="vip1" title="个人" style="width:21px;height:21px;position:relative;top:-20px;right:-60px;display:inline-block;"></div> 
+		 			<%}%>
+		 			<%if(results['user']['authenticationType'] & 2){%>
+		 				<div class="vip2" title="企业"  style="width:21px;height:21px; position:relative;top:-20px;right:-60px; display:inline-block;"></div> 
+		 			<%}%> 
+		 			<%if(results['user']['authenticationType'] &  4){%>
+		 				<div class="vip3" title="交易" style="width:21px;height:21px;position:relative;top:-20px;right:-60px; display:inline-block;"></div>
+		 			<%}%>
+		<h1 style="text-align:center;font-size:26px;color:#e8594b;margin:20px 0 20px 0;"><%= decodeURI(results['user']['nickname']) %></h1>	
+      
+		</br>
+		<div class="userInfo_"  >  
+			<i class="icon-phone" style="color:#98d859;"></i><span>电话：<%=results['user']['phone']%></span> 
+			<%if(results['user']['authenticationType'] & 1 ){%>
+				<i class="icon-user" style="color:#f15e4a;"></i><span>资质认证：个人</span>
+			<%}else if(results['user']['authenticationType'] & 2){%>
+				<i class="icon-user" style="color:#f15e4a;"></i><span>资质认证：企业</span>
+			<%}else{%>
+				<i class="icon-user" style="color:#f15e4a;"></i><span>资质认证：未认证</span>
+			<%}%>    
+			<i class=" icon-envelope-alt" style="color:#46b8da;"></i><span>邮箱：<%=results['user']['email']%></span>  
+			<i class="icon-map-marker" style="color:#fca75b;"></i><span>联系地址：<%= ( decodeURI(results['user']['location']) ? decodeURI(results['user']['location']) : "未填写")%></span> 
+			<%if(results['user']['authenticationType'] & 4 ){%>
+				<i class="icon-credit-card" style="color:#02cf97;"></i><span>交易认证：已认证</span>
+			<%}else{%>
+				<i class="icon-credit-card" style="color:#02cf97;"></i><span>交易认证：未认证</span>
+			<%}%>
+			</br>
+		</div> 
+		</br></br></br>
+		<div style="width:1000px;margin:0 auto;text-align:center;" >
+			<span style="color:#e0e0e0;font-size:16px;">技能标签：</span>
+			<div class="tags"  style="display:inline-block;">
+				<%for(var i in results['tags']){%>
+					<a><%= results['tags'][i]['name']%></a>
+				<%}%> 
+			</div>
+			</br></br></br>
+			<span style="color:#e0e0e0;font-size:16px;">行业分类：</span>
+			<div class="tags" style="display:inline-block; ">
+				<%for(var i in results['categorys']['data']){%>
+					<a><%=  results['categorys']['data'][i]['name']%></a>
+				<%}%> 
+			</div>
+		</div>
+	  
+</section>
+<h1 style="text-align:center;color:#e8594b;margin-top:20px;font-size:30px;font-weight:400">简介</h1>	
+<div class="w">
+	<p style="color:#666;text-indent:2em;line-height:3;margin-top:20px;"><%= decodeURI(results['user']['description'])%></p>
+
+</div>
+<!--作品展示-->
+<div class="w"> 
+	<h2    style="text-align:center;color:#e8594b;margin-top:20px;font-size:30px;font-weight:400" >作品展示</h2></br> 	
+	<div class="works"> 
+		<%for(var i in results['works']['data']){%>
+			<div class="box"> 
+				<a  href="/w?i=<%=  results['works']['data'][i]['workid']%>" style=" display:block;width:100%;height:100%;position:relative;overflow:hidden">
+					<img src="<%= results['works']['data'][i]['image']%>">
+					<p><%= results['works']['data'][i]['title']%></p> 
+				</a>
+			</div> 
+		<%}%> 
+	</div>
+</div>
+<!--参与的项目-->
+<h2 class="title" >参与的项目</h2>
+<div class="w" style="text-align:center">  
+	<div class="projectlist">    
+		<%for( var i in results['participateProjects']['data']){%>  
+			<% if(i%2 == 0){%>
+				<a href="/p?i=<%= results['participateProjects']['data'][i]['project']['id']%>" class="text-right"><%= results['participateProjects']['data'][i]['project']['name']%> <span  >●</span></a> 
+			<%}else{%>
+				<a  href="/p?i=<%= results['participateProjects']['data'][i]['project']['id']%>" class="text-left"><span>●</span><%= results['participateProjects']['data'][i]['project']['name']%>  </a>
+			<%}%> 
+		<%}%>
+		<div class="clear"></div>
+	</div>
+</div>
+<!--发布的项目-->
+<h2 class="title" >发布的项目</h2>
+<div class="w"  style="text-align:center">  
+	<ul class="projectlist" >  
+		<%for( var i in results['publishedProjects']['data']){%>  
+			<% if(i%2 == 0){%>
+				<a href="/p?i=<%= results['publishedProjects']['data'][i]['id']%>" class="text-right"><%= results['publishedProjects']['data'][i]['name']%> <span  >●</span></a> 
+			<%}else{%>
+				<a  href="/p?i=<%= results['publishedProjects']['data'][i]['id']%>" class="text-left"><span  >●</span><%= results['publishedProjects']['data'][i]['name']%>  </a>
+			<%}%> 
+		<%}%>
+		<div class="clear"></div> 
+	</ul>
+</div>
+<!--相关团队推荐-->
+<h2  class="w" style="padding:30px 0;">相关团队推荐</h2>
+<div class="w">     
+	<ul class="recommend">
+		<% for(var i in results['list28']['data']){%>
+			<li>
+				<span><%= results['list28']['data'][i]['title']%></span></br></br>
+				<a  href="<%= results['list28']['data'][i]['url']%>" class="pic">
+					<img src="<%= results['list28']['data'][i]['image']%>"> 
+				</a>
+			</li>
+		<%}%>
+		
+	</ul>  
+</div>
+<% include footer.html %>
+
+</body> 
+<% include commonScript.html %>
+<script type="text/javascript" src="/js/masonry-docs.min.js"></script>  
+<script> 
+$(function() {
+    var $container = $('.works');
+    $container.imagesLoaded(function() {
+        $container.masonry({
+                itemSelector: '.box',
+                gutter: 20,
+                isAnimated: true,
+            });
+     });
+})
+</script>
+</html>

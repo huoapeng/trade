@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>我的作品</title> 
+<style> 
+.myWork{
+	margin-top:12px;
+}
+.myWork>.top{
+	padding-bottom:20px;
+	border-bottom:2px solid #e0e0e0;
+}
+.myWork>.top>span{
+	font-size:18px;
+	font-weight:800;
+	color:#666;
+}
+.myWork>.top>.btn{
+	background-color:#ec6941;
+	color:white;
+	float:right;
+}     
+.myWork>.works{
+	margin-top:20px;
+	margin-bottom:20px;
+	width:100%;
+	position: relative;
+} 
+
+.myWork>.works .workName{
+	font-size:12px;
+}
+.myWork>.works .time{
+	font-size:12px;
+	color:#999; 
+}
+.myWork  .workType{
+	font-size:12px;
+	color:#999;
+}
+.workInfo{
+	background-color:white;
+	box-shadow:0px 0px 4px #e0e0e0;
+	margin-top:20px;
+	float: left; 
+	width: 214px;
+}
+.workInfo p{
+	font-size: 12px;
+    color: #999;
+    display: block; 
+    overflow: hidden;
+    width: 100%;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.workInfo .detail{
+	padding:10px 6px  0px 6px;
+} 
+.workInfo img{ 
+	width:100%;
+}
+.workInfo .operation{
+	margin-top:10px;
+	border-top:1px solid #e0e0e0;
+	padding:6px 0 6px 0px;
+	text-align:right;
+}
+.workInfo .operation>a{
+	color:#ec6941; 
+}
+ 
+</style>  
+</head>
+<body >
+ <% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeWork">我的作品 ></a><a href="/myWork">作品中心</a>
+	</div>
+</div>
+<div class="w" > 
+	<% include nav.html %>
+    <div class="content">
+    	<div class="myWork">
+			<div class="top">
+				<span>作品</span> 
+			</div>
+			<div class="works" data-hasnext="<%= results['works']['has_next']%>"  data-hasprev="<%= results['works']['has_prev']%>" data-nextnum="<%= results['works']['next_num']%>" data-page="<%= results['works']['page']%>" data-pages="<%= results['works']['pages']%>" data-perpage="<%= results['works']['per_page']%>"  data-prevnum="<%= results['works']['prev_num']%>">   
+					<%for(var i in results['works']['data']){%>
+						<div class="workInfo"  id="<%= results['works']['data'][i]['workid']%>">
+							<img src="<%= results['works']['data'][i]['image']%>">
+							<div class="detail">
+								<span class="workName">作品名称：<%= results['works']['data'][i]['title']%></span> 
+								<div class="workType">作品类型：
+								<% for(var j in  results['works']['data'][i]['tags']){%>
+
+									<%=  results['works']['data'][i]['tags'][j]['name']%>
+								<%}%> 
+								</div>
+								<p>作品介绍：<%= results['works']['data'][i]['description']%></p>
+								<span class="time">发布时间：<%= results['works']['data'][i]['publishDate']%></span> 
+								<div class="operation">
+									<a onclick="deleteWork(this)">删除</a>
+								</div>
+							</div>
+						</div> 
+					<%}%>
+					<!--
+					
+					<div class="col-xs-12 col-sm-6 col-md-3">
+						<div class="workInfo">
+							<img src="../../images/index/254982166624103026.jpg">
+							<div class="detail">
+								<span class="workName">作品名称</span>
+								<span class="time">2016/15/6</span></br>
+								<span class="workType">作品类型</span>
+								<p>作品介绍：作品介绍：作品介绍：作品介绍：作品介绍：</p>
+								<div class="operation">
+									<a >删除</a>
+								</div>
+							</div>
+						</div>
+					</div>  
+					--> 
+			</div>
+			<div class="projectPage"  id="turnPage"> 
+			</div>
+		</div> 
+    </div> 	
+</div>  
+<% include commonScript.html %> 
+<script type="text/javascript" src="/js/masonry-docs.min.js"></script>     
+<script   type="text/javascript">  
+$(function () {   
+	$('#myWorkList_2').addClass("active");  
+	//瀑布流
+	var $container = $('.works');
+    $container.imagesLoaded(function() {
+        $container.masonry({
+                itemSelector: '.workInfo',
+                gutter: 4,
+                isAnimated: true,
+            });
+    }); 
+
+    //翻页
+    var turnPageData={
+		has_next: $('.works').attr('data-hasnext'),
+		has_prev: $('.works').attr('data-hasprev'),
+		next_num: $('.works').attr('data-nextnum'),
+		page: $('.works').attr('data-page'),
+		pages: $('.works').attr('data-pages'),
+		per_page: $('.works').attr('data-perpage'),
+		prev_num: $('.works').attr('data-prevnum'), 
+	}
+	$('#turnPage').myUtils('turnPage',turnPageData,changePage) 
+}); 
+
+function changePage(){ 
+	var url=location.search.toString();
+	url='/w/'+$(this).attr('data-pageid')+url; 
+	location =url  
+}  
+//删除作品
+function deleteWork(e){
+	var r=confirm("确定删除？");   
+	if(r==true){ 
+		var obj=$(e).parent().parent().parent();
+		var params={
+			"id":parseInt(obj.attr('id'))
+		}
+		console.log(params); 
+		$.ajax({
+			type: "delete",
+			async: false,
+			url: "/work", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){ 
+				console.log(data);  
+				location = location.search.toString();
+
+			},
+			error: function(){
+				alert('fail');
+			}
+		}); 
+	} 
+} 
+ //日期格式转换
+function dateType(date){
+	var date=new Date(date);
+	return date.toLocaleDateString();
+} 
+</script> 
+</body>
+
+</html>

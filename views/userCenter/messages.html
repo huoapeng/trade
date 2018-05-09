@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>消息管理</title> 
+<style> 
+ 
+ .top{
+	padding-top:12px;
+	padding-bottom:20px;
+	border-bottom:2px solid #e0e0e0;
+	margin-bottom:20px;
+}
+.top>span{
+	font-size:18px;
+	font-weight:800;
+	color:#666;
+}
+.messageList{
+	padding:10px;
+}
+.messageList>li{
+	border-bottom: 1px solid #e0e0e0;
+	padding:10px 0px;
+	position: relative;
+	cursor: pointer;
+}
+.messageList>li>.description{
+	display: none;
+	padding:10px 60px; 
+}
+.messageList>li>.remove{
+	
+	display: none;
+	position: absolute;
+	top:12px;
+	right:0px;
+
+}
+.messageList>li:hover .remove{
+	display: block;
+
+}
+.messageList>li>.emailRead{
+	width: 20px;height:14px;
+	margin:0px 10px;
+	display: inline-block;
+	background:url('/images/common/emailRead.png');
+}
+.messageList>li>.emailUnread{
+	width: 20px;height:14px; 
+	margin:0px 10px;
+	display: inline-block;
+	background:url('/images/common/emailUnread.png') no-repeat;
+}
+.messageList>li>p{
+	display: inline-block;
+}
+.messageList>li>span{
+	display: inline-block;
+	float: right;
+	padding-right:  20px;
+}
+</style>  
+</head>
+<body >
+ <% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeWork">我的作品 ></a><a href="/messages">消息管理</a>
+	</div>
+</div>
+<div class="w" > 
+	<% include nav.html %>
+    <div class="content">  
+		<div class="top">
+			<span>消息管理</span> 
+		</div>
+		<div style="background:#e0e0e0;padding:10px">
+			<input type="checkbox" id="selectAll"> 全选
+			<i class=" icon-trash icon-large" id="removeMessage" style="float:right;cursor:pointer"></i>
+		</div>
+		<ul class="messageList">
+
+		</ul>
+    </div>
+</div>  
+<% include commonScript.html %>     
+<script   type="text/javascript">  
+$(function(){
+ 	$('#messages_1').addClass("active");
+ })
+
+//全选反选
+$('#selectAll').click(function(){
+	var a = $(".messageList input"); 
+	if(a[0].checked){
+		for(var i = 0;i<a.length;i++){
+			if(a[i].type == "checkbox"){
+				a[i].checked = false;
+			}
+		}
+	}else{
+		for(var i = 0;i<a.length;i++){
+			if(a[i].type == "checkbox"){
+				a[i].checked = true;
+			}
+		}
+	}
+}) 
+//删除消息(全选)
+$('#removeMessage').click(function(){
+	var objs=$(".messageList input")
+	var messagesId="";
+	for(var i=0;i<objs.length;i++){
+		messagesId += messagesId=="" ?  $(objs[i]).attr('data-id') : ","+$(objs[i]).attr('data-id');  
+	}   
+/*	$.ajax({
+		type: "delete",
+		async: false,
+		url: "/work", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);  
+			location = location.search.toString();
+
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); */
+})
+//删除单个消息
+$('.remove').click(function(){ 
+	$(this).parent().remove()
+	$.ajax({
+		type: "delete",
+		async: false,
+		url: "/work", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); 
+})
+
+//点击显示详情
+$(".messageList li").click(function(){
+	$(this).find('.emailUnread').removeClass().addClass("emailRead")
+	$('.description').css('display','none')
+	$(this).find('.description').css('display','block')
+})
+
+
+</script> 
+</body>
+
+</html>

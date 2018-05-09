@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html >
+<head>  
+<% include commonHead.html %>
+<title>技能标签</title> 
+<style>  
+.tag{  
+	text-align:center;
+	position:relative;
+	max-width:400px; 
+	
+} 
+.tag>.btn{
+	background-color:#e8594b;
+	color:white;
+	display:inline-block;
+}
+.tag ul{
+	position:absolute;
+	display:none;
+	border:1px solid #e0e0e0;
+	width:100%;
+	text-align:center;
+	background-color:white;
+	z-index:100;
+}
+.userDetail>.top{
+	padding-top:12px;
+	padding-bottom:20px;
+	border-bottom:2px solid #e0e0e0;
+	margin-bottom:20px;
+}
+.userDetail>.top>span{
+	font-size:18px;
+	font-weight:800;
+	color:#666;
+}
+.userDetail .btn{
+	background-color:#e8594b;
+	color:white;
+}
+.userDetail .userLine {
+	padding:16px 0 16px;
+}
+.tabInfo{
+	border:1px solid #e87165;
+	border-radius:4px;
+	display:inline-block;
+	padding:5px 10px 5px 10px;
+	margin-right:20px;
+	margin-top:30px;
+}
+.tabInfo span{
+	color:#e87165;
+}
+.tabInfo .icon-remove{
+	cursor:pointer;
+	color:#e87165;
+}
+.input-group-addon{
+	padding:0px;
+	min-width:100px;
+	border:0px;
+}
+.form-control{
+	border-radius:4px !important;
+}
+</style>  
+</head>
+<body > 
+<% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/basicInfo">资料完善 ></a><a href="/authenManual">技能标签</a>
+	</div>
+</div>
+<div class="w"  > 
+	<% include nav.html %>
+        <div class="content" style="height:500px;"> 
+			<div class="userDetail"> 
+					<div class="top">
+						<span>技能标签</span> 
+					</div> 
+					<div class="tag">
+						<div class="input-group">
+							<span class="input-group-addon" id="basic-addon1">技能标签:</span>
+							<input id="tabInput" class="form-control" type="text" oninput="thinkSearch(this)"  > 
+							<span class="input-group-addon" id="basic-addon1"><a class="btn" onclick="addTag()">添加</a></span>
+						</div>  
+						<div style="margin:0 100px 0 100px;position:relative">
+							<ul>
+								<li><a>1</a></li>
+								<li><a>1</a></li>
+								<li><a>1</a></li>
+							</ul>
+						</div> 
+					</div>   
+					<div class="tabList">
+						<!--
+						<div class="tabInfo">
+							<span>好的</span>
+							<i class="icon-remove" onclick="removeTag(this)"></i>
+						</div>
+						-->
+					</div> 
+			</div>
+		</div>  
+			 
+</div>     
+<% include commonScript.html %>
+<script   type="text/javascript">  
+$(function () {   
+	$.ajax({
+		type: "get",
+		async: false,
+		url: '/usertags', 
+		contentType:"application/json",   
+		success: function(data){ 
+			console.log(data);  
+			for( var i in data){
+				$('.tabList').append('<div class="tabInfo" id="'+data[i]['id']+'"><span>'+data[i]['name']+'</span><i class="icon-remove" onclick="removeTag(this)">	</i></div>');
+			} 
+		},
+		error: function(){
+			alert('fail');
+		}
+	});  
+	$('#userInformation_1').addClass("active");
+});  
+//联想查询
+function thinkSearch(e){
+	$('.tag ul').css('display','block');  
+	$.ajax({
+		type: "get",
+		async: false,
+		url:"/search/usertaglist/"+$(e).val(), 
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);
+			$('.tag ul').empty(); 
+			if(data.length>0){
+				$('.tag ul').css('display','block'); 
+				for(var i in data){
+					$('.tag ul').append('<li id="'+data[i]['id']+'"><a>'+data[i]['name']+'</a></li>');
+				} 
+			}else{
+				$('.tag ul').css('display','none'); 
+			}
+			
+			$('.tag ul>li').click(function(){ 
+				var temp={
+					'id':$(this).attr('id'),
+					'name':$(this).find('a').html() 
+				}
+				$('#tabInput').val(temp['name']);
+				$('#tabInput').attr('data-kindId',temp['id']);
+				$(this).parent().css('display','none');
+			})
+		},
+		error: function(){
+			//alert('添加项目失败');
+			$('.tag ul').css('display','block');  
+		}
+	});   
+}
+//增加技能标签
+function addTag(){
+	var params={ 
+		"name":$('#tabInput').val(), 
+	}  
+	var reg=/^[a-zA-Z\u4e00-\u9fa5]/;
+	var existTags=$('.tabInfo span');
+	var flag=true;
+	for(var i=0; i<existTags.length;i++){
+		console.log(existTags[i].innerText);
+		if(existTags[i].innerText.trim()==params['name'].trim()){
+			alert('此标签已经存在');
+			flag=false;
+		}
+		
+	}
+	if(params["name"].trim()==""){
+		alert('技能标签不能为空');
+		flag=false;
+	} else if(!reg.test(params["name"])){
+		alert('不能包含特殊字符');
+		flag=false;
+	} 
+	if(flag){
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/usertag", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){ 
+				console.log(data);  
+				$('.tabList').append('<div class="tabInfo" id="'+data['id']+'"><span>'+params['name']+'</span><i class="icon-remove" onclick="removeTag(this)"></i></div>');
+			},
+			error: function(){
+				alert('fail');
+			}
+		});  
+	
+	} 
+	
+	
+}
+//删除技能标签
+function removeTag(e){
+	var params={ 
+		'id':parseInt($(e).parent().attr('id')),
+		"userid":parseInt(sessionStorage.customerId) 
+	} 
+	console.log(params);
+	$.ajax({
+		type: "DELETE",
+		async: false,
+		url: "/usertag",
+		contentType:"application/json", 
+		data:JSON.stringify(params),  
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);
+			$(e).parent().remove();
+		},
+		error: function(error){ 
+			console.log('error');
+		}
+	});  
+}
+
+</script> 
+</body>
+
+</html>

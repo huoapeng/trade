@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>首页</title>  
+<style>   
+
+.categorys-sons a:hover{
+	color:#e8594b !important;
+
+}
+#categorysMenua .icon-chevron-down{
+	display: none !important; 
+}
+.projectList>li>a:hover,.hotspotItems a:hover,.teamInfo a:hover{
+	 color:#666 !important;
+}
+header #index{
+	color:#e8594b
+}
+.section1 ul{
+	margin-right: -10px;
+	margin-top: 8px; 
+}
+.section1 ul li {
+	float: left;
+	margin-right: 10px;
+}
+.section1 ul img{
+	width:232px;
+	height:150px;
+} 
+.hotspot{
+	height:120px;border:1px solid #e0e0e0;margin:20px auto;
+	background-color: white;    border-radius: 8px;
+}
+.hotspot .hotspotSign{
+	font-size:24px;display:block;float:left;width:100px; text-align:center;padding-top:30px;
+}
+.hotspot .hotspotItems{
+	display:block;float:left;width:500px;vertical-align:top;padding-top:20px;
+}
+.hotspot .hotspotItems a{
+	font-size: 14px;
+	line-height: 2;
+	color: #999999; 
+	display: block;width:300px; 
+	float: left;
+	letter-spacing: 2px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space:nowrap; 
+}
+.hotspot .hotspotItems span{
+	color:#e8594b; 
+	line-height: 2;
+} 
+section h2{
+	font-size: 30px;
+	color:#545454;
+	font-weight: 400;
+	border-left: 4px solid #e8594b;
+    padding: 0px 10px;
+    margin: 30px 0;
+} 
+.section1 ul li a:hover img{
+	transform: translateY(-6px);
+    -webkit-transform: translateY(-6px);
+    -moz-transform: translateY(-6px);
+    box-shadow: 0 26px 40px -24px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 0 26px 40px -24px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0 26px 40px -24px rgba(0, 0, 0, 0.7);
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.section2 .box{
+	width:380px;
+	border: 1px solid #e0e0e0; 
+    background-color: white;
+    border-radius: 8px;
+}
+.section2 .box-body{
+	min-height: 250px;
+}
+.section2-smallPic{
+	margin-right: -10px;
+}
+.section2-smallPic li{
+	float: left;
+	cursor: pointer;
+	margin-right: 10px; 
+}
+.section2-smallPic li:hover{ 
+	transform: translateY(-6px);
+    -webkit-transform: translateY(-6px);
+    -moz-transform: translateY(-6px);
+    box-shadow: 0 26px 40px -24px rgba(0, 36, 100, 0.3);
+    -webkit-box-shadow: 0 26px 40px -24px rgba(0, 36, 100, 0.3);
+    -moz-box-shadow: 0 26px 40px -24px rgba(0, 36, 100, 0.3);
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.section2-smallPic img{
+	height:60px;
+	width:60px;
+}
+.section2 .teamInfo img{
+	width:100px;
+	height:100px;
+	vertical-align: top;
+}
+.section3 .box-header a{
+	font-size: 18px;
+	padding:16px 10px; 
+	color:#999;
+} 
+.section3 .box-header a:hover{ 
+	color:#e8594b;
+}
+.section3 .box-header .active{	
+	border-bottom: 1px solid #e8594b;
+}
+.section3 .projectList{
+	width:1200px; 
+	display: none; 
+}
+.section3 .projectList:first-child{
+	display: block;
+}
+.section3 .projectList>li{
+	width:400px;
+	padding:10px 0;
+	float: left;
+}
+.section3 .projectList>li>span{
+	color:#e8594b;
+	display: inline-block;
+	width: 100px;
+}
+.section3 .projectList>li>a{
+	color:#999;
+	display: inline-block;
+	width: 300px; 
+}
+.section4 .icons{
+	width:232px;
+	float: left;
+	border:1px solid #e0e0e0;
+}
+.section4 .icons li{
+	border:1px solid #e0e0e0;
+	padding:20px 0;
+	text-align: center;
+	width: 114px;
+	height: 60px;
+	cursor: pointer;
+	float: left;  
+}
+.section4 .icons li span{
+	color:#e8594b;
+}
+.section4 .icons li:hover{
+	
+}
+.section4 .icons .active{
+	border: 1px solid #999;
+}
+.section4 .icons li:hover .img{
+	-webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    transform: scale(1.2);
+    -webkit-transition: transform .5s ease;
+    -moz-transition: transform .5s ease;
+    transition: transform .5s ease;
+}
+.section4 .icons li .img{
+	width: 34px;
+	display: inline-block;
+	height: 34px; 
+}  
+.section4 .list{
+	width:720px;height:510px; float:left;
+}
+.section4 .list li{ 
+	display: none; 
+	overflow: hidden;
+	float: left;
+	cursor: pointer;
+}
+.section4 .list li:hover img{
+	-webkit-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    transform: scale(1.02);
+    -webkit-transition: transform .5s ease;
+    -moz-transition: transform .5s ease;
+    transition: transform .5s ease; 
+
+}
+.section4 .list li img{
+	width:360px;height:510px;float:left; 
+}
+.section5 .lists,.section6 .lists {
+	display: inline-flex; 
+	 
+}
+.section5 .box,.section6 .box{ 
+	padding: 10px;
+	width: 278px;
+	cursor: pointer;
+	background-color: transparent;
+	border: 1px solid transparent;
+	border-bottom: 1px solid #e0e0e0;
+}
+.section5 .box-body,.section6 .box-body{ 
+	padding: 0px;
+	width: 278px;
+	height: 200px;
+	overflow: hidden;
+}
+.section5 .box-body img,.section6 .box-body img{
+	width: 278px;
+	height: 200px;
+}
+.section5  .box-footer,.section6  .box-footer{
+	border-top:0px; 
+}
+.section5 .box:hover img,.section6 .box:hover img,.section4>a:hover img{
+	-webkit-transform: scale(1.02);
+    -moz-transform: scale(1.02);
+    transform: scale(1.02);
+    -webkit-transition: transform .5s ease;
+    -moz-transition: transform .5s ease;
+    transition: transform .5s ease; 
+}
+.section5 .box:hover,.section6 .box:hover{
+	background-color:white;
+	border: 1px solid #e0e0e0;
+	transition:background-color 0.6s linear; 
+} 
+.section6>a>img{
+	display: block;
+	float: left;
+	opacity: .8;
+} 
+.section6>a:hover img{
+	opacity: 1;
+}
+.teamInfo a{
+	color:#999;
+	font-size: 16px;
+	display: block;
+	width: 200px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.teamInfo span{
+	color:#e8594b;
+
+}
+ 
+.box{
+	background-color: white;  
+}
+.box-header{
+	padding:16px;
+	font-size:18px;
+	color:#999;
+	border-bottom: 1px solid #e0e0e0;
+}
+.box-body{
+	padding:16px; 
+} 
+.box-footer{
+	padding:16px; 
+	border-top: 1px solid #e0e0e0;
+}
+
+
+
+
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+
+
+.pulse {
+  animation-name: pulse;
+}
+/* 轮播css */ 
+.slideBox{ margin-left: 210px; width:990px; }
+.slideBox .hd{ height:15px;   position: absolute;bottom:20px;left:45%; }
+.slideBox .hd ul{ overflow:hidden;  }
+.slideBox .hd ul li{display:inline-block;width:14px; height:14px;   margin:0 4px;background-color:white; border-radius:8px; cursor:pointer; }
+.slideBox .hd ul li.on{ background-color:#e8594b; border-radius:7px;}  
+.slideBox .bd img{height:400px;} 
+.slideBox .bd li{display:inline-block;  } 
+</style>  
+</head>
+<body style="overflow-X:hidden; background:#f5f5f5" >
+<% include header.html %>
+<div class="banner">
+	<div class="w" >
+		<div class=" slideBox" style="position:relative">
+			<div class="hd ">
+				<ul><li></li><li></li><li></li></ul>
+			</div>
+			<div class="bd">
+				<ul> 
+					<%for(var i in results['list33']['data']){%>
+						<li><a  href="<%= results['list33']['data'][i]['url'] || '' %>"><img  src="<%= results['list33']['data'][i]['image'] || ''%>" /></a></li>
+					<%}%>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<section class="section1 w">
+	<ul>
+		<%for(var i in results['list34']['data']){%>
+			<li><a  href="<%= results['list34']['data'][i]['url'] || ''  %>"><img  src="<%= results['list34']['data'][i]['image'] || ''%>" /></a></li>
+		<%}%>
+	</ul>
+</section>
+<!--热点-->
+<div  class="w  hotspot" >
+	<span  class="hotspotSign">最新</br>任务</span>
+	<ul class="hotspotItems" >
+		<%for(var i=0;i<=2;i++){%>
+			<li><a  href="<%= (results['list35']['data']  ? results['list35']['data'][i]['url'] : '')%>" ><%=results['list35']['data'] ? results['list35']['data'][i]['title'] : ''%></a> <span>￥<%= results['list35']['data'] ? results['list35']['data'][i]['description'] : ''%></span></li>
+		<%}%>
+	</ul>
+	<span class="hotspotSign">最热</br>任务</span>
+	<ul class="hotspotItems" >
+		<%for(var i=3;i<=5;i++){%>
+			<li><a href="<%= results['list35']['data']  ? results['list35']['data'][i]['url'] : '' %> "><%= results['list35']['data']  ? results['list35']['data'][i]['title'] : ''%></a> <span>￥<%= results['list35']['data']  ? results['list35']['data'][i]['description'] : ''%></span></li>
+		<%}%>
+	</ul>
+</div>
+<!--品质团队-->
+<section class="section2 w" >
+	<h2>品质团队</h2>
+	<div style=" display: flex;">
+		<div class="box" style="margin-right:30px;">
+			<div class="box-header">
+				影视行业找我们
+			</div>
+			<div class="box-body">
+				<div class="teamInfo">
+					<img src="<%= results['list36']['data']  ? results['list36']['data'][0]['image'] : ''%>" />
+					<div style="display:inline-block;padding-left:20px;">
+						<a><%= results['list36']['data']  ? results['list36']['data'][0]['title'] : ''%></a></br>
+						<span><%=results['list36']['data']  ? results['list36']['data'][0]['description'] : ''%></span>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<ul class="section2-smallPic" >
+					<%for(var i in results['list36']['data'] ){%>
+						<li data-title="<%=results['list36']['data']  ?  results['list36']['data'][i]['title'] : ''%>"   data-description="<%= results['list36']['data']  ? results['list36']['data'][i]['description'] : ''%>" data-url="<%=results['list36']['data']  ? results['list36']['data'][i]['url'] : ''%>">
+							<img  src="<%=results['list36']['data']  ?  results['list36']['data'][i]['image'] : ''%>" />
+						</li>
+					<%}%>
+				</ul>
+			</div>
+		</div>
+		<div class="box" style="margin-right:30px;">
+			<div class="box-header">
+				动漫制作找我们
+			</div>
+			<div class="box-body">
+				<div class="teamInfo">
+					<img src="<%=results['list46']['data']  ? results['list46']['data'][0]['image']: '' %>" />
+					<div style="display:inline-block;padding-left:20px;">
+						<a><%=results['list46']['data'] ? results['list46']['data'][0]['title'] : ''%></a></br>
+						<span><%=results['list46']['data'] ? results['list46']['data'][0]['description'] : ''%></span>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<ul class="section2-smallPic" >
+					<%for(var i in results['list46']['data']){%>
+						<li data-title="<%=results['list46']['data'] ? results['list46']['data'][i]['title'] : ''%>"   data-description="<%=results['list46']['data'] ? results['list46']['data'][i]['description'] : ''%>" data-url="<%=results['list46']['data'] ? results['list46']['data'][i]['url'] : ''%>">
+							<img  src="<%= results['list46']['data'] ? results['list46']['data'][i]['image'] : ''%>" />
+						</li>
+					<%}%>
+				</ul>
+			</div>
+		</div>
+		<div class="box">
+			<div class="box-header">
+				VR找我们
+			</div>
+			<div class="box-body">
+				<div class="teamInfo">
+					<img src="<%=results['list47']['data'] ?  results['list47']['data'][0]['image'] : ''%>" />
+					<div style="display:inline-block;padding-left:20px;">
+						<a><%= results['list47']['data'] ? results['list47']['data'][0]['title'] : ''%></a></br>
+						<span><%= results['list47']['data'] ?results['list47']['data'][0]['description'] : ''%></span>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<ul class="section2-smallPic" >
+					<%for(var i in results['list47']['data']){%>
+						<li data-title="<%=results['list47']['data'] ? results['list47']['data'][i]['title'] : ''%>"   data-description="<%=results['list47']['data'] ? results['list47']['data'][i]['description'] : ''%>" data-url="<%=results['list47']['data'] ? results['list47']['data'][i]['url'] : ''%>">
+							<img  src="<%= results['list47']['data'] ? results['list47']['data'][i]['image'] : ''%>" />
+						</li>
+					<%}%>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+<!--ar/vr制作-->
+<section class="section3 w" >
+	<h2>AR/VR制作</h2>
+	<div class="box">
+		<div class="box-header" style="padding-left:0px;">
+		 	<a  class="active" data-id="37">V R 实 拍</a> | <a data-id="38">V R 游 戏</a> | <a data-id="39">A R 教 育</a> | <a data-id="40">A R 游 戏</a>
+		</div>
+		<div class="box-body">
+			<ul class="projectList" id="projectList_37">
+				<%for(var i in results['list37']['data']){%>
+					<li><span>￥<%= results['list37']['data'][i]['description']%></span><a href="<%= results['list37']['data'][i]['url']%>"><%= results['list37']['data'][i]['title']%></a> </li>
+				<%}%>
+				<div style="clear:both"></div>
+			</ul>
+			<ul class="projectList"  id="projectList_38">
+				<%for(var i in results['list38']['data']){%>
+					<li><span>￥<%= results['list38']['data'][i]['description']%></span><a href="<%= results['list38']['data'][i]['url']%>"><%= results['list38']['data'][i]['title']%></a> </li>
+				<%}%>
+				<div style="clear:both"></div>
+			</ul>
+			<ul class="projectList"  id="projectList_39">
+				<%for(var i in results['list39']['data']){%>
+					<li><span>￥<%= results['list39']['data'][i]['description']%></span><a href="<%= results['list39']['data'][i]['url']%>"><%= results['list39']['data'][i]['title']%></a> </li>
+				<%}%>
+				<div style="clear:both"></div>
+			</ul>
+			<ul class="projectList"  id="projectList_40">
+				<%for(var i in results['list40']['data']){%>
+					<li><span>￥<%= results['list40']['data'][i]['description']%></span><a href="<%= results['list40']['data'][i]['url']%>"><%= results['list40']['data'][i]['title']%></a> </li>
+				<%}%>
+				<div style="clear:both"></div>
+			</ul>
+		</div>
+	</div>
+</section>
+<!--创意制作-->
+<section class="section4 w" >
+	<h2>创意制作</h2>
+	<ul class="icons">
+		<li  class="active" data-start="0" ><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat;"></div></br><span>商标/VI设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -32px;width:26px;"></div></br><span>服装设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -58px;width:32px;"></div></br><span>卡片设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -90px;width:30px;"></div></br><span>生活创意设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -122px;width:30px;"></div></br><span>宣传片设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background:url('/images/common/index-icon.png') no-repeat -153px;width:34px;"></div></br><span>首饰设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -187px;width:34px;"></div></br><span>UI设计</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -220px;width:34px;"></div></br><span>照片处理</span>  </li>
+		<li data-start="0"><div  class="img" style="background: url('/images/common/index-icon.png') no-repeat -254px;width:34px;"></div></br><span>工艺美术设计</span>  </li>
+		<li> <div  class="img" ></div>  </li>
+	</ul>
+	<ul class="list">
+		<%for(var i in results['list41']['data']){%>
+			<%if(i==0 || i==1){%>
+			<li id="pic_<%= i%>" style="display:block">
+				<a href="<%= results['list41']['data'][i]['url']%>"><img src="<%= results['list41']['data'][i]['image']%>"></a>
+			</li>
+			<%}else{%>
+			<li id="pic_<%= i%>">
+				<a href="<%= results['list41']['data'][i]['url']%>"><img src="<%= results['list41']['data'][i]['image']%>"></a>
+			</li>
+			<%}%>
+		<%}%>
+	</ul>
+	<a href="<%= results['list42']['data'] ? results['list42']['data'][0]['url'] : ''%>" style="width:230px;height:510px;float:right;overflow:hidden"> <img  src="<%=results['list42']['data'] ?  results['list42']['data'][0]['image'] : ''%>"> </a>
+	<div style="clear:both"></div>
+</section>
+<!--影视行业-->
+<section class="section5 w" >
+	<h2>影视行业</h2>
+	<div class="lists">
+		<%for(var i in results['list43']['data']){%>
+			<div class="box"   >
+				<div class="box-body"  >
+					<a href="<%= results['list43']['data'][i]['url']%>"><img src="<%= results['list43']['data'][i]['image']%>"  /></a>
+				</div>
+				<div class="box-footer">
+					<span><%= results['list43']['data'][i]['title']%></span>
+				</div>
+			</div>
+		<%}%>
+	</div>
+</section>
+<!--动漫制作-->
+<section class="section6 w" >
+	<h2>动漫制作</h2>
+	<a href="<%= results['list45']['data'] ? [0]['url'] : ''%>"><img src="<%=results['list45']['data'] ? results['list45']['data'][0]['image'] : ''%>" style="width:900px;height:300px;"></a>
+	<a href="<%=  results['list45']['data'] ? results['list45']['data'][1]['url'] : '' %>"><img src="<%=results['list45']['data'] ? results['list45']['data'][1]['image'] : ''%>" style="width:300px;height:300px;"></a>
+	<div style="clear:both"></div>
+	<div class="lists">
+		<%for(var i in results['list44']['data']){%>
+			<div class="box"   >
+				<div class="box-body"  >
+					<a href="<%= results['list44']['data'][i]['url']%>"><img src="<%= results['list44']['data'][i]['image']%>"  /></a>
+				</div>
+				<div class="box-footer">
+					<span><%= results['list44']['data'][i]['title']%></span>
+				</div>
+			</div>
+		<%}%>
+	</div>
+</section>
+<% include footer.html %>
+<% include commonScript.html %>
+<script type="text/javascript" src="/js/common.js"></script>
+<script type="text/javascript" src="/js/jquery.SuperSlide.2.1.1.js"></script>
+<script   type="text/javascript">
+ $(".slideBox").slide({mainCell:".bd ul",autoPlay:true});
+
+ $('.section2-smallPic li').click(function(){
+ 	var obj=$(this).parent().parent().parent().find('.box-body').find('.teamInfo');
+ 	$(obj).find('img').attr('src',$(this).find('img').attr('src'))
+ 	$(obj).find('a').html($(this).attr('data-title'))
+ 	$(obj).find('a').attr('href',$(this).attr('data-url'))
+ 	$(obj).find('span').html($(this).attr('data-description'))
+ })
+ $('.section3 .box-header a').click(function(){
+ 	$('.section3 .box-header a').removeClass('active');
+ 	$(this).addClass('active')
+ 	$('.section3 .projectList').css('display','none')
+ 	$('#projectList_'+$(this).attr('data-id')).css('display','block')
+ })
+//创意制作选择
+$('.section4 .icons li').click(function(){
+	$('.section4 .icons li').removeClass('active');
+	$(this).addClass('active')
+	var startNum=$(this).attr('data-start');
+	$('.section4 .list li').css('display','none');
+	$('.section4 .list #pic_'+startNum).css('display','block');
+	$('.section4 .list #pic_'+(parseInt(startNum)+1)).css('display','block');
+})
+</script>
+</body>
+
+</html>

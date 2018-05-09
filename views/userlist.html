@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<link href="/stylesheets/animate.min.css" rel="stylesheet"/>
+<title>团队大厅</title>  
+<style>  
+
+.categorys{
+	display: none;
+}
+header #userlist{
+	color:#e8594b;
+}
+#categorysMenua:hover .categorys{
+	display: block !important; 
+	top:0px;
+}
+.categorys,.categorys>li>ul {  
+	 height: auto !important;
+}
+.fliters{
+	background-color: white;
+	margin:20px 0;
+	border-radius: 4px;
+	padding:0 20px;
+}
+.fliter{
+	border-bottom: 1px solid #e0e0e0;
+	padding:14px;
+}
+.fliter span{
+	font-size: 14px;
+	font-weight: 800;
+}
+.fliter ul>li{
+	display: inline-block; 
+	padding:0 10px;
+} 
+.fliter ul>li>a{
+	color:#999999;
+	font-size: 14px;display: inline-block;
+	padding:0 2px;
+	cursor: pointer;
+} 
+.fliter ul>li>a:hover{
+	background-color: #e8594b;
+    color: white;
+}
+.fliter  .active {
+	background-color: #e8594b;
+    color: white;
+}
+.box-list{
+	background-color: white;
+	border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.14);
+    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1); 
+    overflow: hidden;
+	
+}
+.box-list>.card-box{
+	padding:20px;
+	border-bottom: 1px solid #e0e0e0;
+	position: relative;
+	vertical-align: top;
+	background-color: white;
+}
+.box-list>.card-box .content{
+	display: inline-block;
+	vertical-align: top;
+	padding:0 20px;
+}
+
+.box-list>.card-box .content>.name{ 
+	font-weight: 800;
+	font-size: 18px;
+}
+.box-list>.card-box .span1{
+	font-size: 14px;
+	color:#999999;
+	padding-right:8px;
+}
+.box-list>.card-box:hover{
+	box-shadow: 0 0 38px rgba(0,0,0,.08) inset;  
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+}
+.recommend { 
+	width: 1200px;   
+	text-align: center; 
+	background-color: white;
+	border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.14);
+    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1); 
+    overflow: hidden;
+}
+.recommend li{
+	float: left;  
+	padding:20px 0;
+	position: relative;  
+	width: 239px; 
+	border-right: 1px solid rgba(0,0,0,.14); 
+	 
+}
+.recommend li:hover{
+	box-shadow: 0 0 38px rgba(0,0,0,.08) inset;
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+}
+.recommend li:hover span{
+	color:#666;
+}
+.recommend li>span{
+	color: #999;
+}
+.recommend li a{
+	display: block;
+	position: relative;  
+	vertical-align:middle;
+	text-align:center;
+} 
+.recommend li a>img{ 
+	vertical-align:middle; 
+	max-width: 200px;
+	max-height: 200px;
+}    
+</style>  
+</head>
+<body style="overflow-X:hidden; background:#f5f5f5" >   
+<% include header.html %> 
+<div class="w">
+	<div class="fliters  ">
+		<div class="fliter fliter1">
+			<span>技能标签：</span>
+			<ul>
+				<li><a   data-value="">不限</a></li>
+				<% for(var i in results['list25']['data']){%>
+					<li><a   data-value="<%= results['list25']['data'][i]['title']%>"><%= results['list25']['data'][i]['title']%></a></li>
+				<%}%>
+				
+			</ul>
+		</div>
+		<div class="fliter fliter2">
+			<span>资质认证：</span>
+			<ul>
+				<li><a id="fliter2_" data-value="">不限</a></li>
+				<li><a id="fliter2_1" data-value="1" >个人认证</a></li>
+				<li><a id="fliter2_2" data-value="2">企业认证</a></li>
+				<li><a id="fliter2_4" data-value="4">交易认证</a></li>
+			</ul>
+		</div> 
+		<div class="fliter fliter3" style="border:0px;">
+			<span>行业分类：</span>
+			<ul>
+				<% if( results['parentCategory'] && results['hasSonCategory']){%>
+					<li><a id="fliter3_<%=results['activeCid']%>" class="active" data-value="<%= results['activeCid']%>">不限</a></li> 
+					<% for(var i in results['categorylist']['data']){%>	 
+						<%if( results['categorylist']['data'][i]['id']== results['activeCid']){%>   
+							<%for(var j in results['categorylist']['data']){%>
+								<%if(results['categorylist']['data'][j]['parentid']==results['categorylist']['data'][i]['id']  && results['categorylist']['data'][j]['parentid']!=results['categorylist']['data'][j]['id']){%> 
+									<li><a   id="fliter3_<%=results['categorylist']['data'][j]['id']%>" data-value="<%=results['categorylist']['data'][j]['id']%>"><%=results['categorylist']['data'][j]['name']%></a></li>
+								<%}%>
+							<%}%>
+						<%}%>
+					<%}%> 
+				<%} else if( results['parentCategory'] && !results['hasSonCategory']){%> 
+					<li><a id="fliter3_<%=results['parentCategory']%>"  data-value="<%= results['parentCategory']%>">不限</a></li> 
+					<% for(var i in results['categorylist']['data']){%>	 
+						<%if( results['categorylist']['data'][i]['id']== results['activeCid']){%>   
+							<%for(var j in results['categorylist']['data']){%>
+								<%if(results['categorylist']['data'][j]['parentid']==results['categorylist']['data'][i]['parentid']  && results['categorylist']['data'][j]['parentid']!=results['categorylist']['data'][j]['id']){%> 
+									<li><a   id="fliter3_<%=results['categorylist']['data'][j]['id']%>" data-value="<%=results['categorylist']['data'][j]['id']%>"><%=results['categorylist']['data'][j]['name']%></a></li>
+								<%}%>
+							<%}%>
+						<%}%>
+					<%}%>  
+				<%} else if( !results['activeCid']){%>
+					<% for(var i in results['categorylist']['data']){%>	   
+						<%if(results['categorylist']['data'][i]['id']==results['categorylist']['data'][i]['parentid']){%> 
+							<li><a   id="fliter3_<%=results['categorylist']['data'][i]['id']%>" data-value="<%=results['categorylist']['data'][i]['id']%>"><%=results['categorylist']['data'][i]['name']%></a></li>
+						<%}%> 
+					<%}%> 
+				<%} else if( !results['parentCategory'] && results['hasSonCategory']){%> 
+					<li><a id="fliter3_"  class="active"  data-value="">不限</a></li> 
+					<% for(var i in results['categorylist']['data']){%>	 
+						<%if( results['categorylist']['data'][i]['id']== results['activeCid']){%>   
+							<%for(var j in results['categorylist']['data']){%>
+								<%if(results['categorylist']['data'][j]['parentid']==results['categorylist']['data'][i]['id']  && results['categorylist']['data'][j]['parentid']!=results['categorylist']['data'][j]['id']){%> 
+									<li><a   id="fliter3_<%=results['categorylist']['data'][j]['id']%>" data-value="<%=results['categorylist']['data'][j]['id']%>"><%=results['categorylist']['data'][j]['name']%></a></li>
+								<%}%>
+							<%}%>
+						<%}%>
+					<%}%>  
+				<%}%>   
+			</ul>
+		</div> 
+	</div>   
+</div>
+<div class="w">
+	<div class="box-list"  data-hasnext="<%= results['has_next']%>"  data-hasprev="<%= results['has_prev']%>" data-nextnum="<%= results['next_num']%>" data-page="<%= results['page']%>" data-pages="<%= results['pages']%>" data-perpage="<%= results['per_page']%>"  data-prevnum="<%= results['prev_num']%>"> 
+		<%for( var i in results['data']){%>
+			<div class="card-box" >   
+		 		<img style="height:100px;width:100px; "   src="<%= results['data'][i]['imageLarge'] %>">
+		 		<div class="content">
+		 			<a class="name"   href="/u?i=<%= results['data'][i]['id']%>"><%= decodeURI(results['data'][i]['nickname']) %></a>
+		 			<%if(results['data'][i]['authenticationType'] & 1) {%>
+                        <div class="vip vip1" title="个人"   ></div>
+                       
+		 			<%}%> 
+		 			<%if(results['data'][i]['authenticationType'] & 2){%>
+		 				<div class="vip vip2" title="企业"  ></div>
+		 			
+		 			<%}%> 
+		 			<%if(results['data'][i]['authenticationType'] & 4 ){%>
+		 				<div class="vip vip3" title="交易"  ></div>
+		 			<%}%>
+		 			</br>
+		 			</br>
+		 			<span style="width:400px;display:inline-block">联系方式：
+			 			
+			 			<%if(results['data'][i]['phone']){%>
+			 				<i class="icon-phone"  title="<%= results['data'][i]['phone']%>" style="color:#98d859;margin-right:20px;"> </i> 
+			 			<%}%>
+			 			<%if(results['data'][i]['email']){%>
+			 				<i class=" icon-envelope-alt"  title="<%= results['data'][i]['email']%>" style="color:#46b8da;margin-right:20px;"> </i> 
+			 			<%}%>
+			 			<%if(results['data'][i]['location']){%>
+			 				<i class=" icon-map-marker"  title="<%= results['data'][i] ? results['data'][i]['location'] : ''%>" style="color:#fca75b;margin-right:20px;"> </i>
+			 			<%}%>
+			 			
+			 		</span>
+			 		<span>认证类型：</span> 
+			 		<%if(results['data'][i]['authenticationType'] & 1){%>
+			 			<span  class="span1">个人认证</span>
+			 		<%}if(results['data'][i]['authenticationType'] & 2){%>
+			 			<span  class="span1">企业认证</span>
+			 		<%}if(results['data'][i]['authenticationType'] & 4){%>
+			 			<span  class="span1">交易认证</span>
+			 		<%} else{%>
+			 			<span  class="span1">未认证</span>
+			 		<%}%>
+			 	</div> 
+		 		<div> 
+				 	<span style="font-weight:800">技能标签：</span> 
+				 	<p class="span1" style="display:inline-block"> 
+				 		<% if( results['data'][i]['tags'].length>0){%>
+							<% for(var j in results['data'][i]['tags']){%>
+								<%= results['data'][i]['tags'][j]['name']%>
+							<%}%>
+				 		<%}else{%>
+							未添加
+				 		<%}%>
+						
+				 	</p>
+				</div>
+				<a class="btn" href="/u?i=<%= results['data'][i]['id'] %>" style="border:0px;right:40px;top:50px;position:absolute"> 更多详情 </a>
+			</div>  
+		<%}%> 
+		<!-- 
+		<div class="card-box" >   
+		 	<img style="height:100px;width:100px;background-color:red;">
+		 	<div class="content">
+		 		<span class="name">name</span></br>
+		 		<span class="span1">location</span></br></br>
+		 		<span style="width:400px;display:inline-block">联系方式：
+		 			<i class=" icon-envelope-alt" style="color:#98d859"> </i> 
+		 			<span class="span1">gongjun@qq.com</span>
+		 		</span>
+		 		<span>认证类型：</span> 
+		 	</div> 
+			 <div> 
+			 	<span style="font-weight:800">技能标签：</span> 
+			 	<p class="span1" style="display:inline-block">aaaa</p>
+			 </div>
+			<a class="btn" href="/projectDetail" style="border:0px;right:40px;top:50px;position:absolute"> 更多详情 </a>
+		</div>  -->
+	</div> 
+	<div id="turnPage"></div>
+</div>
+<!--团队推荐-->
+<div class="w">
+	<h3>相关团队推荐</h3>
+	</br> 
+	<ul class="recommend">
+		<% for(var i in results['list27']['data']){%>
+			<li>
+				<span><%= results['list27']['data'][i]['title']%></span></br></br>
+				<a  href="<%= results['list27']['data'][i]['url']%>" class="pic">
+					<img src="<%= results['list27']['data'][i]['image']%>"> 
+				</a>
+			</li>
+		<%}%>
+		
+	</ul>
+	
+</div>
+<% include footer.html %>
+<% include commonScript.html %> 
+<script   type="text/javascript"> 
+// //http://10.0.1.122/trade/teamhall.html?page=1&keyword=&kind=&authentype=0&orderby=0&desc=0&li1_color=0&li2_color=0&li3_color=0&cid=0&parkind=2 
+$(function(){
+	$('.drop-meanu a').each(function(){ 
+		var href=$(this).attr('href').replace("p","t")
+		$(this).attr("href",href)
+	});
+	 
+	getRequest()['t'] ?  $('.fliter1 a[data-value='+getRequest()['t'] +']').addClass('active')  : $('.fliter1 li:first-child a').addClass('active')   
+	 console.log($('.fliter1 a[data-value='+getRequest()['t']+']'))
+	$('#fliter2_'+(getUrlParameter('a') ? getUrlParameter('a') : "")).addClass('active');
+	$('#fliter3_'+(getUrlParameter('c') ? getUrlParameter('c') : "")).addClass('active');
+
+	console.log()
+	var turnPageData={
+		has_next: $('.box-list').attr('data-hasnext'),
+		has_prev: $('.box-list').attr('data-hasprev'),
+		next_num: $('.box-list').attr('data-nextnum'),
+		page: $('.box-list').attr('data-page'),
+		pages: $('.box-list').attr('data-pages'),
+		per_page: $('.box-list').attr('data-perpage'),
+		prev_num: $('.box-list').attr('data-prevnum'), 
+	}
+	$('#turnPage').myUtils('turnPage',turnPageData,changePage) 
+});
+//鼠标滚动 特效
+var windowHeight=$(window).height();//是文档窗口高度
+$(window).scroll(function (){
+	var sTop = $(window).scrollTop(); 
+	var mTopArr = $('.card-box')
+	for(var i in mTopArr){
+		//console.log(mTopArr[i].offsetTop-sTop)
+		if((mTopArr[i].offsetTop-sTop)<$(window).height() && $(window).height()-(mTopArr[i].offsetTop-sTop)<150  ){
+	 
+			$(mTopArr[i]).addClass('animated bounceInUp')
+
+		} 
+	}  
+
+})
+//翻页
+function changePage(){ 
+	var url=location.search.toString();
+	url='/t/'+$(this).attr('data-pageid')+url; 
+	location =url 
+	
+}  
+//技能标签筛选
+$('.fliter1>ul a').click(function(){  
+	var tag=$(this).attr("data-value");
+	var url=location.search.toString();
+	if(tag){ 
+		url=replaceParamVal(url,'t',tag)  
+		url='/t/1'+url; 
+	}else{  
+		url='/t/1'+removeParameter(url,'t');
+	} 
+	location = url 
+}) 
+//状态筛选
+$('.fliter2>ul a').click(function(){ 
+	var authentype=$(this).attr("data-value"); 
+	var url=location.search.toString(); 
+	location = url 
+	if(authentype){ 
+		url=replaceParamVal(url,'a',authentype) 
+		url='/t/1'+url;
+		location = url 
+	}else{ 
+		url='/t/1'+removeParameter(url,'a');
+		location = url  
+	} 
+})
+//行业筛选
+$('.fliter3>ul a').click(function(){  
+	var cid=$(this).attr("data-value");
+	var url=location.search.toString();
+	if(cid){ 
+		url=replaceParamVal(url,'c',cid)  
+		url='/t/1'+url; 
+	}else{  
+		url='/t/1'+removeParameter(url,'c');
+	} 
+	location = url
+}) 
+//搜索
+$('.search a').click(function(){
+	var keyword=$('.search input').val();
+	console.log(keyword);
+	var url=location.search.toString();
+	url=replaceParamVal(url,'keyword',keyword)  
+	url='/t/1'+'?keyword='+keyword;
+	location = url 
+}) 
+
+
+function getRequest() {   
+   var url = window.location.search; //获取url中"?"符后的字串   
+   var theRequest = new Object();   
+   if (url.indexOf("?") != -1) {   
+      var str = url.substr(1);   
+      strs = str.split("&");   
+      for(var i = 0; i < strs.length; i ++) {   
+          //就是这句的问题
+         theRequest[strs[i].split("=")[0]]=decodeURI(strs[i].split("=")[1]); 
+         //之前用了unescape()
+         //才会出现乱码  
+      }   
+   }   
+   return theRequest;   
+}
+
+$(document).keydown(function(event){
+    if(event.keyCode==13){
+        $('.search a').click();
+    }
+});
+</script> 
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>认证列表</title>
+ <style> 
+ .imglist img{
+ 	max-width: 100%;
+ }
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" > 
+				<!-- 个人认证 -->
+				<div class="panel panel-default">
+					<div class="panel-heading">个人认证</div>
+					<div class="privateList panel-body">
+						<table class="table table-hover">
+						<thead>
+							<tr>
+								<td>姓名</td>
+								<td>身份证</td> 
+								<td>申请日期</td>
+								<td>审核资料</td>
+								<td>备注</td> 
+								<td>操作</td> 
+							</tr>
+						</thead>
+						<tbody> 
+						<%for(var i in results['authenticationlist1']['data']){%>
+							<tr data-id="<%= results['authenticationlist1']['data'][i]['id']%>"   data-userid="<%= results['authenticationlist1']['data'][i]['userid']%>">
+								<td><%= results['authenticationlist1']['data'][i]['name']%></td>
+								<td><%= results['authenticationlist1']['data'][i]['identityID']%></td>
+								<td><%= results['authenticationlist1']['data'][i]['authenticateDate']%></td>
+								<td><a data-toggle="modal" data-target=".bs-example-modal-lg"  data-image1="<%= results['authenticationlist1']['data'][i]['identityFrontImage']%>" data-image2="<%= results['authenticationlist1']['data'][i]['identityBackImage']%>"  onclick="showPics(this)">查看</a></td>
+								<td><input placeholder="请出入不同过理由"></td>
+								<td><button class="btn btn-default btn-xs" onclick="changeStatus(this,2,1)">通过</button><button class="btn btn-default btn-xs"  onclick="changeStatus(this,1,1)">不通过</button></td>
+							</tr>
+
+						<%}%> 
+						</tbody> 
+					</table> 
+					</div>
+				</div> 
+				<!-- 企业认证 -->
+				<div class="panel panel-default">
+					<div class="panel-heading">企业认证</div>
+					<div class="companyList panel-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td>公司名称</td>
+									<td>公司范围</td>
+									<td>经营执照注册码</td> 
+									<td>审核资料</td>
+									<td>申请日期</td>
+									<td>备注</td> 
+									<td>操作</td> 
+								</tr>
+							</thead>
+							<tbody>
+							<%for(var i in results['authenticationlist2']['data']){%>
+								<tr data-id="<%= results['authenticationlist2']['data'][i]['id']%>"   data-userid="<%= results['authenticationlist2']['data'][i]['userid']%>">
+									<td><%= results['authenticationlist2']['data'][i]['name']%></td>
+									<td><%= results['authenticationlist2']['data'][i]['businessScope']%></td>
+									<td><%= results['authenticationlist2']['data'][i]['licenseID']%></td>
+									<td><a data-toggle="modal" data-target=".bs-example-modal-lg"  data-image1="<%= results['authenticationlist2']['data'][i]['contactImage']%>" data-image2="<%= results['authenticationlist2']['data'][i]['licenseImage']%>"  onclick="showPics(this)">查看</a></td>
+									<td><%= results['authenticationlist2']['data'][i]['authenticateDate']%></td>
+									<td><input placeholder="请出入不同过理由"></td>
+									<td><button class="btn btn-default btn-xs" onclick="changeStatus(this,2,2)">通过</button><button class="btn btn-default btn-xs"  onclick="changeStatus(this,1,2)">不通过</button></td>
+								</tr>
+
+							<%}%>  
+							</tbody> 
+						</table>
+					</div>
+				</div>
+				<!-- 人工审核 -->
+				<div class="panel panel-default">
+					<div class="panel-heading">人工审核</div>
+					<div class="manualList panel-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td>名称</td>
+									<td>电话</td>
+									<td>地址</td>   
+									<td>申请日期</td>
+									<td>备注</td> 
+									<td>操作</td>  
+								</tr>
+							</thead>
+							<tbody>
+							<%for(var i in results['authenticationlist8']['data']){%>
+								<tr data-id="<%= results['authenticationlist8']['data'][i]['id']%>"   data-userid="<%= results['authenticationlist8']['data'][i]['userid']%>">
+									<td><%= results['authenticationlist8']['data'][i]['name']%></td>
+									<td><%= results['authenticationlist8']['data'][i]['phone']%></td>
+									<td><%= results['authenticationlist8']['data'][i]['location']%></td> 
+									<td><%= results['authenticationlist8']['data'][i]['authenticateDate']%></td>
+									<td><input placeholder="请出入不同过理由"></td>
+									<td><button class="btn btn-default btn-xs" onclick="changeStatus(this,2,8)">通过</button><button class="btn btn-default btn-xs"  onclick="changeStatus(this,1,8)">不通过</button></td>
+									<td><a href="/manualAnthenUpload?userid=<%= results['authenticationlist8']['data'][i]['userid']%>"  target="_blank"><button class="btn btn-default btn-xs" >上传资料</button></a></td>
+								</tr>
+
+							<%}%> 
+							</tbody> 
+						</table>
+					</div>
+				</div>
+				<!-- 交易认证 -->
+				<div class="panel panel-default">
+					<div class="panel-heading">交易认证
+						<a class="btn btn-group-xs pull-right" onclick="javascript:fnExcelReport(this,'table')"  style="background-color:#337ab7;color:white;padding:0px">导出excel</a>
+					</div>
+					<div class="list panel-body">
+						<table class="table table-hover"  id="table">
+							<thead>
+								<tr> 
+									<td>户名</td>
+									<td>对公账号</td>
+									<td>开户银行</td>
+									<td>开户地点</td>
+									<td>申请日期</td>
+									<td>打款金额</td> 
+									<td>操作</td>  
+								</tr>
+							</thead>
+							<tbody> 
+							<%for(var i in results['authenticationlist4']['data']){%>
+								<tr data-id="<%= results['authenticationlist4']['data'][i]['id']%>"   data-userid="<%= results['authenticationlist4']['data'][i]['userid']%>">
+									<td><%= results['authenticationlist4']['data'][i]['name']%></td>
+									<td><%= results['authenticationlist4']['data'][i]['bankAccount']%></td>
+									<td><%= results['authenticationlist4']['data'][i]['bankName']%></td> 
+									<td><%= results['authenticationlist4']['data'][i]['bankLocation']%></td>
+									<td><%= results['authenticationlist4']['data'][i]['authenticateDate']%></td>
+									<td><%= results['authenticationlist4']['data'][i]['checkCode']%></td> 
+									<td><button class="btn btn-default btn-xs" onclick="changeStatus(this,2,4)">通过</button><button class="btn btn-default btn-xs"  onclick="changeStatus(this,1,4)">不通过</button></td>
+									  
+								</tr> 
+							<%}%> 
+
+
+
+
+							<!--
+<tr data-id="'+data['id']+'"    data-userid="'+data['userid']+'">'+
+				'<td>'+data['name']+'</td>'+
+				'<td>'+data['bankAccount']+'</td>'+
+				'<td>'+data['bankName']+'</td>'+
+				'<td>'+data['bankLocation']+'</td>'+
+				'<td>'+dateType(data['authenticateDate'])+'</td>'+
+				'<td>'+data['checkCode']+'</td>'+
+				'<td><input placeholder="输入不通过原因"><a onclick="changeStatus(this,2,4)">通过</a><a onclick="changeStatus(this,1,4)">不通过</a></td>'+
+			'</tr>
+
+
+							-->
+							</tbody> 
+						</table> 
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="imglist">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 
+<% include commonScript.html %>  
+<script type="text/javascript">
+ $(function () {    
+});   
+//点击查看图片
+function showPics(e){
+	var image1 =$(e).attr('data-image1');
+	var image2=$(e).attr('data-image2');
+	$('.imglist').empty();
+	$('.imglist').append('<img src="'+image1+'" style="">');
+	$('.imglist').append('<img src="'+image2+'" style="">'); 
+} 
+//日期格式转换 
+function dateType(date){
+	var date=new Date(date);
+	return date.toLocaleDateString();
+}
+//改变审核状态
+function changeStatus(e,status,authenticationType){
+	var params={
+		"authenType":authenticationType,
+		"authenID":parseInt($(e).parent().parent().attr('data-id')),
+		"approvalStatus":status,
+		"userid":parseInt($(e).parent().parent().attr('data-userid')),
+		"adminid":1,
+		//"description":"asdasd"
+		"description":$(e).parent().parent().find('input').val() 
+	} ;  
+	var r=confirm("确定此操作？");   
+	if(r==true){
+		console.log(params);
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/approval", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				console.log(data);
+				$(e).parent().parent().empty()
+				alert("操作成功");
+				//sendMail(params['userid']);
+			
+			},
+			error: function(){
+				alert('fail');
+			}
+		});   
+	} 
+}  
+function sendMail(userid){
+	var params={
+		"recivers":userInfo(userid)['email'],
+		"folderName":"authen" 
+	} 
+	console.log(params)
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/sendemail", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);
+			 
+		},
+		error: function(){
+			alert('邮件发送失败');
+		}
+	});    
+}  
+</script>  
+</body>
+
+</html>

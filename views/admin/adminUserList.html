@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>用户管理</title> 
+<style>    
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" > 
+				<div class="panel panel-default">
+					<div class="panel-heading">用户列表
+						<input class="form-control" placeholder="请输入用户名称"  style="width:200px;display:inline-block;"  id="searchUserInput">
+						<button class="btn pull-middle  btn-primary btn-sm" id="searchUser" >查询</button>
+						<button class="btn pull-right  btn-primary btn-sm" style=""  data-toggle="modal" data-target="#myModal">添加用户</button>
+					</div>
+					<div class="userlist panel-body">
+						<table class="table table-hover" data-hasnext="<%= results['has_next']%>"  data-hasprev="<%= results['has_prev']%>" data-nextnum="<%= results['next_num']%>" data-page="<%= results['page']%>" data-pages="<%= results['pages']%>" data-perpage="<%= results['per_page']%>"  data-prevnum="<%= results['prev_num']%>">
+							<thead>
+								<tr>
+									<td>昵称</td> 
+									<td>email</td>
+									<td>个人认证</td>
+									<td>发布的项目</td>
+									<td>参与的项目</td>
+									<td>作品</td>  
+									<td>禁用/启用账号</td>
+								</tr>
+							</thead>
+							<tbody>  
+							<%for(var i in results['data']){%>
+								<tr id="<%= results['data'][i]['id']%>"    data-email="<%= results['data'][i]['email']%>">
+									<td><%= results['data'][i]['nickname'] ? decodeURI(results['data'][i]['nickname']) : "未填写"%></td>
+									<td><%= results['data'][i]['email'] ? decodeURI(results['data'][i]['email']) : "未填写"%></td>
+									<%if(results['data'][i]['authenticationType'] & 1){%>
+										<td><a href="/manualAnthenUpload?userid=<%= results['data'][i]['id']%>"  >个人认证</a></td> 
+									<%}else if(results['data'][i]['authenticationType'] & 2){%>
+										<td><a  href="/manualAnthenUpload?userid=<%= results['data'][i]['id']%>"  >企业认证</a></td> 
+									<%} else{%>
+										<td><a  href="/manualAnthenUpload?userid=<%= results['data'][i]['id']%>"  >未认证</a></td> 
+									<%}%> 
+									<td><a href="/userListPublishedProjects/1?userid=<%= results['data'][i]['id']%>">查看</a></td>
+									<td><a  href="/userListParticipateProjects/1?userid=<%= results['data'][i]['id']%>">查看</a></td>
+									<td><a href="/userListWorkList/1?userid=<%= results['data'][i]['id']%>">查看</a></td>
+									<%if(results['data'][i]['status']==2 || !results['data'][i]['status']){%>
+										<td><a data-status="1" onclick="editStatus(this)"  style="color:red">启用</a></td> 
+									<%}else if(results['data'][i]['status']==1){%>
+										<td><a  data-status="2" onclick="editStatus(this)" >禁用</a></td>
+									<%}%>
+							<%}%> 
+							</tbody>  
+								   
+						</table> 
+						<div id="turnPage">
+						</div>
+					</div>
+				</div> 
+			</div>
+		</div> 
+	</div>  
+</div>  
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+      </div>
+      <div class="modal-body">
+        	<div class="input-group input-group-xs">
+			  	<span class="input-group-addon" id="sizing-addon1">邮箱</span>
+			  	<input type="text" name="email" class="form-control" placeholder="邮箱"  >
+			</div> 
+	      	<div class="input-group input-group-xs">
+			  	<span class="input-group-addon" id="sizing-addon1">密码</span>
+			  	<input type="text" name="password" class="form-control" placeholder="密码"  >
+			</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary"  onclick="addUser()">添加</button>
+      </div>
+    </div>
+  </div>
+</div> 
+<% include commonScript.html %>  
+<script type="text/javascript"> 
+$(function(){ 
+	var turnPageData={
+		has_next: $('.table').attr('data-hasnext'),
+		has_prev: $('.table').attr('data-hasprev'),
+		next_num: $('.table').attr('data-nextnum'),
+		page: $('.table').attr('data-page'),
+		pages: $('.table').attr('data-pages'),
+		per_page: $('.table').attr('data-perpage'),
+		prev_num: $('.table').attr('data-prevnum'), 
+	}
+	$('#turnPage').myUtils('turnPage',turnPageData,changePage)   
+})
+//翻页
+function changePage(){ 
+	var url=location.search.toString();
+	url='/adminUserList/'+$(this).attr('data-pageid')+url; 
+	location =url  
+}   
+//搜索
+$('#searchUser').click(function(){
+	var keyword=$('#searchUserInput').val();
+	console.log(keyword);
+	var url=location.search.toString();
+	url=replaceParamVal(url,'keyword',keyword)  
+	url='/adminUserList/1'+url;
+	location = url 
+})  
+//更改用户状态 
+function editStatus(e){
+	var params={
+		'email':$(e).parent().parent().attr('data-email'),
+		'status':parseInt($(e).attr('data-status')),
+	}
+	console.log(params)
+	$.ajax({
+		type: "put",
+		async: false,
+		url: "/login", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){ 
+			console.log(data); 	
+			if(params['status']==1){
+				$(e).attr('data-status',2).css('color',"#337ab7").html('禁用');
+			}else{
+				$(e).attr('data-status',1).css('color',"red").html('启用');
+			} 
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); 
+} 
+ 
+function addUser(){
+	var params={
+		"email":$('#myModal input[name="email"]').val(),
+		"password":$('#myModal input[name="password"]').val(),
+
+	}
+	console.log(params)
+	$.ajax({
+		type: "POST",
+		async: false,
+		url: "/login", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			if(data['result']){
+				console.log(data); 
+				alert("添加成功")
+
+			}else{ 
+				alert(data['message']);
+			}  
+		},
+		error: function(){
+			alert('fail');
+		}
+	});    
+} 
+</script>  
+</body>
+
+</html>

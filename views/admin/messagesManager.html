@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>消息管理</title> 
+<style>  
+ul{
+	 list-style:none;
+}
+.mouldsList li{
+	border-bottom: 2px solid #e0e0e0;
+	padding:30px;
+}
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" >   
+				<div class=" panel panel-default" >
+					<div class="panel-heading" >消息管理</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-3">
+								<button class="btn btn-xs btn btn-primary"  id="addTrigger">添加触发器</button>
+								<ul class="trigger"> 
+									<li data-id="1">
+										<input type="text"    value="触发器1" onblur="modifyTrigger(this)">
+										<button class="btn btn-xs btn btn-primary">删除</button>
+									</li>
+								</ul>
+							</div>
+							<div class="col-xs-9">  
+								<ul class="mouldsList">
+									<button class="btn btn-xs btn btn-primary">添加模板</button>
+									
+									<li>
+										<div class="input-group">
+										  <span class="input-group-addon">标题</span>
+										  <input type="text" class="form-control"  >
+										</div>
+										<div class="input-group">
+										  <span class="input-group-addon">正文</span>
+										  <textarea class="form-control" style="height:100px;"> </textarea>
+										</div>
+										<div class="input-group">
+										  <span class="input-group-addon">备注</span>
+										  <input type="text" class="form-control"  >
+										</div>
+										<button class="btn btn-xs btn btn-primary pull-right">删除模板</button>
+										<button class="btn btn-xs btn btn-primary pull-right">保存修改</button>
+									</li>
+									<li>
+										<div class="input-group">
+										  <span class="input-group-addon">标题</span>
+										  <input type="text" class="form-control"  >
+										</div>
+										<div class="input-group">
+										  <span class="input-group-addon">正文</span>
+										  <textarea class="form-control" style="height:100px;"> </textarea>
+										</div>
+										<div class="input-group">
+										  <span class="input-group-addon">备注</span>
+										  <input type="text" class="form-control"  >
+										</div>
+										<button class="btn btn-xs btn btn-primary pull-right">删除模板</button>
+										<button class="btn btn-xs btn btn-primary pull-right">保存修改</button>
+									</li>  
+								</ul>
+							</div> 
+						</div> 
+					</div> 
+				</div>  
+			</div> 
+		</div>
+	</div>
+</div> 
+<% include commonScript.html %>  
+<script type="text/javascript">
+//显示触发器下的模板
+$('.trigger li').click(function(){
+
+})
+//添加触发器
+$('#addTrigger').click(function(){
+	alert(1)
+})
+//修改触发器
+function modifyTrigger(e){ 
+	var params={
+		"id":parseInt($(e).parent().attr('data-id')),
+		"name":$(e).val()
+	}
+	console.log(params)
+/*	$.ajax({
+		type: "post",
+		async: false,
+		url: "/work", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			 
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); */  
+}
+//删除触发器 
+$('.trigger>li>button').click(function(){
+	var params={
+		"id":parseInt($(this).parent().attr('data-id'))  
+	}
+	console.log(params)
+/*	$.ajax({
+		type: "post",
+		async: false,
+		url: "/work", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			 
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); */  
+}) 
+
+
+</script>  
+</body>
+
+</html>

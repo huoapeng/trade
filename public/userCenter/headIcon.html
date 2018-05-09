@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html >
+<head>  
+<% include commonHead.html %>
+<title>头像设置</title>     
+<link href="/stylesheets/jquery.Jcrop.min.css" rel="stylesheet"/>    
+<link href="/stylesheets/cropper.min.css" rel="stylesheet"/> 
+<style> 
+.top{
+	padding-top:12px;
+	padding-bottom:20px;
+	border-bottom:2px solid #e0e0e0;
+	margin-bottom:20px;
+}
+.top>span{
+	font-size:18px;
+	font-weight:800;
+	color:#666;
+} 
+.defaultHeadIcon li{
+	display:inline-block;
+}
+.defaultHeadIcon img{
+	width:50px;
+	height:50px;
+} 
+.docs-preview {
+  margin-right: -15px;
+  
+  
+}
+
+.img-preview {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.img-preview > img {
+  max-width: 100%; 
+}
+
+.preview-lg {
+  width: 136px;
+  height: 136px;
+}
+
+.preview-md {
+  width: 63px;
+  height: 63px;
+}
+
+.preview-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: 100%;
+}
+ 
+
+
+</style>  
+</head>
+<body >
+<% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/basicInfo">资料完善 ></a><a href="/headIcon">头像设置</a>
+	</div>
+</div>
+<div class="w" > 
+	<% include nav.html %> 
+	<div  class="content">     
+		<div class="top">
+			<span>头像设置</span> 
+		</div>
+		<div>选择默认头像</div></br>
+		<ul class="defaultHeadIcon">
+			<li><a><img data-imageId="1.jpg" src="http://10.0.0.44:8080/static/default/img/1.jpg"></a></li>
+			<li><a><img data-imageId="2.jpg" src="http://10.0.0.44:8080/static/default/img/2.jpg"></a></li>
+			<li><a><img data-imageId="3.jpg" src="http://10.0.0.44:8080/static/default/img/3.jpg"></a></li>
+			<li><a><img data-imageId="4.jpg" src="http://10.0.0.44:8080/static/default/img/4.jpg"></a></li>
+			<li><a><img data-imageId="5.jpg" src="http://10.0.0.44:8080/static/default/img/5.jpg"></a></li>
+			<li><a><img data-imageId="6.jpg" src="http://10.0.0.44:8080/static/default/img/6.jpg"></a></li>
+			<li><a><img data-imageId="7.jpg" src="http://10.0.0.44:8080/static/default/img/7.jpg"></a></li>
+			<li><a><img data-imageId="8.jpg" src="http://10.0.0.44:8080/static/default/img/8.jpg"></a></li>
+			<li><a><img data-imageId="9.jpg" src="http://10.0.0.44:8080/static/default/img/9.jpg"></a></li>
+			<li><a><img data-imageId="10.jpg" src="http://10.0.0.44:8080/static/default/img/10.jpg"></a></li>
+		
+		</ul>
+		</br>
+		<div class="">  
+			<div>自定义头像</div></br>
+			
+			<div class="left" style="display:inline-block;margin-right:50px;overflow:hidden;width:400px;height:400px; ">
+				<img  id="image"  src="../../images/common/headIcon.png"  style="width:100%"    > 
+			</div>
+
+			<div class="right" style="display:inline-block;vertical-align:top;">
+				<p style="color:#e8594b;font-size:10px;">您上传的图片自动生成三种尺寸，请注意中小只存的图片是否清晰</p></br>
+				<div class="docs-preview clearfix">
+				  <div class="img-preview preview-lg"></div>
+				  <div class="img-preview preview-md"></div>
+				  <div class="img-preview preview-sm"></div> 
+				</div>
+			</div> 
+			<p style="font-size:10px;color:#999;">仅支持JPG,PNG图片</p></br>
+			<form id="uploadForm"  style="position:relative;top:12px;background-color:#e0e0e0; border:1px solid #cccccc;cursor:pointer;overflow:hidden;display:inline-block;margin-right:20px;">
+					<a  style="color:black;line-height:31px;margin:0 10px">上传头像</a>
+					<input type="file" class="avatar-input" id="iconfile" style="position:absolute;top:0px;width:0px;padding:16px  80px;">  
+			</form> 
+			<div style="margin-top:20px;display:inline-block">
+				<a id="save" style="background-color:red;padding:6px 20px;color:black;border:1px solid #cccccc;background-color:#e0e0e0">保存</a>
+			</div> 
+		</div>
+	</div>
+		 
+</div>  
+<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>  
+<script type="text/javascript" src="/js/public.js"></script>   
+<script type="text/javascript" src="/js/cropper.min.js"></script>  
+<script type="text/javascript" src="/js/jquery.color.js"></script>    
+<script   type="text/javascript">  
+
+$(function () { 
+	$('#userInformation_4').addClass("active"); 
+	$('#image').cropper({
+	  aspectRatio: 1 / 1,
+	  preview: '.img-preview',
+	  crop: function(e) {
+	    // Output the result data for cropping image. 
+	  }
+	}); 
+});   
+//选择默认头像
+$("#iconfile" ).change(function(){   
+	var files = this.files;
+    var file;
+
+    if (!$('#image').data('cropper')) {
+      return;
+    }
+
+    if (files && files.length) {
+		file = files[0]; 
+		if (/^image\/\w+$/.test(file.type)) {
+			blobURL = URL.createObjectURL(file);
+			$('#image').one('built.cropper', function () { 
+			  // Revoke when load complete
+			  URL.revokeObjectURL(blobURL);
+			}).cropper('reset').cropper('replace', blobURL);
+			//$("#iconfile" ).val('');
+		} else {
+			window.alert('Please choose an image file.');
+		}
+    } 
+	/*
+	var url = null;   
+	var imgObejct=this.files[0];  
+	if (window.createObjectURL!=undefined) { // basic
+		url = window.createObjectURL(imgObejct) ;
+	} else if (window.URL!=undefined) { // mozilla(firefox)
+		url = window.URL.createObjectURL(imgObejct) ;
+	} else if (window.webkitURL!=undefined) { // webkit or chrome
+		url = window.webkitURL.createObjectURL(imgObejct) ;
+	}   
+	if (url) {
+		$('.left img').attr('src',url) ;
+		$(".img-preview img").attr('src',url) ;
+	}  
+	*/
+}) 
+$('.defaultHeadIcon a').click(function(){ 
+	var params={
+		"defaultImage":$(this).find('img').attr('data-imageId') 
+	} 
+	console.log(params)
+	$.ajax({  
+	   	url: '/user',  
+	  	type: 'PUT',     
+	   	contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+	   success: function (data) {  
+	   		alert("更换头像成功")
+			console.log(data)
+			 
+	   },  
+	   error: function (data) {
+			console.log(data);  
+	   }  
+	});  
+	
+})  
+//保存头像
+$('#save').click(function(){      
+	if(document.getElementById('iconfile').files[0]){
+		var images=[{w:138,h:138,type:11}];  
+		for(var i in images){ 
+			 upLoadIcon(images[i]);  
+		}    
+
+	}else{ 
+		alert('请上传头像图片')
+	}  
+}) 
+
+function dataURLtoBlob(dataurl) {
+            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while(n--){
+              u8arr[n] = bstr.charCodeAt(n);
+            }
+          return new Blob([u8arr], {type:mime});
+        } 
+function  upLoadIcon(obj){
+	console.log(obj)
+	 
+	var test=$('#image').cropper('getCroppedCanvas',{
+		width: obj['w'],
+		height: obj['h']
+	}).toDataURL('image/png');
+	//console.log(test);
+	var  aaa=dataURLtoBlob(test);
+	//console.log(aaa)
+	var formData = new FormData();
+	formData.append('file', aaa,'image.png'); 
+	formData.append('type',obj['type']); 
+
+	$.ajax({  
+	   url: '/uploadfile',  
+	   type: 'POST',  
+	   data: formData,  
+	   async: true,  
+	   cache: false,  
+	   processData: false,
+		contentType: false,  
+	   success: function (returndata) {  
+			alert("头像已成功上传");
+	   },  
+	   error: function (returndata) {
+			console.log(returndata);  
+	   }  
+	});     
+}   
+
+</script> 
+</body>
+
+</html>

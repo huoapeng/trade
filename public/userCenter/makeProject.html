@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html >
+<head>  
+<% include commonHead.html %> 
+<title>发布项目</title>    
+<style>    
+ 
+#projectManager_1{
+	background-color: #ffdad6;
+}
+#projectType{
+	height:34px;
+	width:100%;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.btn { 
+	border:1px solid #e8594b;
+	color:white;
+	background-color:#e8594b ;  
+	display:inline-block; 
+}  
+
+.pub-steps{
+	position: relative;
+}
+.pub-steps>li{
+	position: relative;
+	width:33%; 
+	float:left;
+}
+
+.step-deco{
+	width: 100%;
+	background-color: #e0e0e0;
+	height:2px;
+	display: inline-block;
+}
+.step-val{
+	display: inline-block;
+	width:30px;
+	text-align: center; 
+	height: 30px;
+	border-radius: 100%;
+	background-color: #e8594b;
+	color:white !important;
+	position: absolute;
+	line-height: 30px;
+	top:0px;
+	left:45%;
+}
+.step-title{
+	position: absolute;
+	left:42%;
+	top:-20px;
+	color:#e8594b !important;
+}
+.step{
+	display: none;
+}
+.selectedCatalog{
+	background-color: #e8594b;
+	border-radius: 4px;
+	height: 40px; 
+
+}
+.selectedCatalog>ul{
+	display: inline-block;
+}
+.selectedCatalog>ul>li{
+	border:1px solid white;
+	border-radius: 2px;
+	display: inline-block;
+	margin:0 4px;
+	color:white;
+	padding:2px;
+}
+.catalog{
+	position: relative; 
+
+}
+.catalog>ul{    
+	width:200px;
+	background-color: #ecf0f5;  
+	min-height: 400px;
+} 
+
+.catalog>ul>li{   
+	width: 100%;  
+}
+.catalog>ul>li>span{   
+	display: block;
+	padding:10px; 
+	width:200px;
+	text-align: center;
+	
+}
+.catalog ul>li>ul{
+	width:100%;
+	display: none;
+	width:-moz-calc(100% - 200px);
+	width:-webkit-calc(100% - 200px);
+	width: calc(100% - 200px);
+}
+.catalog ul>li:hover ul{
+	display: block; 
+}
+.catalog ul>li:hover >span{
+	color: #e8594b;
+	background-color: white;
+}
+.catalog ul>li>ul{
+	position: absolute;
+	margin-left:200px;
+	top:0px;  
+	min-height: 400px;
+}
+.catalog ul>li>ul>li{
+	padding:8px;
+	border-bottom: 1px dashed #e0e0e0;
+	margin-left:20px; 
+}.catalog ul>li>ul>li>span{
+	color:#e8594b;
+	display: inline-block;
+	text-align: right;
+	width:150px;
+	margin-right: 10px;
+}
+.catalog ul>li>ul>li>a{
+	color:#999999;
+	margin:0 20px; 
+}
+.catalog ul>li>ul>li>a:hover{
+	color:#e8594b;
+}
+.input-group-addon{
+	width:130px !important;
+}
+.step{
+	display: none;
+}
+.step-3 p{ 
+	color:#999;
+}
+</style>  
+</head>
+<body class=" ">
+<% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeProject">项目管理 ></a><a href="#">发布项目</a>
+	</div>
+</div>
+<div class="w" >  
+       		<% include nav.html %> 
+			<!-- <div class="alert alert-warning" role="alert"> 
+				必须先通过身份认证才能进行发布项目。
+			</div> -->
+			
+			<div class="content">  
+				</br>
+				<ul class="pub-steps">
+							<li>
+								<span class="step-deco step-deco-1" style="background-color: #e8594b;"></span>
+								<span class="step-val">1</span>
+								<span class="step-title">选择分类</span>
+							</li>
+							<li>
+								<span class="step-deco step-deco-2 "></span>
+								<span class="step-val ">2</span>
+								<span class="step-title">描述需求</span>
+							</li>
+							<li>
+								<span class="step-deco step-deco-3"></span>
+								<span class="step-val">3</span>
+								<span class="step-title">完成发布</span>
+							</li> 
+						</ul> 
+						</br></br></br> 
+
+						<div class="selectedCatalog">
+							<span style="width:200px;display:inline-block;text-align:right;line-height:40px;color:white;">您选择了：</span>
+							<ul style="display:inline-block">
+							 
+							</ul>
+						</div> 
+ 						<div class="step step-1" style="display:block;">  
+							
+ 							
+ 							<div class="catalog">
+ 								<ul >
+	 								<!-- <li><span>影视大厅  </span>
+	 																		<ul>
+	 																			<li><span>vr大厅  </span></li>
+	 																			<li><span>vr大厅  </span></li>
+	 																			<li><span>vr大厅  </span></li>
+	 																			<li><span>vr大厅  </span>
+	 																				<a>aaaaa</a>
+	 																				<a>aaaaa</a> 
+	 																			</li>
+	 																		</ul>
+	 								</li> 
+	 								<li><span>影视大厅  </span>
+	 																		<ul>
+	 																			<li><span>vr大厅asdasd</span></li>
+	 																			<li><span>vr大厅  </span></li> 
+	 																			<li><span>vr大厅  </span>
+	 																				<a>aaaaa</a>
+	 																				<a>aaaaa</a> 
+	 																			</li>
+	 																		</ul>
+	 								</li> -->
+	 							</ul> 
+ 							</div> 
+ 							</br>
+ 							</br>
+ 							<button class="btn" style="margin: 0 auto;display:block"   onclick="nextOrlast(2)">下一步</button>
+ 						</div>
+ 						<div class="step step-2"  >  
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目名称：</span>
+								<input class="form-control" name="name"  >
+							</div>  
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目周期：</span>
+								<input class="form-control" name="timespan" >
+							</div>  
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目赏金：</span>
+								<input class="form-control" name="bonus"   >
+								<span class="input-group-addon"  style="color:#999999">请输入数字（单位：人民币）</span>
+	
+							</div> 
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目要求：</span>
+								<textarea class="form-control requirements"   style="resize:none;width:500px;height:100px;"></textarea>
+							</div>
+							 
+							
+							<div class="input-group">
+								<span class="input-group-addon"   >乙方资质要求：</span>
+								<input class="form-control" name="bidderQualifiRequire"  >
+							</div>  
+							<div class="input-group">
+								<span class="input-group-addon"   >乙方地域要求：</span>
+								<input class="form-control" name="bidderLocationRequire"  >
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   ><input type="checkbox" id="receipt" >发票：</span>
+								<input class="form-control receiptDes"   name="receiptDes"   > 
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   >项目介绍：</span>
+								<textarea class="form-control description"   style="resize:none;width:500px;height:100px;"></textarea>
+							</div>  
+							 
+							<button class="btn"   onclick="nextOrlast(1)" style="margin-left:130px;">上一步</button>
+							<button class="btn"  onclick="nextOrlast(3)">下一步</button> 
+ 						</div>	
+ 						<div class="step step-3"  >  
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目名称：</span>
+								<p id="name"></p>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目周期：</span>
+								<p id="timespan"></p>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目赏金：</span>
+								<p id="bonus"></p>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   ><font style="color:red">*</font>项目要求：</span>
+								<p id="requirements"></p>
+							</div>
+							
+							<div class="input-group">
+								<span class="input-group-addon"   > 乙方资质要求：</span>
+								<p id="bidderQualifiRequire"></p>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   > 乙方地域要求：</span>
+								<p id="bidderLocationRequire"></p>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   > 发票：</span>
+								<p id="receiptDes"></p>
+							</div>
+							<div class="input-group">
+								<span class="input-group-addon"   >项目介绍：</span>
+								<p id="description"></p>
+							</div> 
+ 							<button class="btn"    onclick="nextOrlast(2)">上一步</button>
+							<button class="btn"     onclick="makeProject()" >发布</button>
+ 						</div>
+			</div> 
+
+	 
+	 
+</div>  
+<% include commonScript.html %>  
+<script   type="text/javascript">  
+$(function () { 
+	$.ajax({
+			type: "get",
+			async: false,
+			url: "/categorylist", 
+			contentType:"application/json",  
+			dataType:'json',
+			success: function(data){  
+				var str=""
+				for(var i in data['data']){
+				 	if(data['data'][i]['parentid']==data['data'][i]['id']  ){
+				 		str+='<li class="catalog-li"><span>'+data['data'][i]['name']+'  </span><ul>';
+				 			for(var j in data['data']){
+				 				if(data['data'][j]['parentid']==data['data'][i]['id']  && data['data'][j]['id']!=data['data'][i]['id']){
+				 					str+='<li><span>'+data['data'][j]['name']+'</span>';
+				 							for(var k in data['data']){
+				 								if(data['data'][k]['parentid']==data['data'][j]['id']  && data['data'][k]['id']!=data['data'][j]['id'])
+				 								str+='<a  data-id="'+data['data'][k]['id']+'" onclick="addCatelog(this)">'+data['data'][k]['name']+'</a>'; 
+				 							}  
+										'</li>'; 
+				 				}  
+				 			}
+				 		str+='</ul></li>'
+				 	}
+
+				} 
+				$('.catalog ul').append(str);
+				 
+			},
+			error: function(){
+				alert('fail');
+			} 
+		}); 
+	 
+});
+//stepone 添加目录选择项目
+function addCatelog(e){
+	var id=$(e).attr('data-id');
+	var name=$(e).html();
+	console.log(id)
+	$('.selectedCatalog ul').append('<li data-id="'+id+'">'+name+'<i class="icon icon-remove"   onclick="removeCatalog(this)" style="cursor:pointer"></i></li>') 
+} 
+//移除目录选项
+function removeCatalog(e){ 
+	$(e).parent().remove();
+}
+//上一步或者下一步
+function nextOrlast(step){   
+	if(step==3){
+		var params={
+			"name":$('input[name="name"]').val(),
+			"timespan":$('input[name="timespan"]').val(),
+			"bonus":$('input[name="bonus"]').val(),
+			"requirements":$('.requirements').val().replace(/\n|\r\n/g,"<br>"),
+			"description":$('.description').val().replace(/\n|\r\n/g,"<br>"),
+			"bidderQualifiRequire":$('input[name="bidderQualifiRequire"]').val(),
+			"bidderLocationRequire":$('input[name="bidderLocationRequire"]').val(),
+			"receiptDes":$('.receiptDes').val().replace(/\n|\r\n/g,"<br>")   
+
+		}
+		if(params['name']==""){
+			alert("任务包名称不能为空"); 
+		}else if(params['timespan']==""){
+			alert("任务包周期不能为空"); 
+		}else if(params['bonus']==""){
+			alert("任务包赏金不能为空"); 
+		}else if(params['requirements']==""){
+			alert("任务包要求不能为空"); 
+		}else{
+			$('#name').html(params['name']);
+			$('#timespan').html(params['timespan']);
+			$('#bonus').html(params['bonus']);
+			$('#requirements').html(params['requirements']);
+			$('#description').html(params['description']);
+			$('#bidderQualifiRequire').html(params['bidderQualifiRequire']);
+			$('#bidderLocationRequire').html(params['bidderLocationRequire']); 
+			if($('.step-2  input[type="checkbox"]').is(':checked')){
+				$('#receiptDes').html($('.receiptDes').val().replace(/\n|\r\n/g,"<br>")); 
+			}  
+			$('.step-deco').css('background-color','#e0e0e0');
+			for(var i =1;i<=step;i++){ 
+				$($('.step-deco-'+i)[0]).css('background-color','#e8594b');
+
+			}   
+			$('.step').css('display','none'); 
+			$($('.step-'+step)[0]).css('display','block');  
+		} 
+	}else{
+		$('.step-deco').css('background-color','#e0e0e0');
+		for(var i =1;i<=step;i++){ 
+			$($('.step-deco-'+i)[0]).css('background-color','#e8594b');
+
+		}   
+		$('.step').css('display','none'); 
+		$($('.step-'+step)[0]).css('display','block');  
+	}
+	if(step>1){
+		$('.selectedCatalog i').css('display',"none");
+	}else{ 
+		$('.selectedCatalog i').css('display',"inline-block");
+	}
+}
+
+function makeProject(){
+	
+	var arr=$('.selectedCatalog li') ;  
+	var cataLogArr="";
+	for(var i=0;i<arr.length;i++){
+		cataLogArr += cataLogArr=="" ?  $(arr[i]).attr('data-id') : ","+$(arr[i]).attr('data-id');
+		//kind.push(parseInt($(arr[i]).attr('id')));
+		 
+	} 
+	var params={
+		"userid":sessionStorage.customerId,
+		"name":$('input[name="name"]').val(),
+		"timespan":$('input[name="timespan"]').val(),
+		"bonus":$('input[name="bonus"]').val(),
+		"requirements":$('.requirements').val().replace(/\n|\r\n/g,"<br>"),
+		"description":$('.description').val().replace(/\n|\r\n/g,"<br>"),
+		"bidderQualifiRequire":$('input[name="bidderQualifiRequire"]').val(),
+		"bidderLocationRequire":$('input[name="bidderLocationRequire"]').val(),
+		"receiptDes":$('.receiptDes').val().replace(/\n|\r\n/g,"<br>")  ,
+		"receipt":$('.step-2  input[type="checkbox"]').is(':checked') ? true :false,
+		"cids":cataLogArr
+
+	}
+	console.log(params)
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/project", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data); 
+			//alert("发布项目成功")
+			window.location.href='/publishedProjects/1';//正确登录后页面跳转至  
+			 
+		},
+		error: function(){
+			alert('fail');
+		}
+	});   
+}
+
+</script> 
+</body>
+
+</html>

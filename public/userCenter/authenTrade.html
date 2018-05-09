@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %>
+<title>交易认证</title> 
+<style>    
+ #onlineAuthen_2{
+	background-color: #ffdad6;
+}
+.top{
+	padding-top:12px;
+	padding-bottom:20px;
+	border-bottom:2px solid #e0e0e0;
+	margin-bottom:20px;
+}
+.top>span{
+	font-size:18px;
+	font-weight:800;
+	color:#666;
+}
+.input-group +span{
+	width:150px;
+	display:inline-block
+
+}
+thead td{
+	font-weight:800;	
+}
+.step{
+	display:none;
+}
+.stepFour table td{
+
+	text-align: center;
+}
+</style>  
+</head>
+<body >
+<% include header.html %>
+
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/authentication">在线认证 ></a><a href="/authentication">身份认证</a>
+	</div>
+</div>
+<div class="w" > 
+	<% include nav.html %>
+    <div class="content" style="height:500px;"> 
+		     
+		<div class="step stepOne"> 
+			<div class="top">
+				<span>交易认证</span> 
+			</div>
+			<div class="alert alert-warning" role="alert"> 
+				必须先通过身份认证才能进行银行卡认证。
+			</div>
+		</div>
+		<div class="step stepTwo"  style="max-width:500px;">
+			<div class="top">
+				<span>交易认证</span> 
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon" >户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span>
+				<input class="form-control" name="name" type="text" placeholder="户名">
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon">对&nbsp;&nbsp;&nbsp;公&nbsp;&nbsp;账&nbsp;&nbsp;户：</span>
+				<input class="form-control" name="bankAccount" type="text"  placeholder="对公账户">
+			</div>   
+			<div class="input-group">
+				<span class="input-group-addon" >确认对公账户： </span>
+				<input class="form-control" name="bankAccount_repeat" type="text" placeholder="再次确认对公账户">
+			</div> 
+			<div class="input-group">
+				<span class="input-group-addon" >开&nbsp;&nbsp;户&nbsp;&nbsp;银&nbsp;&nbsp;行&nbsp;：</span>
+				<input type="text" class="form-control" name="bankName"  placeholder="如：中国银行"  >    
+			</div> 
+			<div class="input-group">
+				<span class="input-group-addon" >开户银行地点：</span>
+				<input class="form-control" placeholder="如：张江路支行"  name="bankLocation" type="text" value="">
+			</div> 
+			<button class="btn  btn-default" style="background-color:#e87165;color:white;width:150px;margin:0 auto;display:block;">立即认证</button>
+		</div>
+		<div class="step stepThree" style="max-width:500px;"> 
+			<div class="top">
+				<span>交易认证</span> 
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon">请填写收到的金额</span>
+				<input class="form-control" placeholder="如：0.25"  name="checkMoney" type="text" >
+			</div> 
+			<p style="font-size:12px;color:red">您只有一次输入验证的机会,一旦输入错误，您将重新开始银行账户验证</p></br>
+			<button class="btn  btn-default" style="background-color:#e87165;color:white;width:150px;margin:0 auto;display:block;">立即认证</button>
+		</div>
+		<div class="step stepFour">  
+			<div class="top">
+				<span>现有银行卡</span> 
+			</div>
+			<span>银行卡名称：</span><span id="bankName"></span></br></br>
+			<span>卡号：</span><span id="bankAccount"></span></br></br>
+			<span>开户地址：</span><span id="bankLocation"></span></br></br>
+			<button type="button" class="btn btn-info btn-md "  >更换 </button>
+			<!-- <table class="table table-bordered"> 
+				<thead>
+					<tr>
+						<td >银行卡名称</td>
+						<td>卡号</td> 
+						<td>开户地址</td> 
+						<td>操作</td> 
+					</tr> 
+				</thead>
+				<tbody>
+					<tr>
+						<td id="bankName"></td>
+						<td id="bankAccount"></td> 
+						<td id="bankLocation"></td> 
+						<td ><button type="button" class="btn btn-info btn-xs "  >更换 </button></td> 
+					</tr>
+				
+				</tbody>
+			</table> -->
+		</div> 
+			 
+	</div>
+</div>  
+<% include commonScript.html %>  
+<script   type="text/javascript">  
+$(function () {  
+	var userInfo=getUserInfo(sessionStorage.customerId);  
+	var authen_bank =getAuthenticationInfo(userInfo['bankAuthentication'])['data']; 
+	var authen_company =getAuthenticationInfo(userInfo['companyAuthentication'])['data']; 
+	var authen_private =getAuthenticationInfo(userInfo['privateAuthentication'])['data']; 
+
+	 if(userInfo['authenticationType']==0){
+	 	$('.stepOne').css('display','block'); 
+	 }else if(1 == userInfo['authenticationType'] || 2 == userInfo['authenticationType']){ 
+	 		if(authen_bank.length >0  ){  
+				if(   (authen_private[0] && authen_private[0]['authenticateDate']  > authen_bank[0]['authenticateDate']) || (authen_company[0] && authen_company[0]['authenticateDate']  > authen_bank[0]['authenticateDate'])){ 
+					$('.stepTwo').css('display','block'); 
+				}else{ 
+					if(authen_bank[0]['status']==1 || authen_bank[0]['status']==2 ){
+						$('.stepTwo').css('display','block'); 
+					}else if(!authen_bank['status'] ){ 
+						if(authen_bank[0]['checkCode']   ||  authen_bank[0]['checkCode']!=null){ 
+							$('.stepThree').css('display','block');
+							$('.stepThree').find('input[name="checkMoney"]').attr('disabled',true).val('已提交');
+							$('.stepThree .btn').attr('disabled',true); 
+							console.log("bobde bug")
+						}else{
+								$('.stepThree').css('display','block');
+
+						} 
+					} 
+				}
+	 		}else{ 
+	 			$('.stepTwo').css('display','block');
+	 		} 
+	 }else if(4 & userInfo['authenticationType']){
+		$('.stepFour').css('display','block'); 
+		$('.stepFour #bankAccount').html(authen_bank[0]['bankAccount'])
+		$('.stepFour #bankName').html(authen_bank[0]['bankName'])
+		$('.stepFour #bankLocation').html(authen_bank[0]['bankLocation'])
+		 
+	} 
+});
+
+
+function getAuthenticationInfo(url){
+	var authenticationInfo;
+	$.ajax({
+		type: "get",
+		async: false,
+		url: url.replace("http://10.0.0.44:8080/api/v1.0",""), 
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){    
+			authenticationInfo=data; 
+		},
+		error: function(){ 
+		}
+	}); 
+	return authenticationInfo; 
+} 
+function getUserInfo(userid){
+	var userInfo;
+	$.ajax({
+		type: "get",
+		async: false,
+		url: "/user", 
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){    
+			userInfo=data; 
+		},
+		error: function(){ 
+		}
+	}); 
+	return userInfo;
+}
+
+
+$('.stepTwo .btn').click(function(){ 
+	var params={
+		'ownerid':sessionStorage.customerId,
+		'name':$('input[name="name"]').val().trim(),
+		'bankAccount':$('input[name="bankAccount"]').val().trim(),
+        'bankAccount_repeat':$('input[name="bankAccount_repeat"]').val().trim(), 
+        'bankName':$('input[name="bankName"]').val().trim(), 
+        'bankLocation':$('input[name="bankLocation"]').val().trim(), 
+	}
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/bankauthen", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data);
+			$('.step').css('display','none');
+			$('.stepThree').css('display','block');
+			alert("已提交认证");  
+		},
+		error: function(data){
+			alert('认证失败');
+			console.log(data);
+		}
+	});
+})
+$('.stepThree .btn').click(function(){ 
+	var userInfo=getUserInfo(sessionStorage.customerId);  
+	var authen_bank =getAuthenticationInfo(userInfo['bankAuthentication']);  
+	var params={
+		'id':authen_bank['data'][0]['id'],
+		'code':$('input[name="checkMoney"]').val()
+	}
+	var reg=new RegExp("^[0-9]*$");
+	if(!reg.test(params['code'])){
+		alert('请填写数字');
+	}else if(params['code']==""){
+		alert('请填写金额');
+	}else{
+		$.ajax({
+			type: "put",
+			async: false,
+			url: "/bankauthen", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				console.log(data);
+				$('.stepThree').find('input[name="checkMoney"]').attr('disabled',true);
+				$('.stepThree .btn').attr('disabled',true);
+				alert("已提交认证");  
+			},
+			error: function(data){
+				alert('认证失败');
+				console.log(data);
+			}
+		});
+
+	}
+	
+})
+$('.stepFour   button').click(function(){
+	if(confirm("更改银行账户需要重新审核，是否确定修改?"))
+	{
+		var params={
+			//'ownerid':sessionStorage.customerId
+		}
+		$.ajax({
+			type: "delete",
+			async: false,
+			url: "/bankauthen", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				console.log(data);
+				$('.stepFour').css('display','none');
+				$('.stepTwo').css('display','block'); 
+			},
+			error: function(data){
+				alert('操作失败');
+				console.log(data);
+			}
+		}); 
+	}
+	
+})
+	 
+
+</script> 
+</body>
+
+</html>

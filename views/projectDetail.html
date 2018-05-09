@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html >
+<head>
+<% include commonHead.html %>  
+<title>项目详情</title>  
+<style type="text/css">
+
+.projectDetail{
+	display: inline-block;
+	width: 898px;
+	padding:20px;
+	background-color: white; 
+	border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.14);
+    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1); 
+}
+.projectDetail>.userName{
+	color:#999999;
+}
+.projectDetail .summary>span{
+	display: inline-block;
+	width: 200px;
+
+}
+.projectDetail dd,.projectDetail dt{
+	display: inline-block;
+	vertical-align: top;
+}
+.projectDetail dd{ 
+	color:#666666;
+	font-size: 14px;
+
+}
+.recommends{ 
+	float: right;
+	padding:0 0px 20px 0px;
+	width: 240px; 
+	
+}
+.recommends .pic{
+	width:100%;
+	margin-bottom: 20px;
+	position: relative;
+	overflow: hidden;
+	cursor: pointer;
+	display: block;
+
+}
+.recommends .pic img{
+	width:240px;
+	height:150px;
+	opacity: 0.8;
+}
+.recommends .pic>p{
+	position: absolute;
+	display: none;
+	width: 100%;
+	text-align: center;
+	color:white;
+	bottom: 0px;
+	padding: 10px 0;
+	background-color: rgba(0,0,0,0.8);
+}
+.recommends .pic:hover p{
+	display: block;
+}
+.recommends .pic:hover img{
+	opacity: 1;
+}
+.model{
+	position:absolute;top:0px;
+	padding-top:200px;width: 100%; height:100%;background:rgba(0,0,0,0.4);
+	display: none;
+}
+.model-content{
+	background-color: white; 
+	padding:20px;
+	border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.14);
+    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1); 
+    width:300px; height:300px;margin:0 auto;
+
+}
+.model-content input{
+	width: 250px; 
+	margin: 0 auto;
+	margin-top:30px;
+}
+</style>
+</head> 
+<body style="overflow-x:hidden;  background:#f5f5f5">
+<% include header2.html %> 
+<div class="w" style="padding-top:50px;"> 
+	<div class="projectDetail" data-projectid="<%= results['project']['id']%>">
+		<h1 style="font-weight:400"><%= results['project']['name']%></h1>
+		<a class="userName"  href="/userDetail?userid=<%= results['owner']['id']%>"><%= decodeURI(results['owner']['nickname'])%></a>
+		</br></br>
+		<div class="summary">
+			<i class="icon-money" style="color:#fca75b"></i> <span>金额：<%= results['project']['bonus']%>  元</span>
+			<i class="icon-user" style="color:#f15e4a;"></i> <span>资质要求：<%= results['project']['bidderQualifiRequire'] ? results['project']['bidderQualifiRequire'] : "不限" %></span>
+			<i class="icon-map-marker" style="color:#fca75b"></i> <span>地域要求：<%= results['project']['bidderLocationRequire']  ? results['project']['bidderLocationRequire'] : "不限"%></span>
+			<i class="icon-time" style="color:#46b8da "></i> <span>周期：<%= results['project']['timespan']%></span>
+		</div>
+		</br></br>
+		<h3 style="font-weight:400;font-size:24px;">项目详情</h3></br>
+		<dl>
+		   <dt>项目名称：</dt>
+		   <dd><%= results['project']['name']%></dd></br></br>
+		   <dt>项目类型：</dt>
+		   <dd>
+		   		<%for(var i in results['categorys']['data']){%>
+		   			<%= results['categorys']['data'][i]['name']%>&nbsp;&nbsp;
+		   		<%}%>
+		   	</dd></br></br>
+		   <dt>项目周期：</dt>
+		   <dd><%= results['project']['timespan']%></dd></br></br>
+		   <dt>赏&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金：</dt>
+		   <dd><%- results['project']['bonus']%>元</dd></br></br>
+		   <dt>项目要求：</dt>
+		   <dd><%- (results['project']['requirements'] ? results['project']['requirements'] : "不限")%></dd></br></br>
+		   <dt>资质要求：</dt>
+		   <dd><%= (results['project']['bidderQualifiRequire'] ? results['project']['bidderQualifiRequire'] : "不限")%></dd></br></br>
+		   <dt>地域要求：</dt>
+		   <dd><%- (results['project']['bidderLocationRequire'] ? results['project']['bidderLocationRequire'] : "不限")%></dd></br></br>
+		   <dt>发票要求：</dt>
+		   <dd><%- (results['project']['receiptDes'] ? results['project']['receiptDes'] : "无")%></dd></br></br>
+		   <dt>项目介绍：</dt>
+		   <dd><%- (results['project']['description'] ? results['project']['description'] : "无")%></dd></br></br>
+		</dl>
+		<div style="text-align:center">
+			<%if(results['project']['status']==1){%> 
+				<%if(session.id){%>
+					<%if(results['owner']['id']==session.id) {%>
+						<button  class="btn" disabled>自己的项目</a></button>
+					<%}else if(results['bids']['data'].length>0 ){%> 
+						<%var flag=false%>
+						<% for(var i in results['bids']['data']){%> 
+							<%if(results['bids']['data'][i]['userid']==session.id){%>
+								<button  class="btn" disabled> 已投标</a></button>
+								<%var flag=true%>
+							<%}%>
+						<%}%> 
+						<%if(!flag){%> 
+							<button  class="btn"> 竞标</a></button>
+						<%}%>
+					<%}else{%>
+						<button  class="btn"> 竞标</a></button>
+					<%}%>  
+				<%}else{%>
+					<button  class="btn"    disabled> 未登录</button>
+				<%}%>  
+			<%}else if(results['project']['status']==2){%>
+				<button  class="btn"    disabled> 进行中</button>
+			<%}else if(results['project']['status']==3){%>
+				<button  class="btn"    disabled>  已结束</button>
+			<%}else if(results['project']['status']==4){%>
+				<button  class="btn"    disabled>审核中</button>
+			<%}else if(results['project']['status']==5){%>
+				<button  class="btn"    disabled>中止</button>
+			<%}else if(results['project']['status']==6){%>
+				<button  class="btn"    disabled>未通过</button>
+			<%}%>
+			
+		</div>
+	</div> 
+	<div class="recommends">
+		<% for(var i in results['list29']['data']){%>
+			<a  href="<%= results['list29']['data'][i]['url']%>" class="pic">
+				<img src="<%= results['list29']['data'][i]['image']%>"> 
+				<p><%= results['list29']['data'][i]['title']%></p>
+			</a> 
+		<%}%> 
+	</div> 
+	<div style="clear:both;"></div>
+</div> 
+<div class="model" style=""> 
+	<div  class="model-content"  > 
+		 <input class="input" type="text" name="price"  placeholder="竞标报价"> 
+		 <input class="input" type="text" name="description" placeholder="报价说明"> 
+		 <input class="input" type="text"  name="timespan" placeholder="项目周期">  
+		 <form id="uploadForm"   data-fileName="">
+		 	<span style="margin:0 0px 0 20px;">上传标书：</span><input  type="file" name="file" style="display:inline-block;width:180px;">
+		 </form>
+		 </br>
+		 <div style="margin:0 20px;">
+			<a class="btn submit" >提交</a> <a class="btn" style="float:right;">取消</a>
+		</div>  
+	</div>
+	
+</div>
+<% include footer.html %>
+</body> 
+<% include commonScript.html %>
+<script type="text/javascript" src="/js/common.js"></script> 
+<script>  
+$('.projectDetail .btn,.model .btn').click(function(){   
+	$('.model').slideToggle(200) 
+})
+$('#uploadForm').change(function(){ 
+	var formData = new FormData($("#uploadForm" )[0]); 
+	formData.append("type", 52);   
+	$.ajax({  
+	   url: '/uploadfile',  
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {
+	   		$('#uploadForm').attr("data-fileName",returndata['fileName']),   
+			 console.log(returndata)
+	   },  
+	   error: function (returndata) {  
+			alert(returndata)
+	   }  
+	});  
+})
+
+$('.submit').click(function(){
+	var params={
+		"projectid":$('.projectDetail').attr('data-projectid'),
+		"price":$('input[name="price"]').val(),
+		"description":$('input[name="description"]').val(),
+		"timespan":$('input[name="timespan"]').val(),
+	    "file":$('#uploadForm').attr("data-fileName"), 
+	}
+	if(params['price']==""){
+		alert("竞标报价不能为空")
+	}else if(params['description']==""){
+		alert("报价说明不能为空")
+	}else if(params['timespan']==""){
+		alert("项目周期不能为空")
+	}else{
+		console.log(params)
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/bid", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				console.log(data); 
+				alert("竞标成功") 
+				location=location;
+				 
+			},
+			error: function(){
+				alert('fail');
+				
+			}
+		});   
+	}
+	
+})
+
+</script>
+</html>

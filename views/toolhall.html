@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html >
+<head>
+<% include commonHead.html %>  
+<title>工具大厅</title>   
+<style type="text/css">
+ header #toolhall{
+	color:#e8594b;
+}
+</style>
+</head> 
+<body style="overflow-x:hidden;">
+<% include header2.html%>
+<div>
+	<img src="/images/common/tool_01.jpg" width="100%">
+	<img src="/images/common/tool_02.jpg" width="100%">
+	<img src="/images/common/tool_03.jpg" width="100%">
+	<img src="/images/common/tool_04.jpg" width="100%">
+
+</div>
+<% include footer.html %>
+</body> 
+<script type="text/javascript" src="/js/jquery-2.2.3.min.js"></script> 
+<script> 
+$('.search a').click(function(){
+	var keyword=$('.search input').val();
+	/*console.log(keyword);
+	var url=location.search.toString();
+	url=replaceParamVal(url,'keyword',keyword)  */
+	url='/p/1?keyword='+keyword;
+	location = url 
+})
+
+$(document).keydown(function(event){
+    if(event.keyCode==13){
+        $('.search a').click();
+    }
+});
+</script>
+</html>

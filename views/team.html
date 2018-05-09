@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<link href="/stylesheets/animate.min.css" rel="stylesheet"/>
+<title>团队大厅</title> 
+</head>
+<style>
+.slideBox{ margin-left: 210px; width:990px; }
+.slideBox .hd{ height:15px;   position: absolute;bottom:20px;left:45%; }
+.slideBox .hd ul{ overflow:hidden;  }
+.slideBox .hd ul li{display:inline-block;width:14px; height:14px;   margin:0 4px;background-color:white; border-radius:8px; cursor:pointer; }
+.slideBox .hd ul li.on{ background-color:#e8594b; border-radius:7px;}  
+.slideBox .bd img{height:400px;} 
+.slideBox .bd li{display:inline-block;  } 
+.tuijian{
+	width:1200px;
+	height:200px;
+	margin:20px auto;
+	
+	}
+.tuijian_l{
+	width:170px;
+	height:200px;
+	float:left;
+	
+	}
+.tuijian_r{
+	width:1020px;
+	height:200px;
+	float:right;
+	overflow:hidden;
+	}
+
+.tuijian_r li{
+	float:left;
+	margin-left:8px;
+	}
+
+.tuijian_r li:first-child{
+	margin-left:0px;
+	}
+.img_12 li{
+	width:168px;
+	height:198px;
+	position:relative;
+	margin:0px;
+	padding:0px;
+	border:1px solid #d0d0d0;
+	}
+
+.img_12 li div{
+	width:168px;
+	height:198px;
+	text-align:center;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background:rgba(0,0,0,0.8);
+	padding-top:60px;
+	color:white;
+	display:none;
+	}
+.img_12 li div p{
+	font-size:18px;
+	text-overflow:ellipsis;
+	}	
+.img_12 li div font{
+	font-size:15px;
+	}
+.img_12 li div a{
+	
+	padding:3px 7px 3px 7px;
+	font-size:14px;
+	background:#f15e4a;
+	color:white;
+	border-radius:2px;
+	}	
+/*.img_12 li div a:hover{
+	 
+	color:white;
+	background:#ed776c;
+	}*/
+	
+.tab_box{
+	width:1200px;
+	height:515px;
+	margin:20px auto;
+	}
+.tab_box_top{
+	width:1200px;
+	height:40px;
+	background:#4d4b4c;
+	}
+.tab_box_top li{
+	
+	width:200px;
+	height:30px;
+	float:left;
+	text-align:center;
+	padding-top:10px;
+	}
+.tab_box_top font{
+	font-weight:300;
+	color:white;
+	font-size:15px;
+	
+	}	
+.tab_box_top li:hover{
+	background:#eb5345;
+	color:white;
+	}	
+.font_right{
+	float:right;
+	font-size:13px;
+	display:none
+	}	
+.li_active{
+		background:#eb5345;
+	}
+.tab_box_bottom{
+	width:1200px;
+	height:460px;
+	margin-top:15px;
+	
+	}	
+.tab_box_bottom_son{
+	width:1200px;
+	height:460px;
+	display:none;
+	}	
+.tab_active{
+	display:block;
+	}	
+.tab_box_bottom_son_l{
+	width:520px;
+	height:460px;
+	float:left;
+	overflow:hidden;
+	}	
+.tab_box_bottom_son_r{
+	width:680px;
+	height:460px;
+	float:right;
+
+	}
+.tab_box_bottom_son_r li{
+	float:left;
+	width:168px;
+	height:228px;
+	border:1px solid #d0d0d0;
+	padding:0px;
+	margin:0px;
+	overflow:hidden;
+	}
+	.tab_box_bottom_son_l li img:hover,.tab_box_bottom_son_r li img:hover,.star_box_l img:hover,.tuijian_r img:hover{
+		-webkit-transform: scale(1.02);
+		-moz-transform: scale(1.02);
+		transform: scale(1.02);
+		-webkit-transition: transform .5s ease;
+		-moz-transition: transform .5s ease;
+		transition: transform .5s ease;	
+		}
+	
+	.star_box{
+		width:1200px;
+		height:490px;
+		margin:0px auto;
+		}
+	.star_box_l{
+		width:285px;
+		height:490px;
+		float:left;
+		background:#e0e0e0;
+		overflow:hidden;
+		}
+	.star_box_r{
+		width:895px;
+		height:490px;
+		float:right;
+		
+		}	
+	.star_box_r li{
+		width:285px;
+		height:235px;
+		float:left;
+		margin-left:20px;
+		display:block;
+		position:relative;
+		}	
+	.star_box_r li span{
+		width:285px;
+		height:35px;
+		display:block;
+		background:rgba(0,0,0,0.8);
+		position:absolute;
+		bottom:0px;
+		left:0px;
+		text-align:center;
+		color:white;
+		font-size:18px;
+		padding-top:15px;
+		}	
+	.star_box_r li:first-child{
+		margin-left:0px;
+		}	
+	.star_box_r li:nth-child(4){
+		margin-left:0px;
+		margin-top:20px;
+		}
+	.star_box_r li:nth-child(5){
+		
+		margin-top:20px;
+		}
+	.star_box_r li:nth-child(6){
+	
+		margin-top:20px;
+		}	
+	.star_box_r img{
+		width:285px;
+		height:235px;
+		}	
+	.star_box_msg{
+		width:285px;
+		height:165px;
+		
+		background:rgba(0,0,0,0.8);
+		position:absolute;
+		top:0px;
+		left:0px;
+		text-align:center;
+		color:white;
+	    padding-top:70px;
+		display:none;
+		}
+	.star_box_msg p{
+		font-size:20px;
+		}
+	.star_box_msg font{
+		font-size:16px;
+		}
+	 .star_box_msg a{
+		 padding:5px 10px 5px 10px;
+		 background:#f15e4a;
+		 color:white;
+		 border-radius:2px;
+		 }	
+	#userlist{
+		color:#e8594b !important;
+		}	 										
+</style>
+
+<body style="overflow-X:hidden; background:#f5f5f5" >   
+<% include header.html %>
+<div class="banner">
+	<div class="w" >   
+		<div class=" slideBox" style="position:relative"> 
+			<div class="hd ">
+				<ul><li></li><li></li><li></li></ul>
+			</div>
+			<div class="bd">
+				<ul>
+					<%for(var i in results['list48']['data']){%>
+						<li><a  href="<%= results['list48']['data'][i]['url']%>"><img  src="<%= results['list48']['data'][i]['image']%>" /></a></li>
+					<%}%> 
+				</ul>
+			</div>
+		</div> 
+	</div>  
+</div> 
+<!--今日推荐-->
+<div class="tuijian">
+
+    <div class="tuijian_l">
+        <a  href="<%= results['list49']['data'] ? results['list49']['data'][0]['url'] : ''%>"><img  src="<%= results['list49']['data'] ? results['list49']['data'][0]['image'] : ''%>" width="170px" height="200px"/></a>
+    </div>
+        <div class="tuijian_r">
+              <ul>
+              	<%for(var i=1;i<results['list49']['data'].length;i++){%>
+                	<li><a  href="<%= results['list49']['data'][i]['url']%>"><img  src="<%= results['list49']['data'][i]['image']%>" width="334px" height="200px"/></a></li>
+                <%}%>
+              </ul>
+        </div>
+</div>
+<!--精品团队-->
+<div class="tuijian">
+        <div class="tuijian_l">
+        	<a  href="<%= results['list50']['data'] ? results['list50']['data'][0]['url'] : ''%>"><img  src="<%=results['list50']['data'] ?  results['list50']['data'][0]['image'] : ''%>" width="170px" height="200px"/></a>
+        </div>
+        <div class="tuijian_r img_12">
+
+        	 <ul>
+                 <%for(var i=1;i<results['list50']['data'].length;i++){%>
+                	<li><a href="<%=results['list50']['data'][i]['url']%>"><img src="<%= results['list50']['data'][i]['image']%>" width="168px" height="198px"/></a><div><p><%=results['list50']['data'][i]['title']%></p><font><%=results['list50']['data'][i]['description']%></font><br/><br/><a href="<%=results['list50']['data'][i]['url']%>">查看详情</a></div></li>
+                <%}%>
+             </ul>
+        </div>
+</div>
+<div class="tuijian" style="height:100%;">
+       <p style="font-size:30px;"><font style="font-size:35px;color:#f15e4a;">|</font>&nbsp;&nbsp;行业推荐</p>
+</div>
+
+<div class="tab_box">
+	<div class="tab_box_top">
+    	<ul>
+        	<li class="li_active"><font>影视行业</font><font class="font_right">|</font></li>
+            <li><font>动漫制作</font><font class="font_right">|</font></li>
+            <li><font>创意产品设计</font><font class="font_right">|</font></li>
+            <li><font>策划/营销/出版</font><font class="font_right">|</font></li>
+            <li><font>VR制作</font><font class="font_right">|</font></li>
+            <li><font>AR制作</font></li>
+        </ul>
+    </div>
+    <div class="tab_box_bottom">
+            <!--轮播开始-->
+            <div class="tab_box_bottom_son tab_active">
+                   <div class="tab_box_bottom_son_l">
+                        <ul>
+                        	<% if(results['list51']['data'].length>0){%>
+                            	<li><a href="<%=results['list51']['data'][0]['url']%>"><img src="<%=results['list51']['data'][0]['image']%>"/></a></li>
+                            <%}%>
+                			
+                		
+                        </ul>
+                   </div>
+                   <div class="tab_box_bottom_son_r">
+                      	<ul>
+                        <% if(results['list51']['data'].length>0){%>
+        	                <%for(var i=1;i<results['list51']['data'].length;i++){%>
+                					<li><a href="<%=results['list51']['data'][i]['url']%>"><img src="<%=results['list51']['data'][i]['image']%>" width="168px" height="228px"/></a></li>
+                			<%}%>
+                            <%}%>
+            			</ul>
+                   </div>
+            </div>
+             <div class="tab_box_bottom_son">
+                     <div class="tab_box_bottom_son_l">
+                          <ul>
+                           <% if(results['list52']['data'].length>0){%>
+                			<li><a href="<%=results['list52']['data'][0]['url']%>"><img src="<%=results['list52']['data'][0]['image']%>"/></a></li>
+                           <%}%>
+                		</ul>
+                   </div>
+                   <div class="tab_box_bottom_son_r">
+                      	<ul>
+                         <% if(results['list52']['data'].length>0){%>
+        	                <%for(var i=1;i<results['list52']['data'].length;i++){%>
+                					<li><a href="<%=results['list52']['data'][i]['url']%>"><img src="<%=results['list52']['data'][i]['image']%>" width="168px" height="228px"/></a></li>
+                			<%}%>
+                           <%}%> 
+            			</ul>
+                   </div>
+            </div>
+             <div class="tab_box_bottom_son">
+                     <div class="tab_box_bottom_son_l">
+                          <ul>
+                           <% if(results['list53']['data'].length>0){%>
+                					<li><a href="<%=results['list53']['data'][0]['url']%>"><img src="<%=results['list53']['data'][0]['image']%>"/></a></li>
+                            <%}%> 
+                		</ul>
+                   </div>
+                   <div class="tab_box_bottom_son_r">
+                      	<ul>
+                        <% if(results['list53']['data'].length>0){%>
+        	                <%for(var i=1;i<results['list53']['data'].length;i++){%>
+                					<li><a href="<%=results['list53']['data'][i]['url']%>"><img src="<%=results['list53']['data'][i]['image']%>" width="168px" height="228px"/></a></li>
+                			<%}%>
+                            <%}%>
+            			</ul>
+                   </div>
+            </div>
+             <div class="tab_box_bottom_son">
+                     <div class="tab_box_bottom_son_l">
+                          <ul>
+                          <% if(results['list54']['data'].length>0){%>
+                					<li><a href="<%=results['list54']['data'][0]['url']%>"><img src="<%=results['list54']['data'][0]['image']%>"/></a></li>
+                             <%}%>          
+                		</ul>
+                   </div>
+                   <div class="tab_box_bottom_son_r">
+                      	<ul>
+                        <% if(results['list54']['data'].length>0){%>
+        	                <%for(var i=1;i<results['list54']['data'].length;i++){%>
+                					<li><a href="<%=results['list54']['data'][i]['url']%>"><img src="<%=results['list54']['data'][i]['image']%>" width="168px" height="228px"/></a></li>
+                			<%}%>
+                        <%}%>    
+            			</ul>
+                   </div>
+            </div>
+             <div class="tab_box_bottom_son">
+                     <div class="tab_box_bottom_son_l">
+                          <ul>
+                           <% if(results['list55']['data'].length>0){%>
+                					<li><a href="<%=results['list55']['data'][0]['url']%>"><img src="<%=results['list55']['data'][0]['image']%>"/></a></li>
+                            <%}%>         
+                		</ul>
+                   </div>
+                   <div class="tab_box_bottom_son_r">
+                      	<ul>
+                        <% if(results['list55']['data'].length>0){%>
+        	                <%for(var i=1;i<results['list55']['data'].length;i++){%>
+                					<li><a href="<%=results['list55']['data'][i]['url']%>"><img src="<%=results['list55']['data'][i]['image']%>" width="168px" height="228px"/></a></li>
+                			<%}%>
+                            	<%}%>
+            			</ul>
+                   </div>
+            </div>
+             <div class="tab_box_bottom_son">
+                     <div class="tab_box_bottom_son_l">
+                          <ul>
+                          <% if(results['list56']['data'].length>0){%>
+                					<li><a href="<%=results['list56']['data'][0]['url']%>"><img src="<%=results['list56']['data'][0]['image']%>"/></a></li>
+                          	<%}%>          
+                		</ul>
+                   </div>
+                   <div class="tab_box_bottom_son_r">
+                      	<ul>
+                         <% if(results['list56']['data'].length>0){%>
+        	                <%for(var i=1;i<results['list56']['data'].length;i++){%>
+                					<li><a href="<%=results['list56']['data'][i]['url']%>"><img src="<%=results['list56']['data'][i]['image']%>" width="168px" height="228px"/></a></li>
+                			<%}%>
+                         <%}%>   
+            			</ul>
+                   </div>
+            </div>
+            <!--轮播结束-->
+    </div>
+</div>
+<div class="tuijian" style="height:100%;">
+       <p style="font-size:30px;"><font style="font-size:35px;color:#f15e4a;">|</font>&nbsp;&nbsp;明星推荐</p>
+</div>
+
+<div class="star_box">
+	  <div class="star_box_l">
+      	      <ul>
+        	        <%for(var i=0;i<results['list57']['data'].length;i++){%>
+                			<li><a href="<%=results['list57']['data'][i]['url']%>"><img src="<%=results['list57']['data'][i]['image']%>" width="285px" height="490px"/></a></li>
+                	<%}%>
+              </ul>
+      </div>
+      <div class="star_box_r">
+      		<ul>
+        	       <%for(var i=0;i<results['list58']['data'].length;i++){%>
+                			<li><a><img src="<%=results['list58']['data'][i]['image']%>"/></a><span><%=results['list58']['data'][i]['title']%></span><div class="star_box_msg"><p><%=results['list58']['data'][i]['title']%></p><font><%=results['list58']['data'][i]['description']%></font><br/><br/><a href="<%=results['list58']['data'][i]['url']%>">查看详情</a></div></li>
+                  <%}%>
+            </ul>	
+      </div>
+</div>
+<% include footer.html %>
+<% include commonScript.html %>
+<script type="text/javascript" src="/js/common.js"></script> 
+<script type="text/javascript" src="/js/jquery.SuperSlide.2.1.1.js"></script>   
+</body>
+<script type="text/javascript">
+$(function(){ 	
+
+	 $('.drop-meanu a').each(function(){ 
+		var href=$(this).attr('href').replace("p","t")
+		$(this).attr("href",href)
+		});
+    $('.search a').click(function(){
+		var keyword=$('.search input').val();
+		console.log(keyword); 
+		url='/t/1?keyword='+keyword;
+		location = url 
+		}) 
+	 $(".slideBox").slide({mainCell:".bd ul",autoPlay:true});
+	 $(".star_box_r li,.img_12 li").each(function(){
+		 var $this=$(this);
+		 $this.hover(function(){
+			 
+			 $this.find("span").css("display","none");
+			 $this.find("div").css("display","block")
+			 },function(){
+				  $this.find("span").css("display","block");
+			 $this.find("div").css("display","none")
+			 });
+		 });
+	var $tab_box_top_li=$(".tab_box_top li");
+	$tab_box_top_li.each(function(index){
+		var $this=$(this);
+		$this.on("click",function(){
+			if($this.attr("class")!=="li_active"){
+				$tab_box_top_li.filter(".li_active").removeClass("li_active");
+				$this.attr("class","li_active");
+				$(".tab_box_bottom_son:visible").css("display","none");
+				$(".tab_box_bottom_son").eq(index).css("display","block");
+				}
+			});
+		
+		});	 
+		
+	
+	})
+
+$(document).keydown(function(event){
+    if(event.keyCode==13){
+        $('.search a').click();
+    }
+});
+</script>
+</html>

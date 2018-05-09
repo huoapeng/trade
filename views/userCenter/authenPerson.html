@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %>
+<title>个人认证</title>   
+<style>   
+
+.personAuthentication{ 
+	font-size:16px; 
+	padding-bottom:50px;  
+	min-height:600px; 
+}
+.personAuthentication h2{ 
+	font-size:16px; 
+	padding-left:10px;
+	text-align:center;
+	font-weight:800;
+	
+}   
+.personAuthentication p{
+	font-size:10px;
+	color:#999999;
+}
+.personAuthentication .line{
+	margin-top:10px;
+}
+.line input +p{
+	padding-left:120px;
+	font-size:10px;
+} 
+.line span{
+	font-size:12px;
+	line-height:24px;
+	display:inline-block;
+	float:left;width:120px;
+	text-align:right;
+}
+.line input{ 
+	display:inline-block;
+}
+
+.example img{
+	height:140px;
+	width:200px;;
+	display:inline-block; 
+	
+}
+.form-control{
+	width:33.3333%;
+} 
+.content .btn {
+	border:1px solid #e87165;
+	color:white;
+	width:150px;
+	background-color:#e87165;
+}
+.btn :hover{
+	color:#e87165 !important;
+	background-color#e87165 !important;
+}
+</style>  
+</head>
+<body >
+ 
+<% include header.html %> 
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/authentication">在线认证 ></a><a href="/authenPerson">个人认证</a>
+	</div>
+</div>
+<div class="w"  > 
+	<% include nav.html %>
+        
+	<div class="content">  
+		<div class="personAuthentication">
+			<h2>个人认证</h2>
+			<div class="row line">
+				<div class="col-xs-12">
+					<span   ><font style="color:red;">*</font>姓名：</span>
+					<input class="form-control"   name="name" >
+					<p>为保障您的资金安全，实名认证姓名和省份证号须和您体现的银行账号的户名保持一致。</p>
+				</div> 
+			</div>
+			<div class="row line">
+				<div class="col-xs-12">
+					<span   ><font style="color:red;">*</font>身份号码：</span>
+					<input class="form-control"   name="identityID"   maxlength="18">
+					<p>身份证号码前后不能有空格，年龄不足18岁，不能认证。</p>
+				</div> 
+			</div>
+			<div class="row line">
+				<div class="col-xs-12">
+					<span ><font style="color:red;">*手持</font>身份证正面照：</span>
+					<div style="width:60%;display:inline-block;">
+						<img id="authorityPrivateFrontImg" src="../../images/common/idfront.png" style="margin-bottom:10px;width:100px;height:97px;"> 
+						<div style="position:absolute;top:0px;width:100px;height:97px;overflow:hidden;cursor:pointer">
+							<form id="uploadForm1">
+								<input  type="file" id="authorityPrivateFront"  name="file" style="padding:200px;position:relative;left:-2px;top:-2px;"> 
+							</form>
+						</div>  
+					</div>
+					<div class="example">  
+						<div class="row">
+							<div class="col-xs-12"> 
+								<span>示例：</span>
+								<img src="../../images/common/id-front-small.jpg">  
+								<div style="width:500px;padding-left:120px;display:inline-block;">
+									<p>1.请上传本人手持身份证正面头部照片和上半身照片</p>
+									<p>2.照片为免冠、未化妆的数码照片原始图片，请勿用任何软件编辑修改</p>
+									<p>3.必须看清证件信息，且证件信息不能被遮挡，持证人五官清晰可见</p>
+									<p>4.仅支持.jpg. bmp. png. gif的图片格式。建议图片大小不超过3M</p>
+									<p>5.您提供的照片信息聚形云将予以保护，不会用于其他用途。</p>
+								</div>
+							</div> 
+						</div> 
+					</div> 
+				</div>  
+			</div>
+			<div class="row line">
+				<div class="col-xs-12">
+					<span>身份证反面照：</span>
+					<div style="width:60%;display:inline-block;">
+						<img id="authorityPrivateBackImg" src="../../images/common/idback.png" style="margin-bottom:10px;width:100px;height:97px;"> 
+						<div style="position:absolute;top:0px;width:100px;height:97px;overflow:hidden;cursor:pointer">
+							<form id="uploadForm2"> 
+								<input  id="authorityPrivateBack"  type="file" name="file" style="padding:200px;position:relative;left:-2px;top:-2px;"> 
+							</form>
+						</div> 
+					</div> 
+					<div class="example">  
+						<div class="row">
+							<div class="col-xs-12">
+								<span>示例：</span>
+								<img src="../../images/common/id-back-small.jpg"> 
+								<div style="width:500px;padding-left:120px;display:inline-block;">
+									<p>1.必须看清证件信息，且证件信息不能被遮挡</p>
+									<p>2.仅支持.jpg .bmp .png .gif的图片格式，图片大小不超过3M</p>
+									<p>3.您提供的照片信息聚形云将予以保护，不会用于其他用途。</p>
+								</div>
+							</div> 
+							
+						</div> 
+					</div>  
+				</div>   
+			</div>
+			<div class="row line">
+				<div class="col-xs-12">
+					<a class="btn" onclick="authentication()" style="margin:20px 0 0 120px;">立即认证</a>
+				</div> 
+			</div>
+		</div> 
+		 
+	</div> 
+		 
+</div>   
+<% include commonScript.html %> 
+<script   type="text/javascript">  
+ $(function(){
+
+ 	$('#onlineAuthen_1').addClass('active')
+ })
+//认证
+function authentication(){ 
+	var flag=true;
+	// 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X  
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+	var params={
+		"ownerid":parseInt(sessionStorage.customerId), 
+		'identityid':$("input[name='identityID']").val(),
+		'name':$("input[name='name']").val(),
+		'identityFrontImage':authorityPrivateFront,
+		'identityBackImage':authorityPrivateBack
+	}
+	if(params['identityID']==""){
+		alert("身份号码不能为空");
+	}else if($('#authorityPrivateFront').val()==''){
+		alert("请上传身份证正面照片");
+	}else if($('#authorityPrivateBack').val()==''){
+		alert("请上传身份证反面照片");
+	}else{
+		console.log(params);
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/privateauthen", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){ 
+				location.replace(document.referrer);
+				console.log(data);
+				alert("已提交认证"); 
+				
+			},
+			error: function(){
+				alert('认证失败');
+			}
+		});   
+	} 
+}
+//全局变量
+var authorityPrivateFront="";//身份证正面照片
+var authorityPrivateBack="";//身份证反面照片
+
+$("#authorityPrivateFront" ).change(function(){
+	 
+	var url = null;  
+	var imgObejct=this.files[0];
+	var formData = new FormData($("#uploadForm1" )[0]); 
+	formData.append("type", 3);   
+	$.ajax({  
+	   url: '/uploadfile',  
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {   
+			authorityPrivateFront=returndata['fileName'];
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(imgObejct) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(imgObejct) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(imgObejct) ;
+			}  
+			if (url) {
+				$("#authorityPrivateFrontImg").attr('src',url) ;
+			}   
+	   },  
+	   error: function (returndata) {  
+			console.log(returndata);  
+	   }  
+	});   
+});
+$("#authorityPrivateBack").change(function(){
+	console.log($("#uploadForm2" )[0]); 
+	var url = null;  
+	var imgObejct=this.files[0];
+	var formData = new FormData($("#uploadForm2")[0]); 
+	formData.append("type",4); 
+	$.ajax({  
+	   url: '/uploadfile',   
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {  
+			console.log(returndata);
+			authorityPrivateBack=returndata['fileName'];
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(imgObejct) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(imgObejct) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(imgObejct) ;
+			}  
+			if (url) {
+				$("#authorityPrivateBackImg").attr('src',url) ;
+			}   
+	   },  
+	   error: function (returndata) {  
+			console.log(returndata);  
+	   }  
+	});   
+});
+
+	
+
+
+
+ 
+
+</script> 
+</body>
+
+</html>

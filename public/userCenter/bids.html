@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>我发布的项目</title> 
+<style>  
+ 
+table td{
+	padding:0px;
+	margin:0px;
+	vertical-align:middle;
+	text-align:center;
+
+}
+tbody .status{ 
+	width:50px;
+	height:20px; 
+	color:#e8594b;
+	text-align:center;
+	border-radius:4px;
+	padding:0px; 
+	border:1px solid #e8594b; 
+	line-height:18px;
+	display:none;
+	font-size:12px;
+} 
+.modal-content{
+	border-radius:0px; 
+	padding:20px;
+	padding-bottom:80px;
+}
+.modal-content h2{
+	padding:20px;
+	border-bottom:1px solid #e0e0e0;
+}
+.modal-content i{
+	float:right;
+	font-size:30px;
+	color:#e0e0e0;
+	position:relative;
+	top:-8px;
+	right:-8px;
+} 
+</style>  
+</head>
+<body > 
+<% include header.html %> 
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeProject">项目管理 ></a><a href="#">竞标管理</a>
+	</div>
+</div>
+<div class="w"  > 
+	<% include nav.html %> 
+    <div class="content" style="background-color:transparent;padding:0px;border:0px">  
+		<div class="user">
+			<div class="panel panel-default">  
+				<div class="panel-heading">
+					项目名称：<a href="/publishedProjects/1" style="color:#666"><%= results['project']['name']%></a>
+					<span class="biddersNum" style="float:right;margin-right:10px;display:block">竞标人数:<%= results['data'].length%></span>
+				</div>
+				<div class="panel-body" >    
+					<table class="table table-hover " style="width:100%;">
+						<thead>
+							<tr>
+								<td><span>竞标者名称</span></td> 
+								<td><span>所在地</span></td>
+								<td><span>工作周期</span></td>
+								<td><span>任务报价</span></td>
+								<td><span>报价说明</span></td>  
+								<td><span>标书</span></td>  
+								<td><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></td> 
+							</tr>
+						</thead> 
+						<tbody> 
+							<% for(var i in results['data']){%>
+								<tr  data-userId="<%= results['data'][i]['user']['id']%>"   data-projectid="<%= results['project']['id']%>">
+									<td><a   href="/userDetail?userid=<%= results['data'][i]['user']['id']%>" style="color:black"><%= results['data'][i]['user']['nickname']%></a></td> 
+									<td><span><%= (results['data'][i]['user']['location'] ? results['data'][i]['user']['location'] : "未填写")%></span></td> 
+									<td><span><%= (results['data'][i]['timespan'] ? results['data'][i]['timespan'] : "未填写")%></span></span></td>
+									<td><span><%= (results['data'][i]['price'] ? results['data'][i]['price'] : "未填写")%></span></span></td>
+									<td><a  onclick="showModel(this)" data-description="<%- (results['data'][i]['price'] ? results['data'][i]['description'] : '未填写')%>">查看</a></td>
+									<%if(results['data'][i]['file']){%>
+									<td><a   href="<%= results['data'][i]['file']%>">下载</a></td>
+									<%}else{%>
+									<td><a   href="<%= results['data'][i]['file']%>">无</a></td>
+									<%}%>	
+									<% if(results['hasBidded']){%>
+										<% if(results['data'][i]['status']==2){%>
+											<td style="width:100px;"><a class="status" style="display:block;">中标</a></td>
+										<%}else {%>
+											<td style="width:100px;"><a class="status  noBidder" onclick="chooseBidder(this)"  >选标</a></td> 
+										<%}%> 
+									<%}else{%>  
+										<td style="width:100px;"><a class="status  noBidder" onclick="chooseBidder(this)"  >选标</a></td> 
+									<%}%>
+								</tr>
+							<%}%> 
+						</tbody>
+					</table>  
+				</div>
+			</div>
+		</div> 
+	</div>    
+</div>   
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document"> 
+		<div class="modal-content"> 
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">报价说明</h4>
+			</div>
+			<div class="modal-body">
+				<p>aaaa </p>
+			</div>
+		</div>
+	</div>
+</div>
+<% include commonScript.html %>  
+<script   type="text/javascript">  
+$(function () {   
+	//迭代竞标者列表
+		$(".table tbody").find('tr').mouseover(function(){ 
+			$(this).find('.noBidder').css('display','block'); 
+		}).mouseout(function(){ 
+			$(this).find('.noBidder').css('display','none');
+		}) 
+	 
+});   
+//显示模态框
+function  showModel(e){
+	$('#myModal').modal('toggle')
+	var description=$(e).attr('data-description');
+	$('.modal-body p').html(description); 
+}
+//选择竞标
+function chooseBidder(e){
+	var $_e=$(e); 
+	var r=confirm("确定选择此竞标者？");   
+	if(r==true){ 
+		var params={
+			"userid":parseInt($_e.parent().parent().attr('data-userId')),
+			"projectid":parseInt($_e.parent().parent().attr('data-projectid')),
+		}
+		console.log(params); 
+		$.ajax({
+			type:"put",   //请求方式
+			url:"/bid",    //请求的url地址
+			dataType:"json",   //返回格式为json
+			contentType:"application/json;charset=utf-8",
+			async:false,//请求是否异步，默认为异步，这也是ajax重要特性
+			data:JSON.stringify(params),    //参数值
+			success:function(data){
+				console.log(data);  
+				$('.table').find('tbody').find('tr').unbind();
+				$(e).html('中标').css('display','block');
+				$(e).attr('onclick',"");
+			},
+			error:function(){
+				alert("请求出错处理")
+			}
+		}) 
+	}else{
+         return false;   
+	} 
+} 
+
+
+</script> 
+</body>
+
+</html>

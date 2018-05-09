@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>  
+<title>密码重置</title>
+<% include commonHead.html %> 
+  
+<style>  
+input::-webkit-input-placeholder { /* WebKit browsers */
+color:#ecf0f5;
+}
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+color:#ecf0f5;
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */
+color:#ecf0f5;
+}
+input:-ms-input-placeholder { /* Internet Explorer 10+ */
+color:#ecf0f5;
+}
+input{
+	border:0px;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #ecf0f5;
+	width:100%;
+	outline:none;
+	padding:15px 0 ;
+	font-size: 16px;
+	color:#ecf0f5 ;
+	text-indent: 30px;
+	 
+}
+.top{
+	width:600px;
+	margin:0 auto;
+	padding-top:100px;
+	padding-bottom:30px;  
+
+}
+.middle{ 
+	padding:20px 0 100px 0;
+	background-color:white;
+}
+.middle i{
+	color:#ecf0f5;
+	font-size:20px; 
+	position:absolute; 
+}
+.bottom{
+	text-align:center;
+}
+</style>  
+</head>
+<body  > 
+<div class="wrapper"  style="background-color:#ecf0f5;position:absolute;min-height:100%;width:100%;">
+	<div class="top"> 
+		<img src="/images/common/logo.png"  style="margin-right:20px;float:left">
+		<div style="display:inline-block;">
+			<h3 style="font-weight:800;word-spacing:8px; letter-spacing: 4px;margin-bottom:4px;">密码重置</h3> 
+			<span style="font-weight:800;color:#999;word-spacing:8px; letter-spacing: 2px;">请按要求设置您的密码</span>
+		</div>
+	</div>
+	<div class="middle "> 
+		<div  class="reset" style="width:600px; margin:0 auto;">
+			<div style="display:inline-block;width:300px;position:relative" >
+				<i class="icon-lock" style="top:20px;"></i>
+				<input type="password" name="password" placeholder="请输入您的新密码" >
+				<i class="icon-lock"  style="top:70px;"></i>
+				<input type="password" name="password_repeated" placeholder="请输重新输入密码" >
+				 
+				<button class='btn '  style="background-color:#e8594b;color:white;width:100%;margin-top:40px;">立即重置</button>
+			</div>
+			<img src="/images/common/welcomeBack.png" style="display:inline-block;float:right">
+		</div> 
+		<div class="success"  style="width:400px; margin:0 auto; margin-top: 20px; display:none">
+			<img src="./images/common/resetPswSuccess.png" style="display:inline-block;margin-right:40px;">
+			<div style="display:inline-block;width:150px;margin-left">
+				</br>
+				<span style="color:#999">恭喜您"密码"重置成功</span> 
+				<button class='btn '  style="background-color:#e8594b;color:white;margin-top:20px;">立即登录</button> 
+			</div>
+			
+
+		</div>
+	</div>
+	<div class="bottom" >
+		</br>
+		<span style="color:#ccc">感谢您对聚形云的支持</span>
+	</div>
+</div>
+<% include commonScript.html %>  
+<script type="text/javascript">
+
+
+ 
+function UrlSearch() { 
+	var url=window.location.href; //取得整个地址栏
+	var num=url.indexOf("?")  
+	url=url.substr(num+1); //取得所有参数   stringvar.substr(start [, length ] 
+	var arr=url.split("&"); //各个参数放到数组里  
+	var params=arr[0].split("=")[1]; 
+	var email=arr[1].split("=")[1];
+	var result={
+		"params":params,
+		"to":email
+	}
+   return  result;
+}  
+//重置密码
+$('.reset .btn').click(function(){
+	var params={
+		"params":UrlSearch()['params'],
+		"email":UrlSearch()['to'],
+		"password":$('input[name=password]').val(),
+		"password_repeated":$('input[name=password_repeated]').val(),
+	} 
+	if(params['password']!=params['password_repeated']){
+		alert('两次输入的密码不一致') 
+	}else if(params['password']==""){
+		alert('密码不能为空')
+	}else if(params['password'].length<6){
+		alert('密码不能少于6位')
+	}
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/changepwd", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);  
+			flag= true;
+		},
+		error: function(){
+			alert('原密码错误'); 
+		}
+	});
+	
+})
+
+</script> 
+
+</body>
+
+</html>

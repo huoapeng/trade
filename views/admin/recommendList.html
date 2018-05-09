@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>推荐位上传</title>  
+<style>   
+input{
+	color:black !important;
+	border-radius:4px;
+	width:100%;
+}
+td{
+	vertical-align:middle !important;
+} 
+.list-group a{
+	cursor: pointer;
+}
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" >   
+				<div class=" panel panel-default" >
+					<div class="panel-heading" >推荐位置</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-4">
+								<div class="list-group" >  
+									<div href="#" class="list-group-item">
+									  	<button class="btn btn-primary" onclick="addRecommendType()">添加推荐类型</button>
+									</div> 
+									<%for(var i in results['recommendtypelist']['data']){%>
+										<a data-typeid="<%= results['recommendtypelist']['data'][i]['id']%>" data-url="<%= results['recommendtypelist']['data'][i]['items']%>" class="list-group-item" onclick="showList(this)">
+											<input type="text" name="location" value="<%= results['recommendtypelist']['data'][i]['name']%>"  onblur="modifyRecommendType(this)">
+										</a> 
+									<%}%>
+
+ 
+
+								</div> 
+							</div>
+							<div class="col-xs-8">
+								<button class="btn btn-primary"  data-toggle="modal" data-target="#myModal">添加推荐</button>
+								<table class="list table table-hover">
+									<thead>
+										<tr>
+											<td>标题</td>
+											<td>描述</td>
+											<td>图片</td>
+											<td>链接</td>
+											<td>位置</td>
+											<td><span  style="width:130px;display:block">操作</span></td>
+										</tr>
+									</thead>
+									<tbody> 
+									</tbody>
+								</table>
+							</div> 
+						</div> 
+					</div> 
+				</div>  
+			</div> 
+		</div>
+	</div>
+</div>   
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"> 
+      	<div class="modal-body">
+        	<div class="input-group">
+		  		<span class="input-group-addon" id="sizing-addon2">标题</span>
+		  		<input type="text" class="form-control" name="title"   >
+			</div>
+			</br>
+			<div class="input-group">
+		  		<span class="input-group-addon" id="sizing-addon2">描述</span>
+		  		<input type="text" class="form-control" name="description"   >
+			</div>
+			</br>
+			<div class="input-group">
+		  		<span class="input-group-addon" id="sizing-addon2">图片</span> 
+		  		<form id="uploadForm" style="position:relative;overflow:hidden">
+					<img style="width:100px;height:100px;border:1px;">
+					<input  class="uploadInput" type="file" name="file" onchange="uploadImg(this)"     style="position:absolute;top:0px; padding:100px;"  >
+				</form> 
+			</div>
+			
+			</br>
+			<div class="input-group">
+		  		<span class="input-group-addon" id="sizing-addon2">链接</span>
+		  		<input type="text" class="form-control" name="url"   >
+			</div>
+			</br>
+			<div class="input-group">
+		  		<span class="input-group-addon" id="sizing-addon2">位置</span>
+		  		<input type="text" class="form-control" name="orderid"   >
+			</div>
+      	</div>
+     	<div class="modal-footer">
+        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        	<button type="button" class="btn btn-primary"  onclick="addRecommendItem()">Save changes</button>
+      	</div>
+    </div>
+  </div>
+</div>
+<% include commonScript.html %>  
+<script type="text/javascript">
+$(function () { 
+ 
+});
+//全局变量
+var _typeid="";
+var _commendImg="";
+//推荐类型--添加
+function addRecommendType(){ 
+	var params={
+		"name":"new Recommend"
+	}
+	$.ajax({  
+	    url: '/recommendtype',  
+	    type: 'POST',  
+	    async: false, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data);
+			var string="";
+			string+='<a data-typeid="'+data['data']['id']+'"   data-url="'+data['data']['items']+'" class="list-group-item" onclick="showList(this)">' + 
+							'<input type="text" name="location" value="'+data['data']['name']+'"  onblur="modifyRecommendType(this)">'+ 
+						'</a>'; 
+		 	$('.list-group').append(string);
+		 	alert('添加成功');
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+//推荐类型--修改
+function modifyRecommendType(e){ 
+	var params={
+		"typeid":parseInt($(e).parent().attr('data-typeid')),
+		"name":$(e).val()
+	}
+	console.log(params)
+	$.ajax({  
+	    url: '/recommendtype',  
+	    type: 'PUT',  
+	    async: false, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){   
+			console.log(data);  
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+//推荐类型--删除
+function deleteRecommendType(e){ 
+	var params={
+		"typeid":parseInt($(e).parent().attr('data-typeid'))
+	}
+	console.log(params)
+	$.ajax({  
+	    url: '/recommendtype',  
+	    type: 'DELETE',  
+	    async: false, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){   
+			console.log(data);
+			$(e).parent().remove();
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+//显示列表
+function showList(e){ 
+	_typeid=$(e).attr('data-typeid'); 
+	var url=$(e).attr('data-url').replace("http://www.juxingcloud.com:8080/api/v1.0","")
+	$('.list-group a').removeClass('active');
+	$(e).addClass('active'); 
+	$.ajax({  
+	    url: url,  
+	    type: 'get',  
+	    async: false, 
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){   
+			console.log(data);
+			var string="";
+			for(var i in data['data']){
+				string+=recommendItemString(data['data'][i]);
+			}
+			$('.list tbody').empty();
+			$('.list tbody').append(string);
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+//拼接recommenditem字符串
+function recommendItemString(data){
+	var string="";
+	string+='<tr data-itemid="'+data['id']+'">'+
+				'<td><input type="text" name="title" value="'+data['title']+'"></td>'+
+				'<td><input type="text" name="description" value="'+data['description']+'"></td>'+
+				'<td>'+
+					'<form  style="position:relative;overflow:hidden"   data-imgsrc='+data['imageName']+'>'+
+						'<img src="'+data['image']+'" style="width:100px;height:100px;border:1px;"></a>'+
+						'<input  class="uploadInput" type="file" name="file"    data-imgsrc=""  style="position:absolute;top:0px; padding:100px;" onchange="uploadImg(this)">'+ 
+					'</form>'+
+					'<a href="'+data['image']+'"  target="_blank">大图</a>'+
+				'</td>'+
+				'<td><input type="text" name="url" value="'+data['url']+'"></td>'+
+				'<td><input type="text" name="orderid" value="'+data['orderid']+'"></td>'+
+				'<td><button type="button" class="btn btn-primary btn-xs" onclick="modifRecommendItem(this)">保存</button>&nbsp;&nbsp;<button type="button" class="btn btn-primary btn-xs" onclick="deleteRecommendItem(this)">删除</button></td>'+
+			'</tr>';
+	return string;
+} 
+//添加recommenditem
+function addRecommendItem(){
+	var params={
+		'typeid':parseInt(_typeid),
+		'title':$('.modal').find('input[name="title"]').val(),
+		'description':$('.modal').find('input[name="description"]').val(),
+		'url':$('.modal').find('input[name="url"]').val(),
+		'orderid':$('.modal').find('input[name="orderid"]').val(),
+		'image':$('#uploadForm').attr('data-imgsrc')
+	}
+	console.log(params)
+	$.ajax({  
+	    url: '/recommenditem',  
+	    type: 'post',  
+	    async: false, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){   
+			console.log(data);
+			$('.list tbody').append(recommendItemString(data['data']));
+			$('#myModal').modal('toggle');
+			alert("添加成功")
+			
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+
+//修改recommenditem
+function modifRecommendItem(e){
+	//var img=$(e).parent().parent().find('img').attr('src').split("/")[$(e).parent().parent().find('img').attr('src').split("/").length-1];
+	var img=$(e).parent().parent().find('form').attr('data-imgsrc'); 
+	console.log(img)
+	var params={
+		'itemid':parseInt($(e).parent().parent().attr('data-itemid')),
+		'title':$(e).parent().parent().find('input[name="title"]').val(),
+		'description':$(e).parent().parent().find('input[name="description"]').val(),
+		'url':$(e).parent().parent().find('input[name="url"]').val(),
+		'orderid':$(e).parent().parent().find('input[name="orderid"]').val(),
+		'image':img
+
+	}
+	console.log(params);
+	$.ajax({  
+	    url: '/recommenditem',  
+	    type: 'PUT',  
+	    async: false, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){   
+			console.log(data);
+			alert("保存成功");
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+//删除recommenditem
+function deleteRecommendItem(e){
+	var params={
+		'itemid':parseInt($(e).parent().parent().attr('data-itemid'))
+	}
+	$.ajax({  
+	    url: '/recommenditem',  
+	    type: 'DELETE',  
+	    async: false, 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){   
+			console.log(data);
+			$(e).parent().parent().remove();
+		},
+		error: function(){
+			alert('fail');
+		}
+	});
+}
+
+//图片上传 
+ function uploadImg(e){
+ 	var $_e=$(e)
+ 	var imgObejct=$_e[0].files[0];   
+	var formData =  new FormData($_e.parent('form')[0]);  
+	formData.append("type",9);   
+	formData.append("foldername",_typeid);   
+	$.ajax({  
+	   url: '/uploadfile',   
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {   
+	   		console.log(returndata)
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(imgObejct) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(imgObejct) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(imgObejct) ;
+			}   
+			console.log(url)
+			if (url) { 
+				$_e.parent('form').find('img').attr('src',url) ;
+				 
+			} 
+			$_e.parent('form').attr('data-imgsrc',returndata['fileName']); 
+	   },  
+	   error: function (returndata){  
+			console.log(returndata);  
+	   }  
+	});
+
+ }
+
+ 
+
+</script> 
+
+</body>
+
+</html>

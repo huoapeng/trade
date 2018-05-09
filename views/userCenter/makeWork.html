@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>发布作品</title>   
+<style>  
+.input-group {
+	max-width:400px;
+}
+.input-group textarea{
+	width:100%;
+	max-width:400px;
+	height:150px; 
+	resize:none;
+ 
+}
+.makeWork>.top{
+	padding-top:12px;
+	padding-bottom:20px;
+	border-bottom:2px solid #e0e0e0;
+	margin-bottom:20px;
+}
+.tagList{  
+	
+	background-color:white;
+}
+.makeWork>.top>span{
+	font-size:18px;
+	font-weight:800;
+	color:#666;
+}
+.tag_style{
+	border:1px solid #e87165;
+	border-radius:4px;
+	color:#e87165;
+	margin-right:10px;
+	font-size:16px;
+	display:inline-block;
+}
+.btn{
+	background-color:#e87165;
+	color:white;
+}
+font{
+	color:red;
+} 
+.header1{ 
+	padding:10px 0px;
+	background-color: white;
+	border-bottom: 1px solid #ec6941;
+}
+</style>  
+</head>
+<body >
+<% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a  >我的作品 ></a><a  >发布作品</a>
+	</div>
+</div>
+<div class="w" > 
+	<% include nav.html %> 
+	<div  class="content">   
+		<div class="makeWork">  
+			<div class="top">
+				<span>发布作品</span> 
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon" >作品名称<font >*</font>：</span>
+				<input class="form-control" name="title" type="text" placeholder="请输入作品名称" >
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon"   >作品简介<font >*</font>：</span>
+				<textarea class="form-control"  id="description" placeholder="准确输入作品简介与作品说明"></textarea>
+			</div>   
+			<div class="input-group">
+				<span class="input-group-addon"   >图片<font >*</font>：</span>
+				<form id="uploadForm" >
+					<input id="imgFile"  type="file" name="file">
+				</form>
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon">附件：</span>
+				<form id="compressfileForm">
+					<input id="compressfile" type="file"   name="file">
+					
+				</form>
+			</div>   
+			
+			<div class="input-group">
+				<span class="input-group-addon"   >版权<font >*</font>：</span>
+				<select class="form-control  copyright">
+					<option id="" selected>请选择版权类型</option>
+					<option id="1">不能使用原创授权</option>
+					<option id="2">署名</option>
+					<option id="3">署名-非商业性使用</option>
+					<option id="4">署名-禁止演绎</option>
+					<option id="5">署名-形同方式共享</option>
+					<option id="6">署名-非商业性使用-禁止演绎</option>
+					<option id="7">署名-非商业性使用-相同方式共享</option>
+				</select>
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon"   >作品标签<font >*</font>：</span>
+				<input class="form-control" id="tagInput" type="text" placeholder="请输入作品类型"   oninput="thinkSearch(this)" >
+				<span class="input-group-addon"  style="padding:0px;"><a class="btn"   style="float:right;"  onclick="addTag()">添加</a> </span>
+				<div style="position:absolute;padding:0 100px;width:100%;left:0px;margin-top:34px;z-index:100;">
+					<ul class="tagList">  
+					</ul> 
+				</div>
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon"   > </span>
+					<div class="tags">  
+					</div>
+				<span class="input-group-addon"   > </span>
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon"   > </span>
+				<a class="btn" onclick="setWork()" style="width:150px;">确认</a> 
+			</div>
+			
+		</div>  
+	</div>
+	 
+</div> 
+<% include commonScript.html %>   
+<script   type="text/javascript">  
+ $(function(){
+ 	$('#myWorkList_1').addClass("active");
+ })
+//全局变量
+var workImg="";
+var compressfile="";
+var thumbnail=""; 
+//点击上传缩略图片
+$("#imgFile").change(function(){   
+	var url = null;  
+	var imgObejct=this.files[0]; 
+	var formData = new FormData($("#uploadForm" )[0]);  
+	formData.append("type", 7);  
+	formData.append("thumbnail", 1);  
+	$.ajax({  
+	   url: '/uploadfile',  
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {   
+			console.log(returndata);
+			workImg=returndata['fileName']; 
+	   },  
+	   error: function (returndata){  
+			console.log(returndata);  
+	   }  
+	});  
+});
+//点击上传压缩文件
+$("#compressfile").change(function(){   
+	var imgObejct=this.files[0];
+	var formData = new FormData($("#compressfileForm")[0]);
+	formData.append("type", 7);   
+	$.ajax({  
+	   url: '/uploadfile',  
+	   type: 'POST',  
+	   data: formData,
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {   
+			console.log(returndata);
+			compressfile=returndata['fileName'];
+	   },  
+	   error: function (returndata){  
+			console.log(returndata);  
+	   }  
+	});  
+}); 
+//发布作品
+function setWork(){
+	var arr=$('.tags .tag_style').find('a'); 
+	var tags="";
+	for (var i=0;i<arr.length;i++){
+		//console.log($(arr[i]).html());
+		tags+= tags==""? $(arr[i]).parent().attr('data-tagid') : ','+$(arr[i]).parent().attr('data-tagid');
+	} 
+	var params={
+		'title':$('input[name="title"]').val().trim(),
+		'image':workImg,
+		'description':$('#description').val().trim(), 
+		'userid':parseInt(sessionStorage.customerId),
+		'file':compressfile,
+		'copyright':parseInt($('.copyright').find('option:selected').attr('id')),
+		'thumbnail':thumbnail,
+		'tags':tags
+	} 
+	console.log(params)
+	if(params['title']==""){
+		alert("请填写作品名称"); 
+	}else if(params['image']==""){
+		alert("请上传图片"); 
+	}else if(params['description']==""){
+		alert("请填写作品简介"); 
+	}else if(params['copyright']==""){
+		alert("请选择版权"); 
+	}else if(params['tags']==""){
+		alert("请添加标签"); 
+	}else{
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/work", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){  
+				console.log(data); 
+				alert('上传作品成功！')
+				$('input').val("");
+				$('textarea').val("");
+				$('.tags').empty();
+				$('.copyright').find('option:eq(0)').attr('selected',true);
+			},
+			error: function(){
+				alert('fail');
+			}
+		});   
+	} 
+}
+
+//添加作品标签
+function addTag(){
+	var params={
+		'name':$('#tagInput').val().trim(),
+	}
+	var flag=true; 
+	var arr=$('.tags .tag_style').find('a'); 
+	for (var i=0;i<arr.length;i++){
+		//console.log($(arr[i]).html());
+		if($(arr[i]).html()==params['name']){
+			flag=false;
+			alert('此标签已存在');
+		}
+	}
+	if(flag){
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/worktag", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){   
+				console.log(data);
+				$('.tags').append('<div class="tag_style" data-tagid='+data['id']+'><a  style="color:#e87165;">'+data['name']+'</a><i class="glyphicon glyphicon-remove" style="font-size:14px;" onclick="removeTag(this)"></i></div>');
+			},
+			error: function(){
+				alert('fail');
+			}
+		});   
+	}
+	 
+	 
+}
+//移除标签
+function removeTag(e){
+	$(e).parent().remove();
+	
+}
+//联想查询
+function thinkSearch(e){
+	$('.tagList').css('display','block');   
+	if($(e).val()==""){
+		$('.tagList').css('display','none');  
+	}
+	$.ajax({
+		type: "get",
+		async: false,
+		url:"/search/worktaglist/"+$(e).val(), 
+		contentType:"application/json",  
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);
+			$('.tagList').empty(); 
+			if(data.length>0){
+				$('.tagList').css('display','block'); 
+				for(var i in data){
+					$('.tagList').append('<li id="'+data[i]['id']+'"    ><a>'+data[i]['name']+'</a></li>');
+				} 
+			}else{
+				$('.tagList').css('display','none'); 
+			} 
+			$('.tagList>li').click(function(){ 
+				var temp={
+					'id':$(this).attr('id'),
+					'name':$(this).find('a').html() 
+				}
+				$('#tagInput').val(temp['name']);
+				$('#tagInput').attr('data-kindId',temp['id']);
+				$(this).parent().css('display','none');
+			})
+		},
+		error: function(err){
+			//alert('添加项目失败');
+			console.log(err);
+		}
+	});   
+}
+ 
+</script> 
+</body>
+
+</html>

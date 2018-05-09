@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<% include commonHead.html %> 
+<title>分类筛选编辑</title> 
+  
+<style>   
+.right .btn{
+	background-color:#337ab7;
+	color:white;
+} 
+.kindlist{ 
+	list-style:none;
+}
+.kindlist li{
+	list-style-type:none;
+}
+input{
+	display:inline-block;
+	width:100px;
+	
+} 
+.form-control{
+	width:150px;
+	display: inline-block;
+}
+</style>  
+</head>
+<body  > 
+<div class="wrapper">
+	<div class="container-fluid">
+		<div class="row">
+			<% include nav.html %> 
+			<div class="  col-xs-10" >
+				<div class="right">
+					<div class="panel panel-default">
+						<div class="panel-heading">分类
+							 <button type="button" class="btn btn-default btn-xs pull-right"  onclick="addParentKind()">添加顶级分类</button>
+						</div>
+						<div class="panel-body">
+							<ul class="kindlist"  >
+								<%for(var i in results['categorylist']['data']){%>
+									<%if(results['categorylist']['data'][i]['id']==results['categorylist']['data'][i]['parentid']){%>
+										<li data-id="<%= results['categorylist']['data'][i]['id']%>">
+											<input class="form-control" value="<%= results['categorylist']['data'][i]['name']%>" onblur="reName(this)"><i class="glyphicon glyphicon-plus"   onclick="addkind(this)"></i>
+											<i class="glyphicon glyphicon-remove"  onclick="removeKind(this)"></i>
+											<span onclick="kindUlToggle(this)" style="color:#337ab7;cursor:pointer">隐藏/显示</span>
+											<!--二级-->
+											<ul>
+												<%for(var j in results['categorylist']['data']){%>
+													<%if(results['categorylist']['data'][j]['parentid']==results['categorylist']['data'][i]['id']   && results['categorylist']['data'][j]['parentid']!=results['categorylist']['data'][j]['id']){%>
+														<li data-id="<%= results['categorylist']['data'][j]['id']%>" >
+															<input class="form-control" value="<%= results['categorylist']['data'][j]['name']%>" onblur="reName(this)"><i class="glyphicon glyphicon-plus"   onclick="addkind(this)"></i>
+															<i class="glyphicon glyphicon-remove"  onclick="removeKind(this)"></i>
+															<span onclick="kindUlToggle(this)" style="color:#337ab7;cursor:pointer">隐藏/显示</span>
+															<!--三级-->
+															<ul  > 
+																<%for(var k in results['categorylist']['data']){%>
+																	<%if(results['categorylist']['data'][k]['parentid']==results['categorylist']['data'][j]['id'] && results['categorylist']['data'][k]['parentid'] != results['categorylist']['data'][k]['id']){%>
+																		<li data-id="<%= results['categorylist']['data'][k]['id']%>" >
+																			<input class="form-control" value="<%= results['categorylist']['data'][k]['name']%>" onblur="reName(this)">  
+																			<i class="glyphicon glyphicon-remove"  onclick="removeKind(this)"></i>
+																		</li>
+																	<%}%>
+																<%}%>  
+															</ul>
+														</li>
+													<%}%>
+												<%}%> 
+											</ul>
+
+									<%}%>
+								<%}%>
+							</ul>
+						</div>
+					</div>  
+				</div> 
+			</div>
+		</div>
+	</div>
+</div> 
+<% include commonScript.html %>   
+<script type="text/javascript"> 
+$(function(){  
+})
+function kindUlToggle(e){ 
+	$(e).parent().find('ul').toggle(500) 
+}
+ 
+//添加顶级分类
+function addParentKind(){
+	var params={ 
+		"name":"new node",
+	}
+	console.log(params);
+	$.ajax({
+		type: "POST",
+		async: false,
+		url: "/category", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			$('.kindlist').append('<li data-id='+data['id']+'><input value="'+data['name']+'" onblur="reName(this)"><i class="glyphicon glyphicon-plus"   onclick="addkind(this)"></i><ul>' )
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); 
+}
+function addkind(e){ 
+	var params={
+		'parentid':parseInt($(e).parent().attr('data-id')),
+		"name":"new node",
+	}
+	console.log(params);
+	$.ajax({
+		type: "POST",
+		async: false,
+		url: "/category", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){
+			var string ='<li data-id="'+data['id']+'" >'+
+							'<input value="'+data['name']+'" onblur="reName(this)"> '+
+							'<i class="glyphicon glyphicon-remove"  onclick="removeKind(this)"></i>'+
+							'<i class="glyphicon glyphicon-plus"   onclick="addkind(this)"></i>'+
+							'<ul id="kindId'+data['id']+'"></ul>'+
+						'</li>'  
+			$(e).next('ul').append(string) 
+			
+		},
+		error: function(){
+			alert('fail');
+		}
+	}); 
+}
+ 
+function removeKind(e){
+	var params={
+		'id':$(e).parent().attr('data-id'),  
+	};
+	$.ajax({
+		type: "DELETE",
+		async: false,
+		url: "/category",
+		contentType:"application/json", 
+		data:JSON.stringify(params),  
+		dataType:'json',
+		success: function(data){ 
+			$(e).parent().remove();
+		},
+		error: function(error){ 
+			console.log('error');
+		}
+	});  
+}
+function reName(e){
+	var params={
+		'id':parseInt($(e).parent().attr('data-id')),
+		'name':$(e).val(),
+		'parentid':$(e).parent().parent().parent('li').attr('data-id') ? parseInt($(e).parent().parent().parent('li').attr('data-id')) :parseInt($(e).parent().attr('data-id')),
+	}  
+	console.log(params);
+	$.ajax({
+		type: "put",
+		async: false,
+		url: "/category", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){ 
+			console.log(data);
+		},
+		error: function(data){
+			console.log(data)
+			alert('fail');
+		}
+	});  
+}   
+ 
+
+</script> 
+
+</body>
+
+</html>

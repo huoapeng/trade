@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>意见</title> 
+<style>  
+
+
+
+.more{
+	color:#e8594b;
+	text-align:center;
+	display:block;
+	padding-bottom:20px;
+	padding-top:10px;
+}
+.lists{
+	margin-top:20px;
+} 
+.fliter{
+	padding-bottom:10px;
+	border-bottom:1px solid #e0e0e0;
+	margin-bottom:10px;
+}
+.fliter>li{
+	display:inline-block;
+	margin-top:6px;
+	margin-right:50px;
+}
+.fliter>li>a{
+	color:#666;
+}
+.fliter .active{
+	color:red;
+}
+.list{
+	border-left:1px solid #e0e0e0;
+	padding-left:20px;
+	margin-left:20px;
+}
+.list .time{
+	position:relative;
+	left:-40px;
+	top:-14px;
+} 
+.giveSuggection>span{
+	font-size: 16px;
+    font-weight: 600;
+	display:inline-block;
+	margin-bottom:20px;
+}
+</style>  
+</head>
+<body> 
+<% include header.html %>
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="#">意见</a>
+	</div>
+</div>
+<div class="w" > 
+	<% include nav.html %>
+    <div class="content"> 
+	  
+				<div class="giveSuggection" style="background-color:white;padding:20px 10px 20px 10px;border-radius:4px;    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);">	
+					<span id="projectName"><%= project['name']%></span> 
+					<ul class="fliter">
+						<li><a  onclick="toVersions()">Version</a></li>
+						<li><a  class="active" href="#">意见</a></li>
+					</ul>
+					<div class="input-group">
+						<input type="text" id="suggection" placeholder="输入意见 ..." class="form-control">
+						<span class="input-group-btn">
+							<% if (project['status']==2){%>
+								<button    onclick="sendSuggection(this)" class="send btn btn-danger btn-flat">Send</button>
+							<%}else{%>
+								<button    onclick="sendSuggection(this)" class="send btn btn-danger btn-flat"  disabled>Send</button>
+							<%}%>
+							
+						</span>
+					</div>
+					
+				</div>
+				<div class="lists">  
+					<%for(var i in results){%>
+						<%for(var j=0;j<results[i].length;j++){%>
+							<div class="list"  >
+							<%if(j==0){%> 
+								<div class="time"><%= results[i][j]['publishDate']%></div> 
+							<%}%> 
+								<div class="suggectionInfo" id="<%= results[i][j]['noteid']%>">
+									<div class="box box-widget collapsed-box">
+										<div class="box-header with-border">
+											<div class="user-block">
+												<img class="img-circle" src="<%= results[i][j]['userImage']%>" alt="User Image">
+												<span class="username"><a href="#"><%= decodeURI(results[i][j]['userName'])%></a></span>
+												<span class="description"><%= decodeURI(results[i][j]['title'])%></span>
+											</div>
+											<div class="box-tools">
+												<button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="messageToggle(this)">
+													<i class="fa icon-plus"></i>
+												</button>
+											</div> 
+										</div>
+										<div class="box-footer box-comments" id="box-comments_<%=results[i][j]['noteid']%>" style="display: none;">
+								 			
+										</div>
+										<div class="box-footer" style="display: none;">
+											<div >
+												<div class="input-group">
+													<input type="text" name="message" placeholder="Type Message ..." class="form-control">
+													<span class="input-group-btn">
+														<% if (project['status']==2){%>
+															<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" >Send</button>
+
+														<%}else{%>
+															<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" disabled>Send</button>
+														<%}%>
+														
+													</span>
+												</div> 
+											</div> 
+										</div> 
+									</div>
+								</div> 
+							</div>
+						<%}%>  
+					<%}%>
+ 
+
+<!--
+
+<div class="suggectionInfo" id="'+data['noteid']+'">'+ 
+						'<div class="box box-widget collapsed-box">'+
+							'<div class="box-header with-border">'+
+								'<div class="user-block">';
+								if(data['userImage']=="null" || data['userImage']==null){ 
+									console.log(1);
+									string+='<img class="img-circle" src="../../images/index/userInfo_3.png" alt="User Image">';
+									
+									}else{ 
+									string+='<img class="img-circle" src="'+data['userImage']+'" alt="User Image">';
+									}
+							string+='<span class="username"><a href="#">'+data['userName']+'</a></span>'+
+									'<span class="description">'+data['title']+'</span>'+
+								'</div>'+
+								'<div class="box-tools">'+ 
+									'<button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="messageToggle(this)">'+
+										'<i class="fa icon-plus"></i>'+
+									'</button>'+ 
+								'</div>'+
+							'</div>'+
+							'<div class="box-footer box-comments" id="box-comments_'+data['noteid']+'" style="display: none;">'+
+								 
+							'</div> '+
+							'<div class="box-footer" style="display: none;">'+
+								'<div >'+
+									'<div class="input-group">'+
+										'<input type="text" name="message" placeholder="Type Message ..." class="form-control">'+
+										'<span class="input-group-btn">';
+								if(task_status==3){
+									string+='<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" disabled>Send</button>';
+								}else{
+									string+='<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat">Send</button>';
+								} 
+								string+='</span>'+
+									'</div>'+
+								'</div>'+
+							'</div> '+
+						'</div> '+ 
+				'</div> 
+
+-->
+ 
+
+					<!--
+					<div class="list" id="2011/5/6">
+						<div class="time">
+						</div>
+						<div class="suggectionInfo" id="1"> 
+								<div class="box box-widget collapsed-box">
+									<div class="box-header with-border">
+										<div class="user-block">
+											<img class="img-circle" src="../../images/index/userInfo_3.png" alt="User Image">
+											<span class="username"><a href="#">Jonathan Burke Jr.</a></span>
+											<span class="description">Shared publicly - 7:30 PM Today</span>
+										</div> 
+										<div class="box-tools">
+											<button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-original-title="Mark as read">
+												<i class="fa fa-circle-o"></i></button>
+											<button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="messageToggle(this)"><i class="fa fa-minus"></i>
+											</button>
+											<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+										</div> 
+									</div> 
+									<div class="box-body" style="display:none;"> 
+									  <p>好的</p>  
+									</div>
+									 
+									<div class="box-footer box-comments" style="display: none;">
+										<div class="box-comment"> 
+											<img class="img-circle img-sm" src="../../images/index/userInfo_3.png" alt="User Image"> 
+											<div class="comment-text">
+												<span class="username">
+													Maria Gonzales
+													<span class="text-muted pull-right">8:03 PM Today</span>
+												</span> 
+											好的
+											</div> 
+										</div>  
+									</div> 
+									<div class="box-footer">
+										<div >
+											<div class="input-group">
+												<input type="text" name="message" placeholder="Type Message ..." class="form-control">
+												<span class="input-group-btn">
+													<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat">Send</button>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>  
+						</div> 
+					</div> 
+					-->		 
+		</div> 
+	</div> 
+</div>     
+
+<% include commonScript.html %>    
+<script   type="text/javascript">  
+$(function () {   
+	var url = location.search;  
+	var _projectid="";
+	if (url.indexOf("?") != -1) {
+	    var str = url.substr(1);
+	    strs = str.split("&"); 
+	    _projectid=strs[0].split("projectid=")[1]; 
+	} 
+	//迭代note
+	 
+});   
+//全局变量
+
+var url = location.search;  
+var _projectid="";
+if (url.indexOf("?") != -1) {
+    var str = url.substr(1);
+    strs = str.split("&"); 
+    _projectid=strs[0].split("i=")[1]; 
+} 
+ 
+//提出意见
+function sendSuggection(e){ 
+	var string="";  
+	var flag=true;
+	var params= {
+		//"userid":sessionStorage.customerId,
+		"projectid":_projectid,
+		"title":$('#suggection').val().trim()
+	}; 
+	if(params['title']==""){
+		alert("请输入意见");
+		flag=false;
+	}
+	console.log(params)
+	if(flag){
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/note", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){ 
+				 location=location;
+			},
+			error: function(){
+				alert('fail');
+			}
+		});    
+	} 
+}
+//获取当日日期
+function todayDate(){
+	var myDate = new Date();
+	return myDate.getFullYear()+"/"+(myDate.getMonth()+1)+"/"+myDate.getDate()
+}
+//发送消息
+function sendMessage(e){ 
+	var params={ 
+		"message":$(e).parent().prev('input').val(),
+		"noteid":$(e).parent().parent().parent().parent().parent().parent('.suggectionInfo').attr('id'),
+		//"userid":sessionStorage.customerId
+	} 
+	$.ajax({
+		type: "post",
+		async: false,
+		url: "/notemessage", 
+		contentType:"application/json", 
+		data:JSON.stringify(params), 
+		dataType:'json',
+		success: function(data){  
+			console.log(data)
+			var string=""; 
+			string='<div class="box-comment"> ';   
+				string+='<img class="img-circle img-sm" src="'+data['userImage']+'"  > ';	 
+				string+='<div class="comment-text">'+
+							'<span class="username">'+decodeURI(data['userName'])+''+
+								'<span class="text-muted pull-right">'+dateType(data['publishDate'])+'</span>'+
+							'</span>'+decodeURI(data['message'])+''+
+						'</div> '+
+					'</div> '; 
+				$('#box-comments_'+params['noteid']).append(string); 
+				$(e).parent().prev('input').val("");
+		},
+		error: function(){
+			alert('fail');
+		}
+	});   
+} 
+//消息字符串
+function stringMessage(data){
+	var string=""; 
+	string='<div class="box-comment"> '; 
+				if(data['userImage']==null){
+		string+='<img class="img-circle img-sm" src="../../images/index/userInfo_3.png" alt="User Image"> ';
+				}else{
+		string+='<img class="img-circle img-sm" src="'+data['userImage']+'" alt="User Image"> ';		
+				} 
+		string+='<div class="comment-text">'+
+					'<span class="username">'+decodeURI(data['userName'])+''+
+						'<span class="text-muted pull-right">'+dateType(data['publishDate'])+'</span>'+
+					'</span>'+decodeURI(data['message'])+''+
+				'</div> '+
+			'</div> '; 
+	return string;
+}  
+ 
+//显示隐藏留言
+function messageToggle(event){  
+		//迭代note的message
+		
+		var note_id=$(event).parent().parent().parent().parent('.suggectionInfo').attr('id');  
+		console.log(note_id);
+		if($('#box-comments_'+note_id).css('display')=="none"){
+			$.ajax({
+				type: "get",
+				async: false,
+				url: "/"+note_id+"/notemessagelist",
+				contentType:"application/json",  
+				dataType:'json',
+				success: function(data){  
+					console.log(data);
+					var string=""
+					for(var i in data['data']){
+						string+=stringMessage(data['data'][i]); 
+					}
+					console.log(string);
+					$('#box-comments_'+note_id).empty();
+					$('#box-comments_'+note_id).append(string);
+				},
+				error: function(){
+					alert('fail');
+				}
+			});    
+		}
+		
+} 
+function toVersions(){  
+	window.location.href='/versions?i='+_projectid; 
+}
+function dateType(date){
+	var date=new Date(date);
+	return date.toLocaleDateString();
+}
+
+</script> 
+</body>
+
+</html>

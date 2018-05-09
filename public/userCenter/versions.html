@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html >
+<head> 
+<% include commonHead.html %> 
+<title>Version</title>
+ 
+<style> 
+.versionTop{ 
+	position:relative;
+}
+.versionTop>span{
+	font-size: 16px;
+    font-weight: 600;
+	display:inline-block; 
+	margin-bottom: 20px;
+}
+.versionTop .btn{
+	position:absolute;
+	right:0px;
+	top:30%;
+	color:#e8594b;
+	border:1px solid #e8594b;
+	border-radius:4px;
+	margin-right:20px;
+	font-size:14px;
+	background-color: transparent;
+}
+.fliter{ 
+}
+.fliter>li{
+	display:inline-block;
+	margin-top:6px;
+	margin-right:50px;
+}
+.fliter>li>a{
+	color:#666;
+}
+.fliter .active{
+	color:red;
+}  
+.lists{
+	margin-top:20px;
+}
+.list{
+	border-left:1px solid #e0e0e0;
+	padding-left:20px;
+	margin-left:20px;
+}
+.list .time{
+	position:relative;
+	left:-40px;
+	top:-14px;
+} 
+.versionInfo{
+	cursor:pointer;
+} 
+.box-body>div{
+	position:relative;
+	overflow:hidden;
+}
+.box-body>div>img{
+	width:100%; 
+	
+}
+
+.describe{
+	position:absolute;
+	bottom:0px; 
+	padding:4px;
+	background-color:red;
+	width:100%; 
+	background-color: rgba(0,0,0,0.5);
+	display:none;
+}
+.describe span{
+	color:white;
+	font-size:14px;
+}
+.describe p{
+	color:white;
+	font-size:12px; 
+	color:#999999;
+}
+.versionInfo:hover .describe{
+	display:block;
+}
+.more{
+	display:block;
+	text-align:center;
+	color:#666666;
+	font-weight:800;
+} 
+
+.modal-content{
+	border-radius:0px;  
+}
+.modal-content h2{
+	position:absolute;
+	color:white;
+	font-size:18px;
+	text-align:center;
+	margin-left:300px;
+	margin-top:10px;
+}
+.modal-content h3{
+	position:absolute;
+	color:white;
+	font-size:14px;
+	text-align:center;
+	margin-left:300px;
+	margin-top:35px;
+} 
+#myModal span{
+	position:absolute; 
+	color:#e87165;
+	font-size:30px;
+	right:-10px;
+	top:-6px;
+	cursor:pointer; 
+}
+#myModal2 i{
+	position:absolute; 
+	color:#e87165;
+	font-size:30px;
+	right:-10px;
+	top:-6px;
+	cursor:pointer; 
+}
+.more{
+	color:#e8594b;
+	text-align:center;
+	display:block;
+	padding-bottom:20px;
+	padding-top:10px;
+} 
+.addVersion{
+	padding:30px;
+	font-size:16px;
+}
+.addVersion>span{
+	color:#e85946;
+	font-size:24px;
+	display:inline-block;
+	margin-bottom:30px;
+}
+.addVersion .btn{
+	background-color:#e85946;
+	color:white;
+	width:150px;
+	margin:0 auto;
+	display:block;
+	margin-top:66px;
+}
+.addVersion input{
+	border:0px;
+	border-bottom:1px solid #e0e0e0;
+	outline:none;
+	width:100%;
+}
+.addVersion .uploadImg,.describtion,.versionName{
+	padding-top:20px; 
+}
+.addVersion  .uploadImg img{
+	position:relative; 
+	height:100%;
+	width:100%;
+}
+.addVersion  .uploadImg_label{ 
+	text-align:center;
+	padding-top:40px;
+	padding-left:10px;
+	font-size:15px; 
+	color:#8b8b8b;
+	position:absolute;
+}
+.addVersion  .uploadImg input{
+	width: 100%;
+    height: 98px;
+    cursor: pointer;
+    font-size: 30px;
+	 position: absolute;
+    outline: medium none; 
+    filter:alpha(opacity=0); 
+    -moz-opacity:0;
+    opacity:0; 
+    left:0px;
+    top: 0px; 
+} 
+</style>  
+</head>
+<body >
+<% include header.html %> 
+<div class="location">
+	<div class="w">
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="#">Version</a>
+	</div>
+</div>
+<div class="w"  > 
+	<% include nav.html %>
+    <div class="content">   
+		<div class="versionTop" style="background-color:white;padding:20px 10px 20px 10px;border-radius:4px;    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);">	
+			<span id="projectName"><%= project['name']%></span> 
+			<ul class="fliter">
+				<li><a class="active" href="#">Version</a></li>
+				<li><a onclick="toSuggections()">意见</a></li>
+			</ul> 
+			<a    data-toggle="modal" data-target="#myModal2">
+
+			<% if(project['status']==2) {%>
+				<button  class="btn"   >添加Version</button></a>
+			<%} else{%>
+				<button  class="btn"  disabled >添加Version</button></a>
+			<%}%>
+
+			
+		</div> 
+		<div class="lists"> 
+		<%for(var i in results){%>
+			<div class="list"> 
+				<% for(var j=0; j<results[i].length;j++){%> 
+					<%if(j==0){%>
+						<div class="time"><%= results[i][j]['publishDate']%> </div>
+					<%}%> 
+					<div class="versionInfo"  >
+						<div class="box box-widget "> 
+							<div class="box-body" > 
+								<div>
+									<img src="<%= results[i][j]['image']%>"  onclick="showModal(this)" data-toggle="modal" data-target="#myModal"> 
+									<div class="describe">
+										<span><%=results[i][j]['title']%></span></br>
+										<p><%= results[i][j]['description']%></p>
+									</div>
+								</div>
+							</div> 
+						</div>
+					</div> 
+				<%}%>
+			</div>  
+		<%}%> 
+			<!--
+			<div class="list">
+				<div class="time">2015/5/6 </div>
+				<div class="versionInfo" id="1">
+					<div class="box box-widget "> 
+						<div class="box-body" > 
+							<div>
+								<img src="../../images/index/index_bg.jpg"  onclick="showModal(this)" data-toggle="modal" data-target="#myModal"> 
+								<div class="describe">
+									<span>sss</span></br>
+									<p>按时大大说的</p>
+								</div>
+							</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+			-->
+		</div>   
+	</div> 
+</div>    
+<!--VERSION查看 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">    
+			<span class=" glyphicon glyphicon-remove-sign" data-dismiss="modal" aria-label="Close"></span>
+			<img id="modalImg" src="../../images/index/index_bg.jpg" style="width:100%;height:100%;">
+			<div style="clear:both;"></div> 
+		</div>
+	</div>
+</div>  
+<!--增加VERSION -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document" style="width:520px !important;">
+		<div class="modal-content"  >  
+			<div class="addVersion">
+				<span>发布Version</span><i class="icon-remove-sign pull-right" data-dismiss="modal" aria-label="Close" > </i>
+				<div class="uploadImg">
+					<div class="row">
+						<div class="col-xs-4" style="vertical-align:middle;">上传缩略图:</div> 
+						<div class="col-xs-8">
+							<div  style="border:1px dashed #8b8b8b;background-color:#fafafa;float:left;height:100px;width:100%;position:relative;overflow:hidden;"> 
+								<div style="padding:40px 0 0 70px;position:absolute">点击此处上传图片</div>
+								<img id="uploadImg" style="position:absolute">
+								<form id="uploadForm" style=" position:absolute"> 
+									<input  id="imgFile" type="file" name="file" style="background-color:transparent;width:300px;height:100px;z-index:100;">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="describtion"> 
+					<div class="row">
+						<div class="col-xs-4" >描 &nbsp;&nbsp;&nbsp;述:</div> 
+						<div class="col-xs-8"><input type="text" name="description" ></div>
+					</div>
+				</div>
+				<div class="versionName"> 
+					<div class="row">
+						<div class="col-xs-4">Version名称:</div> 
+						<div class="col-xs-8"><input  type="test" name="versionName" ></div>
+					</div>
+				</div>
+				<a class="btn"  onclick="addVersion()">发布</a>
+				<div style="clear:both;" ></div>
+			</div>
+		</div>
+	</div>
+</div> 
+<% include commonScript.html %>   
+<script   type="text/javascript">    
+//全局变量
+var versionImg="";  
+var url = location.search;  
+var projectid="";
+if (url.indexOf("?") != -1) {
+    var str = url.substr(1);
+    strs = str.split("&"); 
+    projectid=strs[0].split("i=")[1]; 
+}
+//点击上传图片
+$("#imgFile").change(function(){   
+	var url = null;  
+	var imgObejct=this.files[0]; 
+	var formData = new FormData($("#uploadForm")[0]); 
+	formData.append("type", 2);   
+	$.ajax({  
+	   url: '/uploadfile',  
+	   type: 'POST',  
+	   data: formData,  
+	   async: false,  
+	   cache: false,  
+	   contentType:false,  
+	   processData: false,  
+	   success: function (returndata) {   
+	   		console.log(returndata)
+			versionImg=returndata['fileName'];
+			if (window.createObjectURL!=undefined) { // basic
+				url = window.createObjectURL(imgObejct) ;
+			} else if (window.URL!=undefined) { // mozilla(firefox)
+				url = window.URL.createObjectURL(imgObejct) ;
+			} else if (window.webkitURL!=undefined) { // webkit or chrome
+				url = window.webkitURL.createObjectURL(imgObejct) ;
+			}  
+			if (url) {
+				$("#uploadImg").attr('src',url) ;
+			}    
+	   },  
+	   error: function (returndata){  
+			console.log(returndata);  
+	   }  
+	});  
+}); 
+//添加version
+function addVersion(){
+	var params={ 
+		"projectid":projectid, 
+		"title":$("input[name='versionName']").val(),
+		"description":$("input[name='description']").val(),
+		"userid":sessionStorage.customerId,
+		'image':versionImg
+	}
+	console.log(params);
+	if(params['title']==""){
+		alert('标题不能为空'); 
+	}else if(params['description']==""){
+		alert('描述不能为空'); 
+	}else if(params['image']==""){
+		alert('请上传version'); 
+	}else{
+		$.ajax({
+			type: "post",
+			async: false,
+			url: "/version", 
+			contentType:"application/json", 
+			data:JSON.stringify(params), 
+			dataType:'json',
+			success: function(data){ 
+				alert("添加Version成功");
+				console.log(data);
+				location=location
+				
+			},
+			error: function(){
+				alert('添加version失败');
+			}
+		}); 
+	}    
+}  
+//查看大图
+function showModal(e){
+	var imgUrl=$(e).attr('src');
+	$('#modalImg').attr('src',imgUrl); 
+} 
+function toSuggections(){  
+	window.location.href='/suggections?i='+projectid; 
+}
+
+</script> 
+</body>
+
+</html>
