@@ -11,7 +11,6 @@ exports.showHtml = function (req, res, next) {
 	    	var options={
 		        "path":"/recommendtypelist"
 		    }
-		    console.log(options)
 		    httpUtil.get(options,function(result,err){  
 		        if(err){
 		            done(err, null);
@@ -24,7 +23,6 @@ exports.showHtml = function (req, res, next) {
 	],  
     function(err, results) {   
     	 
-    	console.log(resultData)
     	res.render('admin/recommendList',{'results':resultData}) 	
     }); 
  
