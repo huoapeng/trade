@@ -97,7 +97,6 @@ exports.showHtml = function (req, res, next) {
 	    } 
 	],  
     function(err, results) {   
-    	console.log(resultData) 
     	res.render('workDetail',{"results":resultData}) 	
     });
     

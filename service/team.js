@@ -11,7 +11,6 @@ exports.showHtml = function (req, res, next) {
    // console.log(urlArr)
 	var arr=[]; 
 	async.each(urlArr, function(urlArr_, callback) { 
-		console.log(urlArr_['name'])
 	    arr.push(function(callback) {
 				getUrlInfo(urlArr_,callback)
 			}) 
@@ -21,7 +20,6 @@ exports.showHtml = function (req, res, next) {
   
 	async.parallel(arr, 
 		function(err, results) {  
-			console.log(resultsData)
 	   		res.render('team',{"results":resultsData}) 
 		}
 	); 
@@ -31,7 +29,6 @@ exports.showHtml = function (req, res, next) {
 	    var options={
 	        "path":path
 	    }  
-	    console.log(path)
 	    httpUtil.get(options,function(result,err){  
 	        if(err){
 	            callback(err, null);

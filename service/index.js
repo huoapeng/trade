@@ -9,10 +9,8 @@ exports.showHtml = function (req, res, next) {
     {"path":"/39/recommenditemlist","name":"list39"},{"path":"/40/recommenditemlist","name":"list40"},{"path":"/41/recommenditemlist","name":"list41"},
     {"path":"/42/recommenditemlist","name":"list42"},{"path":"/43/recommenditemlist","name":"list43"},{"path":"/44/recommenditemlist","name":"list44"},
     {"path":"/45/recommenditemlist","name":"list45"},{"path":"/46/recommenditemlist","name":"list46"},{"path":"/47/recommenditemlist","name":"list47"}]
-   // console.log(urlArr)
 	var arr=[];
 	async.each(urlArr, function(urlArr_, callback) {
-		console.log(urlArr_['name'])
 	    arr.push(function(callback) {
 				getUrlInfo(urlArr_,callback)
 			})
@@ -22,7 +20,6 @@ exports.showHtml = function (req, res, next) {
 
 	async.parallel(arr,
 		function(err, results) {
-			console.log(resultsData)
 	   		res.render('index',{"results":resultsData})
 		}
 	);
@@ -31,7 +28,6 @@ exports.showHtml = function (req, res, next) {
 	    var options={
 	        "path":path
 	    }
-	    console.log(path)
 	    httpUtil.get(options,function(result,err){
 	        if(err){
 	            callback(err, null);

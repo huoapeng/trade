@@ -14,7 +14,6 @@ exports.get=function (options,callback) {
     }     
     var body = ''; 
     var req = http.request(opt, function(res) {
-       	console.log("Got response: " + res.statusCode);  
         if (res.statusCode == 200) {   
             res.on('data', function (chunk) { 
             	body += chunk;   

@@ -124,7 +124,6 @@ exports.showHtml = function (req, res, next) {
 			function(err, results) { 
 				
 				for(var i in results){
-						console.log(results[i])
 					resultData['participateProjects']['data'][i]['project']=results[i]
 				}
 			    done(err, onearg) 
