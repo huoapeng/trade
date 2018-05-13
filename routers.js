@@ -25,6 +25,7 @@ var projectDetail=require('./service/projectDetail.js')
 var userlist=require('./service/userlist.js') 
 var userDetail=require('./service/userDetail.js') 
 var workDetail=require('./service/workDetail.js') 
+var workBuy=require('./service/workBuy.js') 
 var login=require('./service/admin/login.js')
 
 var team=require('./service/team.js') 
@@ -81,6 +82,7 @@ app.get('/p/:page',projectlist.showHtml);
 app.get('/t/:page',userlist.showHtml);  
 app.get('/u',userDetail.showHtml); 
 app.get('/w',workDetail.showHtml);   
+app.get('/wb', workBuy.showHtml); 
 
 /*--------------api---start---------*/ 
  

@@ -123,7 +123,7 @@
 .recommend li a{
 	display: block;
 	position: relative;  
-	vertical-align:middle;
+	/* vertical-align:middle; */
 	text-align:center;
 } 
 .recommend li a>img{ 
@@ -135,7 +135,7 @@
 </head> 
 <body style="overflow-x:hidden;  background:#f5f5f5">
 <% include header2.html%>
-<section class="userInfo" style=""> 
+<section class="userInfo"> 
 		<img src="<%=results['user']['imageLarge']%>">
           			<%if(results['user']['authenticationType'] & 1) {%>
                         <div class="vip1" title="个人" style="width:21px;height:21px;position:relative;top:-20px;right:-60px;display:inline-block;"></div> 
