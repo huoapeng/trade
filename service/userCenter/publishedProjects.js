@@ -12,8 +12,7 @@ exports.showHtml = function (req, res, next) {
 	    function (done) {
 	    	var options={
 		        "path":'/userPublishedProjects/'+req.params.page+"?userid="+req.session.user.id + (status ? "&status="+status : "")
-		    }   
-		    console.log(options)
+		    }
 		    httpUtil.get(options,function(result,err){  
 		        if(err){
 		            done(err, null);
@@ -42,9 +41,7 @@ exports.showHtml = function (req, res, next) {
 			});  
 	    }  
 	],  
-    function(err, results) { 
-    	 
-    	console.log(resultData)
+    function(err, results) {
     	res.render('userCenter/publishedProjects.html',{'results':resultData}) 	
     });   
 };  

@@ -27,7 +27,6 @@ exports.create = function (req, res, next) {
         "receipt":req.body.receipt,
         "cids":req.body.cids
     }
-    console.log(params);
     var options={
         "path":"/project"
     }

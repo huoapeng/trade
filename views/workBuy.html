@@ -1,200 +1,137 @@
 <!DOCTYPE html>
-<html >
+<html>
+
 <head>
-<% include commonHead.html %> 
-<title>确认购买</title> 
- 
-<style type="text/css">
-.rightAside{
-	width:320px;position:absolute;top:0px;right:0px;padding:0 10px; 
-}
-.rightAside>.box>a>img{
-	width:80px;height:80px;margin-left:20px;margin-top:10px;border-radius:100%;display:inline-block
-}
-.rightAside>.box>.userInfo{
-	display:inline-block;vertical-align:top;margin:20px 0;
-}
-.worksList{
-	text-align: center;
-	position: relative;
-	padding:4px;
-	height: 400px !important; 
-	overflow: auto; 
-}
-.worksList .worksList_{ 
-	width: 98px;
-	float: left; 
-
-}
-.worksList .worksList_ img{ 
-	width:100%;  
-}
-.worksList .worksList_:hover img{ 
-	opacity: 0.8
-}
-.box{
-	background-color: white;
-	border-radius: 8px;
-    border: 1px solid rgba(0,0,0,.14);
-    box-shadow: 0 3px 8px -6px rgba(0,0,0,.1); 
-    width:100%; 
-} 
-.box .top-title{
-	padding: 10px 0px;
-	margin: 10px 20px;
-	border-bottom: 1px solid #e0e0e0;
-	font-size: 14px;
-	font-weight:500; 
-} 
-.box .pic{
-	width: 170px; 
-	margin: 20px; 
-	display: block;
-	float: left;
-	position: relative;
-	overflow: hidden; 
-}
-.box .pic p{
-	position: absolute;
-	bottom: 4px;
-	padding:10px 10px; 
-	width: 100%;
-	background-color: rgba(0,0,0,0.8);
-	color:white; 
-	display: none;
-}
-.box .pic:hover p{
-	display: block;
-
-}
-.box .pic img{
-	width:100%; 
-
-} 
-.box .bottom{
-	border-top: 1px solid #e0e0e0;
-	margin: 10px 20px;
-	padding:20px 0; 
-}
-
-.box2{ 
-	width:320px;height:200px; 
-	position: relative; 
-	overflow: hidden;
-	padding-top: 20px;
-	display: block;
-
-} 
-.box2 >img{
-	width:100%;
-}
-.box2:hover p{
-	display: block;
-}
-.box2  p{
-	position: absolute;
-    bottom: 0px;
-    padding: 10px 0px;
-    width: 100%;
-    background-color: rgba(0,0,0,0.8);
-    color: white; 
-    display: none;
-}
-.vip{
-	top:4px;
-}
-</style>
-</head> 
-<body style="overflow-x:hidden;  background:#f5f5f5">
-<% include header2.html%> 
-<div class="w" style="position:relative;margin-top:50px;"> 
-	<div class="box" style="width:auto;">   
-		<div class="top-title">
-			<span style="font-size:18px;">确认购买 《<%= results['work']['title']%>》</span> </br>
-		</div>
-		<div style="text-align:left;position:relative;padding:50px;"> 
-			团队名称：<%= decodeURI(results['owner']['nickname'])%> </br>
-			发布日期： <%= results['work']['publishDate'].split("T")[0]%></br>
-			电话： <%= results['owner']['phone']%></br>
-			邮箱： <%= results['owner']['email']%></br>
-			地址： <%= decodeURI(results['owner']['location'])%>
-		</div>
-		<div class="bottom" style="text-align:center">
-			<a  class="btn" href="www.juxingcloud.com">提交</a>
-		</div> 
-	</div>
-</div> 
-<% include footer.html %>
-</body> 
-<% include commonScript.html %>
-<script type="text/javascript" src="/js/masonry-docs.min.js"></script>  
-<script>
-$(function() {
-    var $container = $('.worksList');
-    $container.imagesLoaded(function() {
-        $container.masonry({
-                itemSelector: '.worksList_',
-                gutter: 4,
-                isAnimated: true,
-            });
-    }) 
- 
-var n=window.location.href.split("?")[1].split("=")[1];	 
-
-$(".worksList>a").each(function(){
-	     if($(this).attr("data_num")== n){ 
-			 $(this).css("border","1px solid red");
-			 }
-	
-	});	
-	 
-}) 
-//全局变量
-var page=1; 
-//右侧我的作品滚动加载
-$('.worksList').scroll(function(){ 
-	var $this =$(this),  
-    viewH =$(this).height(),//可见高度  
-    contentH =$(this).get(0).scrollHeight,//内容高度  
-    scrollTop =$(this).scrollTop();//滚动高度  
-    //if(contentH - viewH - scrollTop <= 100) { //到达底部100px时,加载新内容  
-    if(scrollTop/(contentH -viewH)>=0.95){ //到达底部100px时,加载新内容  
-    // 这里加载数据..  
-    	$.ajax({
-			type: "get",
-			async: false,
-			url: "/42/userworks/"+(page+1), 
-			contentType:"application/json",  
-			dataType:'json',
-			success: function(data){ 
-				console.log(data);   
-				if(data['data'].length>0){
-					var string="";
-					for(var i in data['data']){
-						string+='<a href="/workDetail?workid='+data['data'][i]['workid']+'" data_num="'+data['data'][i]['workid']+'" class="worksList_" >'+ 
-		                			'<img src="'+data['data'][i]['image']+'">'+ 
-		            			'</a>' 
-					}  
-					page++;
-					$('.worksList').append(string) 
-					var $container = $('.worksList');
-					$container.masonry('destroy')
-				    $container.imagesLoaded(function() {
-				        $container.masonry({
-				                itemSelector: '.worksList_',
-				                gutter: 4,
-				                isAnimated: true,
-				            });
-				    })   
-					
-				}    
-
-			},
-			error: function(){
-				alert('fail');
+	<% include commonHead.html %>
+		<title>确认购买</title>
+		<style type="text/css">
+			.box {
+				background-color: white;
+				border-radius: 8px;
+				border: 1px solid rgba(0, 0, 0, .14);
+				box-shadow: 0 3px 8px -6px rgba(0, 0, 0, .1);
+				width: 100%;
 			}
-		});  
-    }  
-}); 
-</script> 
+
+			.box .top-title {
+				padding: 10px 0px;
+				margin: 10px 20px;
+				border-bottom: 1px solid #e0e0e0;
+				font-size: 14px;
+				font-weight: 500;
+			}
+
+			.box .pic {
+				width: 170px;
+				margin: 20px;
+				display: block;
+				float: left;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.box .pic p {
+				position: absolute;
+				bottom: 4px;
+				padding: 10px 10px;
+				width: 100%;
+				background-color: rgba(0, 0, 0, 0.8);
+				color: white;
+				display: none;
+			}
+
+			.box .pic:hover p {
+				display: block;
+
+			}
+
+			.box .pic img {
+				width: 100%;
+
+			}
+
+			.box .bottom {
+				border-top: 1px solid #e0e0e0;
+				margin: 10px 20px;
+				padding: 20px 0;
+			}
+
+			.vip {
+				top: 4px;
+			}
+		</style>
+</head>
+
+<body style="overflow-x:hidden;  background:#f5f5f5">
+	<% include header2.html%>
+		<div class="w" style="position:relative;margin-top:50px;">
+			<div class="box" style="width:auto;">
+				<div class="top-title">
+					<span style="font-size:18px;">确认购买 《
+						<%= results['work']['title']%>》</span>
+					<span id='title' hidden="hidden">
+						<%= results['work']['title']%>
+					</span>
+				</div>
+				<div style="text-align:left;position:relative;padding:50px;">
+					团队名称：
+					<%= decodeURI(results['owner']['nickname'])%>
+						</br>
+						发布日期：
+						<%= results['work']['publishDate'].split("T")[0]%>
+							</br>
+							电话
+							<%= results['owner']['phone']%>
+								</br>
+								邮箱：
+								<%= results['owner']['email']%>
+									</br>
+									地址：
+									<%= decodeURI(results['owner']['location'])%>
+				</div>
+				<div class="bottom" style="text-align:center">
+					<button class="btn" onclick="makeProject()">提交</button>
+				</div>
+			</div>
+		</div>
+		<% include footer.html %>
+</body>
+<% include commonScript.html %>
+	<script type="text/javascript" src="/js/masonry-docs.min.js"></script>
+	<script>
+		function makeProject() {
+			if (!sessionStorage) {
+				return res.redirect('/login');
+			}
+			var params = {
+				"userid": sessionStorage.customerId,
+				"name": "购买作品：" + document.getElementById('title').innerText,
+				"timespan": '0',
+				"bonus": '0',
+				"requirements": '',
+				"description": '',
+				"bidderQualifiRequire": '',
+				"bidderLocationRequire": '',
+				"receiptDes": '',
+				"receipt": '',
+				"cids": "183"
+			}
+			$.ajax({
+				type: "post",
+				async: false,
+				url: "/project",
+				contentType: "application/json",
+				data: JSON.stringify(params),
+				dataType: 'json',
+				success: function (data) {
+					console.log(data);
+					window.location.href = '/publishedProjects/1';//正确登录后页面跳转至
+				},
+				error: function () {
+					alert('fail');
+				}
+			});
+		}
+	</script>
+
 </html>
