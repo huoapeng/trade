@@ -1,5 +1,5 @@
 var httpUtil=require('../utils/http.js') 
-exports.addMessage = function (req, res, next) {   
+exports.addNoteMessage = function (req, res, next) {   
     var params = {
         "userid":req.session.user.id,
         "message":req.body.message,
@@ -33,4 +33,21 @@ exports.notemessagelist = function (req, res, next) {
         }
     })  
 } 
-
+exports.addWorkMessage = function (req, res, next) {   
+    var params = {
+        "message":req.body.message,
+		"workid":parseInt(req.body.workid),
+		"buyerid":parseInt(req.body.buyerid),
+		"sellerid":parseInt(req.body.sellerid)
+    }
+    var options={
+        "path":"/workmessage"
+    }
+    httpUtil.post(params,options,function(result,err){
+        if(err){ 
+            res.send("statusCode is:"+err);  
+        }else{  
+            res.send(result); 
+        }
+    })  
+} 

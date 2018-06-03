@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<% include commonHead.html %>
+		<title>确认购买</title>
+		<style>
+			.btn {
+				border: 1px solid #e8594b;
+				color: white;
+				background-color: #e8594b;
+				display: inline-block;
+			}
+
+			.top {
+				padding-top: 12px;
+				padding-bottom: 20px;
+				border-bottom: 2px solid #e0e0e0;
+				margin-bottom: 20px;
+			}
+
+			.top>span {
+				font-size: 18px;
+				font-weight: 800;
+				color: #666;
+			}
+		</style>
+</head>
+
+<body>
+	<% include header.html %>
+		<div class="location">
+			<div class="w">
+				<span>当前位置：</span>
+				<a href="/">首页 ></a>
+				<a>用户中心 ></a>
+				<a href="#">消息管理</a>
+			</div>
+			<div class="w">
+				<% include nav.html %>
+					<div class="content">
+						<div class="top">
+							<span>确认购买 《
+								<%= results['work']['title']%>》 </span>
+						</div>
+						<div class="giveSuggection" style="background-color:white;padding:20px 10px 20px 10px;border-radius:4px;    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);">
+							<div>团队名称：
+								<%= decodeURI(results['owner']['nickname'])%>
+							</div>
+							<div>发布日期：
+								<%= results['work']['publishDate'].split("T")[0]%>
+							</div>
+							<div>电话
+								<%= results['owner']['phone']%>
+							</div>
+							<div>
+								邮箱：
+								<%= results['owner']['email']%>
+							</div>
+							<div>地址：
+								<%= decodeURI(results['owner']['location'])%>
+							</div>
+							<div class="bottom" style="text-align:center">
+								<button class="btn" onclick="makeProject()">提交</button>
+							</div>
+						</div>
+						<%for(var i in results['messagelist'].data){%>
+							<div class="list">
+								<div class="suggectionInfo">
+									<div class="box-header with-border">
+										<div class="user-block" style="width:100%">
+											<img class="img-circle" src="<%= results['messagelist'].data[i]['buyerImage']%>" alt="User Image">
+											<span class="username">
+												<%= decodeURI(results['messagelist'].data[i]['buyerName'])%>
+											</span>
+											<span class="description">
+												<%= decodeURI(results['messagelist'].data[i]['message'])%>
+											</span>
+											<div class="time" style="text-align: right;width:100%">
+												<%= results['messagelist'].data[i]['publishDate']%>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<%}%>
+								<div class="input-group">
+									<input type="text" id="suggection" placeholder="输入意见 ..." class="form-control">
+									<span class="input-group-btn">
+										<button onclick="sendMessage(this)" class="btn">发送留言</button>
+									</span>
+									<span id='worktitle' hidden="hidden">
+										<%= results['work']['title']%>
+									</span>
+									<span id='workid' hidden="hidden">
+										<%= results['work']['workid']%>
+									</span>
+									<span id='sellerid' hidden="hidden">
+										<%= results['work']['userid']%>
+									</span>
+								</div>
+					</div>
+			</div>
+</body>
+<% include commonScript.html %>
+	<script type="text/javascript" src="/js/masonry-docs.min.js"></script>
+	<script>
+		function makeProject() {
+			if (!sessionStorage) {
+				return res.redirect('/login');
+			}
+			var params = {
+				"userid": sessionStorage.customerId,
+				"name": "购买作品：" + document.getElementById('worktitle').innerText,
+				"timespan": '0',
+				"bonus": '0',
+				"requirements": '',
+				"description": '',
+				"bidderQualifiRequire": '',
+				"bidderLocationRequire": '',
+				"receiptDes": '',
+				"receipt": '',
+				"cids": "183"
+			}
+			$.ajax({
+				type: "post",
+				async: false,
+				url: "/project",
+				contentType: "application/json",
+				data: JSON.stringify(params),
+				dataType: 'json',
+				success: function (data) {
+					window.location.href = '/publishedProjects/1';//正确登录后页面跳转至
+				},
+				error: function () {
+					alert('fail');
+				}
+			});
+		}
+
+		function sendMessage(e) {
+			var params = {
+				"message": $(e).parent().prev('input').val(),
+				"workid": document.getElementById('workid').innerText,
+				"buyerid": sessionStorage.customerId,
+				"sellerid": document.getElementById('sellerid').innerText
+			}
+			console.log(params)
+			$.ajax({
+				type: "post",
+				async: false,
+				url: "/workmessage",
+				contentType: "application/json",
+				data: JSON.stringify(params),
+				dataType: 'json',
+				success: function (data) {
+					console.log(data)
+					window.location.reload();
+				},
+				error: function () {
+					alert('fail');
+				}
+			});
+		}
+
+	</script>
+
+</html>

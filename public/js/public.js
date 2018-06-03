@@ -3,7 +3,7 @@ function quitLogin(){
 	sessionStorage.clear();
 	console.log(sessionStorage.customerId);
 	console.log('aaa');
-	window.location.href='http://www.juxingcloud.com:3000';//正确登录后页面跳转至
+	window.location.href='#';//正确登录后页面跳转至
 } 
 //中文数字字母正则
 var totalReg={

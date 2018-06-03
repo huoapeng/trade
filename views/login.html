@@ -190,6 +190,7 @@ function login(){
 			dataType:'json',
 			success: function(data){    
 				if(data['result']){   
+					sessionStorage.customerId = data['data']['id']
 					window.location.href='/info';//正确登录后页面跳转至   
 				}else{
 					alert(data['message']); 

@@ -25,7 +25,6 @@ var projectDetail=require('./service/projectDetail.js')
 var userlist=require('./service/userlist.js') 
 var userDetail=require('./service/userDetail.js') 
 var workDetail=require('./service/workDetail.js') 
-var workBuy=require('./service/workBuy.js') 
 var login=require('./service/admin/login.js')
 
 var team=require('./service/team.js') 
@@ -40,6 +39,7 @@ var authentication =require('./service/userCenter/authentication.js')
 var domain=require('./service/userCenter/domain.js') 
 var myWork=require('./service/userCenter/myWork.js') 
 var messages=require('./service/userCenter/messages.js') 
+var workBuy=require('./service/userCenter/workBuy.js') 
 
 //后台
 var authenticationList=require('./service/admin/authenticationList.js') 
@@ -140,7 +140,8 @@ app.post('/note', note.addNote)
 app.get('/:projectid/projectnotes', note.projectnotes) 
 //message
 app.get('/:noteid/notemessagelist', message.notemessagelist) 
-app.post('/notemessage', message.addMessage) 
+app.post('/notemessage', message.addNoteMessage) 
+app.post('/workmessage', message.addWorkMessage)
 //bid
 app.get('/:projectid/bidcount',bid.bidcount);
 app.put('/bid',bid.put);
