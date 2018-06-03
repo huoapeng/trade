@@ -99,6 +99,7 @@ app.get('/user/:userid',user.getUserById);
 app.post('/project',project.create); 
 app.put('/project',project.modify);  
 app.get('/project/:projectid',project.projectDetail);  
+app.post('/projectonestep', project.onestepcreate)
 //category
 app.get('/categorylist',category.categorylist); 
 app.get('/usercategorys',category.usercategorys); 

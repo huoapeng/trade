@@ -109,23 +109,16 @@
 			if (!sessionStorage) {
 				return res.redirect('/login');
 			}
-			var params = {
-				"userid": sessionStorage.customerId,
+			var params = {				
 				"name": "购买作品：" + document.getElementById('worktitle').innerText,
-				"timespan": '0',
-				"bonus": '0',
-				"requirements": '',
-				"description": '',
-				"bidderQualifiRequire": '',
-				"bidderLocationRequire": '',
-				"receiptDes": '',
-				"receipt": '',
+				"buyerid": sessionStorage.customerId,
+				"sellerid": document.getElementById('sellerid').innerText,
 				"cids": "183"
 			}
 			$.ajax({
 				type: "post",
 				async: false,
-				url: "/project",
+				url: "/projectonestep",
 				contentType: "application/json",
 				data: JSON.stringify(params),
 				dataType: 'json',
