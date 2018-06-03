@@ -76,13 +76,73 @@
 		<div class="top">
 			<span>消息管理</span> 
 		</div>
-		<div style="background:#e0e0e0;padding:10px">
-			<input type="checkbox" id="selectAll"> 全选
-			<i class=" icon-trash icon-large" id="removeMessage" style="float:right;cursor:pointer"></i>
-		</div>
-		<ul class="messageList">
+		<div class="giveSuggection" style="background-color:white;padding:20px 10px 20px 10px;border-radius:4px;    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);">	
+				<span id="projectName">项目名称</span> 
+				<ul class="fliter">
+					<li><a  onclick="toVersions()">我购买的作品消息</a></li>
+					<li><a  class="active" href="#">被人购买的作品消息</a></li>
+				</ul>
+				<!-- <div class="input-group">
+					<input type="text" id="suggection" placeholder="输入意见 ..." class="form-control">
+					<span class="input-group-btn">
+						<% if (1){%>
+							<button    onclick="sendSuggection(this)" class="send btn btn-danger btn-flat">Send</button>
+						<%}else{%>
+							<button    onclick="sendSuggection(this)" class="send btn btn-danger btn-flat"  disabled>Send</button>
+						<%}%>
+						
+					</span>
+				</div> -->
+				
+			</div>
+			<div class="lists">  
+				<%for(var i in results){%>
+					<%for(var j=0;j<results[i].length;j++){%>
+						<div class="list"  >
+						<%if(j==0){%> 
+							<div class="time"><%= results[i][j]['publishDate']%></div> 
+						<%}%> 
+							<div class="suggectionInfo" id="<%= results[i][j]['noteid']%>">
+								<div class="box box-widget collapsed-box">
+									<div class="box-header with-border">
+										<div class="user-block">
+											<img class="img-circle" src="<%= results[i][j]['userImage']%>" alt="User Image">
+											<span class="username"><a href="#"><%= decodeURI(results[i][j]['userName'])%></a></span>
+											<span class="description"><%= decodeURI(results[i][j]['title'])%></span>
+										</div>
+										<div class="box-tools">
+											<button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="messageToggle(this)">
+												<i class="fa icon-plus"></i>
+											</button>
+										</div> 
+									</div>
+									<div class="box-footer box-comments" id="box-comments_<%=results[i][j]['noteid']%>" style="display: none;">
+										 
+									</div>
+									<div class="box-footer" style="display: none;">
+										<div >
+											<div class="input-group">
+												<input type="text" name="message" placeholder="Type Message ..." class="form-control">
+												<span class="input-group-btn">
+													<% if (project['status']==2){%>
+														<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" >Send</button>
 
-		</ul>
+													<%}else{%>
+														<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" disabled>Send</button>
+													<%}%>
+													
+												</span>
+											</div> 
+										</div> 
+									</div> 
+								</div>
+							</div> 
+						</div>
+					<%}%>  
+				<%}%>
+
+	 
+	</div> 
     </div>
 </div>  
 <% include commonScript.html %>     
