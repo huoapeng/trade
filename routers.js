@@ -117,6 +117,7 @@ app.get('/search/usertaglist/:keyword',usertag.usertaglist);
 app.post('/work',work.create);
 app.delete('/work',work.delete);
 app.get('/userworks/:page',work.userworks);
+app.get('/workpic/:workid',work.workpic);
 app.get('/:userid/userworks/:page',work.getWorksByUserid);
 //worktag
 app.post('/worktag',worktag.create);

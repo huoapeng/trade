@@ -65,3 +65,17 @@ exports.userworks = function (req, res, next) {
         }
     })  
 } 
+
+exports.workpic = function (req, res, next) {   
+    var options={
+        'path': "/workpic/"+req.params.workid
+
+    } 
+    httpUtil.get(options,function(result,err){
+        if(err){ 
+            res.send("statusCode is:"+err);  
+        }else{  
+            res.send(result); 
+        }
+    })  
+} 
