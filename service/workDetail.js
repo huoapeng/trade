@@ -59,6 +59,19 @@ exports.showHtml = function (req, res, next) {
 					done(null, onearg);
 				}
 			})
+		},
+		function (onearg, done) {
+			var options = {
+				"path": '/' + workid + '/worktags'
+			}
+			httpUtil.get(options, function (result, err) {
+				if (err) {
+					done(err, null);
+				} else {
+					resultData['tags'] = result;
+					done(null, onearg);
+				}
+			})
 		}
 	],
 		function (err, results) {
