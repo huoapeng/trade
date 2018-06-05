@@ -20,11 +20,34 @@ exports.showHtml = function (req, res, next) {
 					for (var i in result['data']) {
 						result['data'][i]['publishDate'] = dateType(result['data'][i]['publishDate'])
 					}
-					resultData['buyerMessageList'] = result;
+					var arr = result['data'];
+					var workmap = {},
+						dest = [];
+					for (var i = 0; i < arr.length; i++) {
+						var ai = arr[i];
+						if (!workmap[ai.workid]) {
+							dest.push({
+								workid: ai.workid,
+								sellerid: ai.seller_id,
+								title: ai.workTitle,
+								data: [ai]
+							});
+							workmap[ai.workid] = 'hello world';
+						} else {
+							for (var j = 0; j < dest.length; j++) {
+								var dj = dest[j];
+								if (dj.workid == ai.workid) {
+									dj.data.push(ai);
+									break;
+								}
+							}
+						}
+					}
+					resultData['buyerMessageList'] = dest;
 					done(null, result);
 				}
 			})
-		},function (onearg, done) {
+		}, function (onearg, done) {
 			var options = {
 				"path": "/workmessagelist?s=" + req.session.user.id
 			}

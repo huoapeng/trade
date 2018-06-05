@@ -1,225 +1,200 @@
 <!DOCTYPE html>
-<html >
-<head> 
-<% include commonHead.html %> 
-<title>消息管理</title> 
-<style> 
- 
- .top{
-	padding-top:12px;
-	padding-bottom:20px;
-	border-bottom:2px solid #e0e0e0;
-	margin-bottom:20px;
-}
-.top>span{
-	font-size:18px;
-	font-weight:800;
-	color:#666;
-}
-.messageList{
-	padding:10px;
-}
-.messageList>li{
-	border-bottom: 1px solid #e0e0e0;
-	padding:10px 0px;
-	position: relative;
-	cursor: pointer;
-}
-.messageList>li>.description{
-	display: none;
-	padding:10px 60px; 
-}
-.messageList>li>.remove{
-	
-	display: none;
-	position: absolute;
-	top:12px;
-	right:0px;
+<html>
 
-}
-.messageList>li:hover .remove{
-	display: block;
+<head>
+	<% include commonHead.html %>
+		<title>消息管理</title>
+		<style>
+			.top {
+				padding-top: 12px;
+				padding-bottom: 20px;
+				border-bottom: 2px solid #e0e0e0;
+				margin-bottom: 20px;
+			}
 
-}
-.messageList>li>.emailRead{
-	width: 20px;height:14px;
-	margin:0px 10px;
-	display: inline-block;
-	background:url('/images/common/emailRead.png');
-}
-.messageList>li>.emailUnread{
-	width: 20px;height:14px; 
-	margin:0px 10px;
-	display: inline-block;
-	background:url('/images/common/emailUnread.png') no-repeat;
-}
-.messageList>li>p{
-	display: inline-block;
-}
-.messageList>li>span{
-	display: inline-block;
-	float: right;
-	padding-right:  20px;
-}
-</style>  
+			.top>span {
+				font-size: 18px;
+				font-weight: 800;
+				color: #666;
+			}
+
+			.messageList {
+				padding: 10px;
+			}
+
+			.messageList>li {
+				border-bottom: 1px solid #e0e0e0;
+				padding: 10px 0px;
+				position: relative;
+				cursor: pointer;
+			}
+
+			.messageList>li>.description {
+				display: none;
+				padding: 10px 60px;
+			}
+
+			.messageList>li>.remove {
+
+				display: none;
+				position: absolute;
+				top: 12px;
+				right: 0px;
+
+			}
+
+			.messageList>li:hover .remove {
+				display: block;
+
+			}
+
+			.messageList>li>.emailRead {
+				width: 20px;
+				height: 14px;
+				margin: 0px 10px;
+				display: inline-block;
+				background: url('/images/common/emailRead.png');
+			}
+
+			.messageList>li>.emailUnread {
+				width: 20px;
+				height: 14px;
+				margin: 0px 10px;
+				display: inline-block;
+				background: url('/images/common/emailUnread.png') no-repeat;
+			}
+
+			.messageList>li>p {
+				display: inline-block;
+			}
+
+			.messageList>li>span {
+				display: inline-block;
+				float: right;
+				padding-right: 20px;
+			}
+
+			.fliter {
+				padding-bottom: 10px;
+				border-bottom: 1px solid #e0e0e0;
+				margin-bottom: 10px;
+			}
+
+			.fliter>li {
+				display: inline-block;
+				margin-top: 6px;
+				margin-right: 50px;
+			}
+
+			.fliter>li>a {
+				color: #666;
+			}
+
+			.fliter .active {
+				color: red;
+			}
+		</style>
 </head>
-<body >
- <% include header.html %>
-<div class="location">
-	<div class="w">
-		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeWork">我的作品 ></a><a href="/messages">消息管理</a>
-	</div>
-</div>
-<div class="w" > 
-	<% include nav.html %>
-    <div class="content">  
-		<div class="top">
-			<span>消息管理</span> 
-		</div>
-		<div class="giveSuggection" style="background-color:white;padding:20px 10px 20px 10px;border-radius:4px;    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);">	
-				<!-- <span id="projectName">项目名称</span>  -->
-				<ul class="fliter">
-					<!-- <li><a  onclick="toVersions()">我购买的作品消息</a></li>
-					<li><a  class="active" href="#">被人购买的作品消息</a></li> -->
-				</ul>
-				<!-- <div class="input-group">
-					<input type="text" id="suggection" placeholder="输入意见 ..." class="form-control">
-					<span class="input-group-btn">
-						<% if (1){%>
-							<button    onclick="sendSuggection(this)" class="send btn btn-danger btn-flat">Send</button>
-						<%}else{%>
-							<button    onclick="sendSuggection(this)" class="send btn btn-danger btn-flat"  disabled>Send</button>
-						<%}%>
-						
-					</span>
-				</div> -->
-				
+
+<body>
+	<% include header.html %>
+		<div class="location">
+			<div class="w">
+				<span>当前位置：</span>
+				<a href="/">首页 ></a>
+				<a>用户中心 ></a>
+				<a href="/makeWork">我的作品 ></a>
+				<a href="/messages">消息管理</a>
 			</div>
-			<div class="lists">  
-				<%for(var i in results){%>
-					<%for(var j=0;j<results[i].length;j++){%>
-						<div class="list"  >
-						<%if(j==0){%> 
-							<div class="time"><%= results[i][j]['publishDate']%></div> 
-						<%}%> 
-							<div class="suggectionInfo" id="<%= results[i][j]['noteid']%>">
-								<div class="box box-widget collapsed-box">
-									<div class="box-header with-border">
-										<div class="user-block">
-											<img class="img-circle" src="<%= results[i][j]['userImage']%>" alt="User Image">
-											<span class="username"><a href="#"><%= decodeURI(results[i][j]['userName'])%></a></span>
-											<span class="description"><%= decodeURI(results[i][j]['title'])%></span>
-										</div>
-										<div class="box-tools">
-											<button type="button" class="btn btn-box-tool" data-widget="collapse" onclick="messageToggle(this)">
-												<i class="fa icon-plus"></i>
-											</button>
-										</div> 
+		</div>
+		<div class="w">
+			<% include nav.html %>
+				<div class="content">
+					<div class="top">
+						<span>消息管理</span>
+					</div>
+					<div>
+						<ul class="fliter">
+							<li>
+								<a id="buyermessage" onclick="tobuyermessages()" class="active">我购买的作品消息</a>
+							</li>
+							<li>
+								<a id="sellermessage" onclick="tosellermessage()">被人购买的作品消息</a>
+							</li>
+						</ul>
+					</div>
+					<div class="lists" id="buyerlist">
+						<%for(var i in results['buyerMessageList']){%>
+							<div class="time">
+								<%= results['buyerMessageList'][i].title%>
+							</div>
+							<%for(var j=0;j<results['buyerMessageList'][i]['data'].length;j++){%>
+								<div class="box-header with-border">
+									<div class="user-block">
+										<img class="img-circle" src="<%= results['buyerMessageList'][i]['data'][j]['buyerImage']%>" alt="User Image">
+										<span class="username">
+											<a href="#">
+												<%= decodeURI(results['buyerMessageList'][i]['data'][j]['buyerName'])%>
+											</a>
+										</span>
+										<span class="description">
+											<%= decodeURI(results['buyerMessageList'][i]['data'][j]['message'])%>
+										</span>
 									</div>
-									<div class="box-footer box-comments" id="box-comments_<%=results[i][j]['noteid']%>" style="display: none;">
-										 
-									</div>
-									<div class="box-footer" style="display: none;">
-										<div >
-											<div class="input-group">
-												<input type="text" name="message" placeholder="Type Message ..." class="form-control">
-												<span class="input-group-btn">
-													<% if (project['status']==2){%>
-														<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" >Send</button>
-
-													<%}else{%>
-														<button type="submit"  onclick="sendMessage(this)" class="btn btn-danger btn-flat" disabled>Send</button>
-													<%}%>
-													
-												</span>
-											</div> 
-										</div> 
-									</div> 
 								</div>
-							</div> 
-						</div>
-					<%}%>  
-				<%}%>
+								<%}%>
+									<div class="input-group" id="<%= results['buyerMessageList'][i].workid%>">
+										<input type="text" name="message" placeholder="输入消息 ..." class="form-control">
+										<span class="input-group-btn" id="<%= results['buyerMessageList'][i].sellerid%>">
+											<button type="submit" onclick="sendMessage(this)" class="btn btn-danger btn-flat">发送</button>
+										</span>
+									</div>
+									<input type="hidden" id="workid" value="<%= results['buyerMessageList'][i].workid%>" />
+									<input type="hidden" id="sellerid" value="<%= results['buyerMessageList'][i].sellerid%>" />
+									<%}%>
+					</div>
+				</div>
+		</div>
+		<% include commonScript.html %>
+			<script type="text/javascript">  
+				function tobuyermessages() {
+					$('#buyermessage').addClass("active");
+					$('#buyerlist').css("display", "block");
+					$('#sellermessage').removeClass("active");
+					$('#sellerlist').css("display", "none");
+				}
 
-	 
-	</div> 
-    </div>
-</div>  
-<% include commonScript.html %>     
-<script   type="text/javascript">  
-$(function(){
- 	$('#messages_1').addClass("active");
- })
+				function tosellermessage() {
+					$('#sellermessage').addClass("active");
+					$('#buyermessage').removeClass("active");
+					$('#buyerlist').css("display", "none");
+					$('#sellerlist').css("display", "block");
+				}
 
-//全选反选
-$('#selectAll').click(function(){
-	var a = $(".messageList input"); 
-	if(a[0].checked){
-		for(var i = 0;i<a.length;i++){
-			if(a[i].type == "checkbox"){
-				a[i].checked = false;
-			}
-		}
-	}else{
-		for(var i = 0;i<a.length;i++){
-			if(a[i].type == "checkbox"){
-				a[i].checked = true;
-			}
-		}
-	}
-}) 
-//删除消息(全选)
-$('#removeMessage').click(function(){
-	var objs=$(".messageList input")
-	var messagesId="";
-	for(var i=0;i<objs.length;i++){
-		messagesId += messagesId=="" ?  $(objs[i]).attr('data-id') : ","+$(objs[i]).attr('data-id');  
-	}   
-/*	$.ajax({
-		type: "delete",
-		async: false,
-		url: "/work", 
-		contentType:"application/json", 
-		data:JSON.stringify(params), 
-		dataType:'json',
-		success: function(data){ 
-			console.log(data);  
-			location = location.search.toString();
-
-		},
-		error: function(){
-			alert('fail');
-		}
-	}); */
-})
-//删除单个消息
-$('.remove').click(function(){ 
-	$(this).parent().remove()
-	$.ajax({
-		type: "delete",
-		async: false,
-		url: "/work", 
-		contentType:"application/json", 
-		data:JSON.stringify(params), 
-		dataType:'json',
-		success: function(data){  
-
-		},
-		error: function(){
-			alert('fail');
-		}
-	}); 
-})
-
-//点击显示详情
-$(".messageList li").click(function(){
-	$(this).find('.emailUnread').removeClass().addClass("emailRead")
-	$('.description').css('display','none')
-	$(this).find('.description').css('display','block')
-})
-
-
-</script> 
+				function sendMessage(e) {
+					var params = {
+						"message": $(e).parent().prev('input').val(),
+						"workid": $(e).parent().parent().attr('id'),
+						"buyerid": sessionStorage.customerId,
+						"sellerid": $(e).parent().attr('id')
+					}
+					$.ajax({
+						type: "post",
+						async: false,
+						url: "/workmessage",
+						contentType: "application/json",
+						data: JSON.stringify(params),
+						dataType: 'json',
+						success: function (data) {
+							console.log(data)
+							window.location.reload();
+						},
+						error: function () {
+							alert('fail');
+						}
+					});
+				}
+			</script>
 </body>
 
 </html>
