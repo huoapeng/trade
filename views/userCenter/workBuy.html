@@ -135,6 +135,7 @@
 			var params = {
 				"message": $(e).parent().prev('input').val(),
 				"workid": document.getElementById('workid').innerText,
+				"senderid": sessionStorage.customerId,
 				"buyerid": sessionStorage.customerId,
 				"sellerid": document.getElementById('sellerid').innerText
 			}

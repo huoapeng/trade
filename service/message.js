@@ -36,7 +36,8 @@ exports.notemessagelist = function (req, res, next) {
 exports.addWorkMessage = function (req, res, next) {   
     var params = {
         "message":req.body.message,
-		"workid":parseInt(req.body.workid),
+        "workid":parseInt(req.body.workid),
+        "senderid":parseInt(req.body.senderid),
 		"buyerid":parseInt(req.body.buyerid),
 		"sellerid":parseInt(req.body.sellerid)
     }

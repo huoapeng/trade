@@ -19,31 +19,8 @@ exports.showHtml = function (req, res, next) {
 				} else {
 					for (var i in result['data']) {
 						result['data'][i]['publishDate'] = dateType(result['data'][i]['publishDate'])
-					}
-					var arr = result['data'];
-					var workmap = {},
-						dest = [];
-					for (var i = 0; i < arr.length; i++) {
-						var ai = arr[i];
-						if (!workmap[ai.workid]) {
-							dest.push({
-								workid: ai.workid,
-								sellerid: ai.seller_id,
-								title: ai.workTitle,
-								data: [ai]
-							});
-							workmap[ai.workid] = 'hello world';
-						} else {
-							for (var j = 0; j < dest.length; j++) {
-								var dj = dest[j];
-								if (dj.workid == ai.workid) {
-									dj.data.push(ai);
-									break;
-								}
-							}
-						}
-					}
-					resultData['buyerMessageList'] = dest;
+					}					
+					resultData['buyerMessageList'] = computeData(result['data']);
 					done(null, result);
 				}
 			})
@@ -58,7 +35,7 @@ exports.showHtml = function (req, res, next) {
 					for (var i in result['data']) {
 						result['data'][i]['publishDate'] = dateType(result['data'][i]['publishDate'])
 					}
-					resultData['sellerMessageList'] = result;
+					resultData['sellerMessageList'] = computeData(result['data']);
 					done(null, result);
 				}
 			})
@@ -67,7 +44,38 @@ exports.showHtml = function (req, res, next) {
 		res.render('userCenter/messages', { 'results': resultData })
 	});
 };
+
 function dateType(date) {
 	var date = new Date(date);
 	return date.toLocaleDateString();
+}
+
+function computeData(date)
+{
+	var arr = date;
+	var workmap = {};
+	var	dest = [];
+	for (var i = 0; i < arr.length; i++) {
+		var ai = arr[i];
+		if (!workmap[ai.workid]) {
+			dest.push({
+				workid: ai.workid,
+				sellerid: ai.seller_id,
+				buyerid: ai.buyer_id,
+				senderid: ai.sender_id,
+				worktitle: ai.workTitle,
+				data: [ai]
+			});
+			workmap[ai.workid] = 'hello world';
+		} else {
+			for (var j = 0; j < dest.length; j++) {
+				var dj = dest[j];
+				if (dj.workid == ai.workid) {
+					dj.data.push(ai);
+					break;
+				}
+			}
+		}
+	}
+	return dest;
 }

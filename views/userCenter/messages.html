@@ -116,7 +116,7 @@
 					<div>
 						<ul class="fliter">
 							<li>
-								<a id="buyermessage" onclick="tobuyermessages()" class="active">我购买的作品消息</a>
+								<a id="buyermessage" onclick="tobuyermessages()">我购买的作品消息</a>
 							</li>
 							<li>
 								<a id="sellermessage" onclick="tosellermessage()">被人购买的作品消息</a>
@@ -126,15 +126,15 @@
 					<div class="lists" id="buyerlist">
 						<%for(var i in results['buyerMessageList']){%>
 							<div class="time">
-								<%= results['buyerMessageList'][i].title%>
+								<%= results['buyerMessageList'][i].worktitle%>
 							</div>
 							<%for(var j=0;j<results['buyerMessageList'][i]['data'].length;j++){%>
 								<div class="box-header with-border">
 									<div class="user-block">
-										<img class="img-circle" src="<%= results['buyerMessageList'][i]['data'][j]['buyerImage']%>" alt="User Image">
+										<img class="img-circle" src="<%= results['buyerMessageList'][i]['data'][j]['senderImage']%>" alt="User Image">
 										<span class="username">
 											<a href="#">
-												<%= decodeURI(results['buyerMessageList'][i]['data'][j]['buyerName'])%>
+												<%= decodeURI(results['buyerMessageList'][i]['data'][j]['senderName'])%>
 											</a>
 										</span>
 										<span class="description">
@@ -145,12 +145,38 @@
 								<%}%>
 									<div class="input-group" id="<%= results['buyerMessageList'][i].workid%>">
 										<input type="text" name="message" placeholder="输入消息 ..." class="form-control">
-										<span class="input-group-btn" id="<%= results['buyerMessageList'][i].sellerid%>">
+										<span class="input-group-btn" id="<%= results['buyerMessageList'][i].sellerid%>" name="<%= results['buyerMessageList'][i].buyerid%>">
 											<button type="submit" onclick="sendMessage(this)" class="btn btn-danger btn-flat">发送</button>
 										</span>
 									</div>
-									<input type="hidden" id="workid" value="<%= results['buyerMessageList'][i].workid%>" />
-									<input type="hidden" id="sellerid" value="<%= results['buyerMessageList'][i].sellerid%>" />
+									<%}%>
+					</div>
+					<div class="lists" id="sellerlist">
+						<%for(var i in results['sellerMessageList']){%>
+							<div class="time">
+								<%= results['sellerMessageList'][i].worktitle%>
+							</div>
+							<%for(var j=0;j<results['sellerMessageList'][i]['data'].length;j++){%>
+								<div class="box-header with-border">
+									<div class="user-block">
+										<img class="img-circle" src="<%= results['sellerMessageList'][i]['data'][j]['senderImage']%>" alt="User Image">
+										<span class="username">
+											<a href="#">
+												<%= decodeURI(results['sellerMessageList'][i]['data'][j]['senderName'])%>
+											</a>
+										</span>
+										<span class="description">
+											<%= decodeURI(results['sellerMessageList'][i]['data'][j]['message'])%>
+										</span>
+									</div>
+								</div>
+								<%}%>
+									<div class="input-group" id="<%= results['sellerMessageList'][i].workid%>">
+										<input type="text" name="message" placeholder="输入消息 ..." class="form-control">
+										<span class="input-group-btn" id="<%= results['sellerMessageList'][i].sellerid%>" name="<%= results['sellerMessageList'][i].buyerid%>">
+											<button type="submit" onclick="sendMessage(this)" class="btn btn-danger btn-flat">发送</button>
+										</span>
+									</div>
 									<%}%>
 					</div>
 				</div>
@@ -170,12 +196,15 @@
 					$('#buyerlist').css("display", "none");
 					$('#sellerlist').css("display", "block");
 				}
-
+				window.onload = function () {
+					tobuyermessages();
+				}
 				function sendMessage(e) {
 					var params = {
 						"message": $(e).parent().prev('input').val(),
+						"senderid": sessionStorage.customerId,
 						"workid": $(e).parent().parent().attr('id'),
-						"buyerid": sessionStorage.customerId,
+						"buyerid": $(e).parent().attr('name'),
 						"sellerid": $(e).parent().attr('id')
 					}
 					$.ajax({
