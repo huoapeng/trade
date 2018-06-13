@@ -88,8 +88,8 @@ header .nav-head-items{
 }
 header .nav-head-items>li{
   	text-align: center;
-  	width:100px;
-  	padding: 0 8px;
+  	
+  	padding: 0 18px;
   	display: inline-block;
 }
 header .nav-head-items>li>a{

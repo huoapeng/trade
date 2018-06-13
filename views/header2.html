@@ -1,52 +1,100 @@
 <header style="z-index:999;width:100%;">
 	<div class="w">
 		<div class="logo">
-			<a href="/"><img src="/images/common/index_logo.png"> </a>
+			<a href="/">
+				<img src="/images/common/index_logo.png"> </a>
 		</div>
 		<div class="search" style="width:800px;vertical-align:top">
 			<input class="" placeholder="  请输入关键字" style="border-radius:4px;border:1px solid #e8594b;height:30px;width:600px;margin-left:50px;margin-top:30px;">
 			<a style="background-color:#e8594b;color:white;position:relative;left:-89px;display:inline-block;line-height:32px;width:84px;text-align:center;border-radius: 0 4px 4px 0px;">搜索</a>
 		</div>
 		<!--<a class="btn" href="/makeProject" style="margin-top:30px;float:right;">发布项目</a>-->
-	</div> 
+	</div>
 	<div class="w">
-		<ul class="nav-head-items" style="">
-			<li id="categorysMenua" style="width:210px;padding:0px;"><a style="color:white"> <i class=" icon-chevron-down"></i></a> 
+		<ul class="nav-head-items">
+			<li id="categorysMenua" style="width:200px;padding:0px;">
+				<a style="color:white">
+					<i class=" icon-chevron-down"></i>
+				</a>
 			</li>
-			<li><a id="index" href="/">首页</a></li>
-			<li><a id="vrhall" href="/vr">VR/AR大厅</a></li>
-			<li><a id="mhall"  href="/movie">影视制作大厅</a></li>
-			<li><a id="userlist" href="/team">团队大厅</a></li> 
-			<li><a id="servicehall" href="/service">服务大厅</a></li>
-			<li><a id="toolhall" href="/tool">工具大厅</a></li> 
-			<% if(session ){%> 
-			<li  class="afterLogin" style="text-align:right">
-				<div style="display:inline-block;position:relative;margin-right:10px;">
-					<a  href="/info"><img src="<%= session.imageSmall%>" style=""></a>
-					<%if( session['authenticationType'] & 1){%>
-						<div class="vip vip1" style="top:20px;position:absolute;width:22px;height:22px;"></div> 
-					<%}else if(  session['authenticationType'] & 2){%>
-						<div class="vip vip2" style="top:20px;position:absolute;width:22px;height:22px;"></div>  
-					<%}else {%> 
+			<li>
+				<a id="index" href="/">首页</a>
+			</li>
+			<li>
+				<a id="vrhall" href="/vr">VR/AR大厅</a>
+			</li>
+			<li>
+				<a id="mhall" href="/movie">影视制作大厅</a>
+			</li>
+			<li style="widows: 230px;">
+				<a id="userlist" href="/team">团队大厅（二维/三维展示厅）</a>
+			</li>
+			<li>
+				<a id="servicehall" href="/service">服务大厅</a>
+			</li>
+			<li>
+				<a id="toolhall" href="/tool">工具大厅</a>
+			</li>
+			<% if(session ){%>
+				<li class="afterLogin" style="text-align:right">
+					<div style="display:inline-block;position:relative;margin-right:10px;">
+						<a href="/info">
+							<img src="<%= session.imageSmall%>" style="">
+						</a>
+						<%if( session['authenticationType'] & 1){%>
+							<div class="vip vip1" style="top:20px;position:absolute;width:22px;height:22px;"></div>
+							<%}else if(  session['authenticationType'] & 2){%>
+								<div class="vip vip2" style="top:20px;position:absolute;width:22px;height:22px;"></div>
+								<%}else {%>
+									<%}%>
+					</div>
+					<span style="vertical-align:top;margin-top:8px;display:inline-block;text-overflow:ellipsis;-o-text-overflow:ellipsis;white-space:nowrap;max-width: 100px;overflow: hidden;"
+					 title="<%= decodeURI(session.nickname) %>">
+						<%= decodeURI(session.nickname) %>
+					</span>
+					<ul>
+						<li>
+							<a href="/publish">
+								<i class="icon-edit"></i>发布项目</a>
+						</li>
+						<li>
+							<a href="/publishedProjects/1">
+								<i class=" icon-file-alt"></i>我发布的项目</a>
+						</li>
+						<li>
+							<a href="/participateProjects/1">
+								<i class=" icon-file-alt"></i>我参加的项目</a>
+						</li>
+						<li>
+							<a href="/authentication">
+								<i class=" icon-credit-card"></i>在线认证</a>
+						</li>
+						<li>
+							<a href="/info">
+								<i class=" icon-cogs"></i>基本资料</a>
+						</li>
+						<li>
+							<a href="/w/publish">
+								<i class="icon-picture"></i>发布作品</a>
+						</li>
+						<li>
+							<a href="/w/1">
+								<i class=" icon-book"></i>作品中心</a>
+						</li>
+						<li>
+							<a href="/logout">
+								<i class="icon-off"></i>退出</a>
+						</li>
+					</ul>
+				</li>
+				<%}else{%>
+					<li style="float:right;text-align:right;">
+						<a href="/login">登录</a> |
+						<a href="/regist">注册</a>
+					</li>
 					<%}%>
-				</div>  
-				<span style="vertical-align:top;margin-top:8px;display:inline-block;text-overflow:ellipsis;-o-text-overflow:ellipsis;white-space:nowrap;max-width: 100px;overflow: hidden;" title="<%= decodeURI(session.nickname) %>"><%= decodeURI(session.nickname) %></span>
-				<ul >
-					<li><a href="/publish"><i class="icon-edit"></i>发布项目</a></li>
-					<li><a href="/publishedProjects/1"><i class=" icon-file-alt"></i>我发布的项目</a></li>
-					<li><a href="/participateProjects/1"><i class=" icon-file-alt"></i>我参加的项目</a></li>
-					<li><a href="/authentication"><i class=" icon-credit-card"></i>在线认证</a></li>
-					<li><a href="/info"><i class=" icon-cogs"></i>基本资料</a></li>
-					<li><a href="/w/publish"><i class="icon-picture"></i>发布作品</a></li>
-					<li><a href="/w/1"><i class=" icon-book"></i>作品中心</a></li>
-					<li><a  href="/logout"><i class="icon-off" ></i>退出</a></li>
-				</ul>
-			</li> 
-			<%}else{%>
-			<li style="float:right;text-align:right;" ><a  href="/login">登录</a>  |  <a  href="/regist">注册</a></li> 
-			<%}%> 
 		</ul>
-	</div> 
+	</div>
 	<div style="clear:both;"></div>
 </header>
 <script>
