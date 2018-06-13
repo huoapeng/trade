@@ -160,12 +160,18 @@ $('.fliter a').click(function(){
 	var status=$(this).attr("data-value");
 	var url=location.search.toString();
 	if(status){ 
-		url=replaceParamVal(url,'status',status)  
+		url=replaceParamVal(url,'status',status); 
 		url='/orderManage/1'+url; 
 	}else{  
 		url='/orderManage/1'+removeParameter(url,'status');
 	}
-	location =  status == "3" ? url + "?winner=isNotMe" : url  
+	if(status == "3"){
+		url=replaceParamVal(url,'winner',"isNotMe");
+	}else{
+		url = removeParameter(url,'winner') 
+	}
+	
+	location = url  
 }) 
 //翻页
 function changePage(){ 

@@ -8,10 +8,11 @@ exports.showHtml = function (req, res, next) {
 	} 
 	var resultData={};    
 	var status=req.query.status ? req.query.status : ""; 
+	var winner=req.query.winner ? req.query.winner : ""; 
 	async.waterfall([
 	    function (done) {
 	    	var options={
-		        "path":'/userParticipateProjects/'+req.params.page+"?userid="+req.session.user.id + (status ? "&status="+status : "")
+		        "path":'/userParticipateProjects/'+req.params.page+"?userid="+req.session.user.id + (status ? "&status="+status : "") + (winner ? "&winner="+winner : "")
 		    }   
 		    console.log(options)
 		    httpUtil.get(options,function(result,err){  
