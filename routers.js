@@ -32,6 +32,7 @@ var team=require('./service/team.js')
 //个人中心
 var publishedProjects =require('./service/userCenter/publishedProjects.js') 
 var participateProjects =require('./service/userCenter/participateProjects.js') 
+var orderManage =require('./service/userCenter/orderManage.js') 
 var versions =require('./service/userCenter/versions.js') 
 var suggections =require('./service/userCenter/suggections.js') 
 var bids=require('./service/userCenter/bids.js')  
@@ -163,6 +164,7 @@ app.get('/:type/recommenditemlist', recommenditem.recommenditemlist)
 /*--------------个人中心---start---------*/ 
 app.get('/publishedProjects/:page',publishedProjects.showHtml);
 app.get('/participateProjects/:page',participateProjects.showHtml); 
+app.get('/orderManage/:page',orderManage.showHtml); 
 app.get('/bids',bids.showHtml); 
 app.get('/versions',versions.showHtml); 
 app.get('/suggections',suggections.showHtml);  

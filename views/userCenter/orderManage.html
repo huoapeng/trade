@@ -2,9 +2,9 @@
 <html >
 <head> 
 <% include commonHead.html %> 
-<title>我参加的项目</title>  
+<title>订单管理</title>  
 <style> 
- #projectManager_3{
+ #projectManager_4{
 	background-color: #ffdad6;
 }
 .versionTop{
@@ -74,7 +74,7 @@ table td{
 <% include header.html %> 
 <div class="location">
 	<div class="w">
-		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeProject">项目管理 ></a><a href="/participateProjects/1">我参加的项目</a>
+		<span>当前位置：</span><a href="/">首页 ></a><a>用户中心 ></a><a href="/makeProject">项目管理 ></a><a href="/orderManage/1">订单管理</a>
 	</div>
 </div>
 <div class="w"  > 
@@ -84,10 +84,10 @@ table td{
 			<div class="panel panel-default">  
 				<div class="panel-heading">
 					<ul class="fliter">
-						<li><a id="fliter_"  data-value="">全部</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-						<li><a id="fliter_1" data-value="1" >竞标中</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-						<li><a id="fliter_2" data-value="2">进行中</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-						<li><a id="fliter_3" data-value="3">已结束</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>   
+						<!-- <li><a id="fliter_"  data-value="">全部</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li> -->
+						<li><a id="fliter_2" data-value="2">历史已中标</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+						<li><a id="fliter_1" data-value="1" >正在竞标</a>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+						<li><a id="fliter_3" data-value="3">未中标已结束</a></li>
 					</ul>
 					<!--
 					<div class="input-group"   style="width:200px;    float: right;position: relative;top: -12px;"> 
@@ -161,11 +161,11 @@ $('.fliter a').click(function(){
 	var url=location.search.toString();
 	if(status){ 
 		url=replaceParamVal(url,'status',status)  
-		url='/participateProjects/1'+url; 
+		url='/orderManage/1'+url; 
 	}else{  
-		url='/participateProjects/1'+removeParameter(url,'status');
-	} 
-	location = url  
+		url='/orderManage/1'+removeParameter(url,'status');
+	}
+	location =  status == "3" ? url + "?winner=isNotMe" : url  
 }) 
 //翻页
 function changePage(){ 
