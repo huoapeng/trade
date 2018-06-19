@@ -72,7 +72,11 @@ font{
 			<div class="input-group">
 				<span class="input-group-addon"   >作品简介<font >*</font>：</span>
 				<textarea class="form-control"  id="description" placeholder="准确输入作品简介与作品说明"></textarea>
-			</div>   
+			</div>  
+			<div class="input-group">
+				<span class="input-group-addon" >作品价格<font >*</font>：</span>
+				<input class="form-control" name="price" type="text" placeholder="请输入作品价格" >
+			</div>  
 			<div class="input-group">
 				<span class="input-group-addon"   >图片<font >*</font>：</span>
 				<form id="uploadForm" >
@@ -83,10 +87,8 @@ font{
 				<span class="input-group-addon">附件：</span>
 				<form id="compressfileForm">
 					<input id="compressfile" type="file"   name="file">
-					
 				</form>
-			</div>   
-			
+			</div>  
 			<div class="input-group">
 				<span class="input-group-addon"   >版权<font >*</font>：</span>
 				<select class="form-control  copyright">
@@ -108,7 +110,7 @@ font{
 					<ul class="tagList">  
 					</ul> 
 				</div>
-			</div>
+			</div> 
 			<!-- <div class="input-group">
 					<span class="input-group-addon">是否三维：</span>
 					<form id="compressfileForm">
@@ -201,7 +203,8 @@ function setWork(){
 		'file':compressfile,
 		'copyright':parseInt($('.copyright').find('option:selected').attr('id')),
 		'thumbnail':thumbnail,
-		'tags':tags
+		'tags':tags,
+		'price':$('input[name="price"]').val().trim()
 	} 
 	console.log(params)
 	if(params['title']==""){

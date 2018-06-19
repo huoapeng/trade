@@ -8,7 +8,8 @@ exports.create = function (req, res, next) {
         'file':req.body.file,
         'copyright':req.body.copyright,
         'thumbnail':req.body.thumbnail,
-        'tags':req.body.tags
+        'tags':req.body.tags,
+        'price':req.body.price
     }
     var options={
         "path":"/work"
