@@ -32,7 +32,8 @@ var team=require('./service/team.js')
 //个人中心
 var publishedProjects =require('./service/userCenter/publishedProjects.js') 
 var participateProjects =require('./service/userCenter/participateProjects.js') 
-var orderManage =require('./service/userCenter/orderManage.js') 
+var boughtOrders =require('./service/userCenter/boughtOrders.js') 
+var soldOrders =require('./service/userCenter/soldOrders.js') 
 var versions =require('./service/userCenter/versions.js') 
 var suggections =require('./service/userCenter/suggections.js') 
 var bids=require('./service/userCenter/bids.js')  
@@ -100,7 +101,7 @@ app.get('/user/:userid',user.getUserById);
 app.post('/project',project.create); 
 app.put('/project',project.modify);  
 app.get('/project/:projectid',project.projectDetail);  
-app.post('/projectonestep', project.onestepcreate)
+app.post('/createOrder', project.createOrder)
 //category
 app.get('/categorylist',category.categorylist); 
 app.get('/usercategorys',category.usercategorys); 
@@ -164,7 +165,8 @@ app.get('/:type/recommenditemlist', recommenditem.recommenditemlist)
 /*--------------个人中心---start---------*/ 
 app.get('/publishedProjects/:page',publishedProjects.showHtml);
 app.get('/participateProjects/:page',participateProjects.showHtml); 
-app.get('/orderManage/:page',orderManage.showHtml); 
+app.get('/boughtOrders/:page',boughtOrders.showHtml); 
+app.get('/soldOrders/:page',soldOrders.showHtml); 
 app.get('/bids',bids.showHtml); 
 app.get('/versions',versions.showHtml); 
 app.get('/suggections',suggections.showHtml);  

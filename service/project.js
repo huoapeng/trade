@@ -56,15 +56,15 @@ exports.modify = function (req, res, next) {
     })
 }
 
-exports.onestepcreate = function (req, res, next) {   
+exports.createOrder = function (req, res, next) {   
     var params = { 
         "name":req.body.name,
         "buyerid":req.body.userid ? req.body.userid : req.session.user.id,
         "sellerid": req.body.sellerid,
-        "cids":req.body.cids
+        "workid":req.body.workid
     }
     var options={
-        "path":"/projectonestep"
+        "path":"/order"
     }
     httpUtil.post(params,options,function(result,err){
         if(err){

@@ -50,6 +50,9 @@
 							<div>发布日期：
 								<%= results['work']['publishDate'].split("T")[0]%>
 							</div>
+							<div>价格：
+								<%= results['work']['price']%>元
+							</div>
 							<div>电话
 								<%= results['owner']['phone']%>
 							</div>
@@ -110,20 +113,20 @@
 				return res.redirect('/login');
 			}
 			var params = {				
-				"name": "购买作品：" + document.getElementById('worktitle').innerText,
+				"name": "购买作品：" + document.getElementById('worktitle').innerText.trim(),
 				"buyerid": sessionStorage.customerId,
-				"sellerid": document.getElementById('sellerid').innerText,
-				"cids": "183"
+				"sellerid": document.getElementById('sellerid').innerText.trim(),
+				"workid": document.getElementById('workid').innerText.trim()
 			}
 			$.ajax({
 				type: "post",
 				async: false,
-				url: "/projectonestep",
+				url: "/createOrder",
 				contentType: "application/json",
 				data: JSON.stringify(params),
 				dataType: 'json',
 				success: function (data) {
-					window.location.href = '/publishedProjects/1';//正确登录后页面跳转至
+					window.location.href = '/boughtOrders/1';//正确登录后页面跳转至
 				},
 				error: function () {
 					alert('fail');
